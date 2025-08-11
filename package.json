@@ -1,0 +1,50 @@
+{
+	"name": "turnapp",
+	"version": "0.1.0",
+	"devDependencies": {
+		"@commitlint/cli": "^19.8.1",
+		"@commitlint/config-conventional": "^19.8.1",
+		"commitizen": "^4.3.1",
+		"conventional-changelog-cli": "^5.0.0",
+		"cz-conventional-changelog": "^3.3.0",
+		"husky": "^8.0.0",
+		"lint-staged": "^16.1.5",
+		"nanoid": "^5.1.5",
+		"remark": "^15.0.1",
+		"remark-cli": "^12.0.1",
+		"remark-parse": "^11.0.0",
+		"remark-stringify": "^11.0.0",
+		"standard-version": "^9.5.0",
+		"unified": "^11.0.5",
+		"yaml": "^2.8.1"
+	},
+	"scripts": {
+		"lint-staged": "lint-staged --config .lintstagedrc.json",
+		"prepare": "husky install",
+		"commit": "cz",
+		"cz": "cz",
+		"release": "standard-version",
+		"release:patch": "standard-version --release-as patch",
+		"release:minor": "standard-version --release-as minor",
+		"release:major": "standard-version --release-as major",
+		"release:first": "standard-version --first-release",
+		"changelog": "conventional-changelog -p conventionalcommits -i docs/CHANGELOG.md -s -r 0",
+		"postrelease": "git push --follow-tags",
+    	"commitlint": "commitlint -x @commitlint/config-conventional",
+		"todo:refresh": "node scripts/todo-refresh.mjs"
+	},
+	"lint-staged": {
+		"**/*.md": [
+			"pnpm remark --frail --no-stdout"
+		]
+	},
+	"config": {
+		"commitizen": {
+			"path": "cz-conventional-changelog"
+		}
+	},
+	"standard-version": {
+    "preset": "conventionalcommits",
+    "infile": "docs/CHANGELOG.md"
+  }
+}

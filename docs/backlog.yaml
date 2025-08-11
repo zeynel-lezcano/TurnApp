@@ -1,0 +1,20 @@
+wip_limit_now: 5
+now:
+  - id: oauth-tenant
+    title: OAuth & Shop-Registry fertigstellen
+    desc: Offline-Token verschlüsselt speichern, HMAC prüfen
+  - id: admin-shell
+    title: Embedded Admin Shell
+    desc: Polaris+App Bridge, Overview + Branding Seite
+  - id: branding-config-api
+    title: Branding & Config API
+    desc: /api/config GET, /api/settings POST + Zod
+  - id: webhooks-min
+    title: Webhooks (APP_UNINSTALLED, PRODUCTS_UPDATE)
+    desc: Registrierung + Handler, idempotent
+next: []
+later:
+  - id: product-proxy
+    title: Product Proxy + Cache
+    desc: GET /api/products, 60s Cache
+done: []

@@ -1,0 +1,6 @@
+{
+    "**/*.md": [
+      "pnpm remark --frail --no-stdout"
+    ]
+  }
+  
