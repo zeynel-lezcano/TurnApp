@@ -1,8 +1,5 @@
 wip_limit_now: 5
 now:
-  - id: dev-seed-script
-    title: Dev Seed Script
-    desc: pnpm seed command with dummy shop data, smoke test scripts
   - id: logo-upload-s3
     title: Logo Upload to S3/Cloud Storage
     desc: File upload endpoint, S3/cloud storage integration, asset URL generation
@@ -13,7 +10,24 @@ now:
   - id: config-api-validation
     title: Config API Schema Validation
     desc: Zod schema validation for config endpoints, error responses, type safety
-next: []
+  - id: storefront-api-setup
+    title: Storefront API Setup
+    desc: GET /api/products proxy mit Shopify Storefront GraphQL, error handling,
+      rate limits
+  - id: dev-tunnel-setup
+    title: Dev Tunnel Setup (ngrok)
+    desc: ngrok integration für local dev, webhook endpoint routing, .env setup
+next:
+  - id: admin-api-integration
+    title: Admin API Integration
+    desc: GraphQL client setup für Admin API, shop validation, product queries
+  - id: health-endpoints
+    title: Health & Monitoring Endpoints
+    desc: /healthz, /readiness endpoints, request logging, error tracking setup
+  - id: mobile-demo-scaffold
+    title: Mobile Demo Scaffold
+    desc: RN/Flutter template consuming /api/config, basic product list, checkout
+      links
 later:
   - id: product-proxy
     title: Product Proxy + Cache
@@ -49,4 +63,8 @@ done:
   - id: oauth-tests
     title: OAuth Auth-Flow Tests
     desc: Unit tests für HMAC, encryption, integration test install-flow
+    doneAt: 2025-08-21
+  - id: dev-seed-script
+    title: Dev Seed Script
+    desc: pnpm seed command with dummy shop data, smoke test scripts
     doneAt: 2025-08-21
