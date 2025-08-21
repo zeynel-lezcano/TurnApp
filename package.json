@@ -29,7 +29,7 @@
 		"release:major": "standard-version --release-as major",
 		"release:first": "standard-version --first-release",
 		"changelog": "conventional-changelog -p conventionalcommits -i docs/CHANGELOG.md -s -r 0",
-		"postrelease": "git push --follow-tags",
+		"postrelease": "echo 'Release completed, skipping push'",
     	"commitlint": "commitlint -x @commitlint/config-conventional",
 		"todo:refresh": "node scripts/todo-refresh.mjs"
 	},

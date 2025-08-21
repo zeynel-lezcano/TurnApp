@@ -1,5 +1,8 @@
-# Changelog
+## 0.1.0 (2025-08-21)
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+* feat: initial turnapp project setup with automated tooling f021672
+* docs: für den automatisierten TODO.md wurden Skripte und zusätzlich Abhängigkeiten erstellt c3931bb
+* docs: steering MDs fb79b65
 
-## 0.1.0 (2025-08-11)
+
+
