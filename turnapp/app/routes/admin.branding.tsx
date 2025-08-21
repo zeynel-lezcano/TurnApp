@@ -1,6 +1,6 @@
 import { json, type LoaderFunctionArgs, type ActionFunctionArgs } from "@remix-run/node";
 import { useLoaderData, Form, useActionData, useFetcher } from "@remix-run/react";
-import { getOptionalSession } from "~/lib/session.server";
+import { flexibleAuth, logRequest } from "~/lib/middleware.server";
 import {
   Page,
   Layout,
@@ -33,25 +33,13 @@ interface UploadResponse {
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  // Try session token first (for embedded admin)
-  const sessionContext = await getOptionalSession(request);
-  
-  let shop: string;
-  if (sessionContext) {
-    shop = sessionContext.shop;
-  } else {
-    // Fallback to query parameter (for development/testing)
-    const shopParam = new URL(request.url).searchParams.get("shop");
-    if (!shopParam) {
-      throw new Response("Unauthorized - Missing session token or shop parameter", { status: 401 });
-    }
-    shop = shopParam;
-  }
+  const context = await flexibleAuth(request);
+  logRequest(request, context);
 
   // Load branding settings from config API
   try {
     const configUrl = new URL("/api/config", request.url);
-    configUrl.searchParams.set("shop", shop);
+    configUrl.searchParams.set("shop", context.shop);
     
     const configResponse = await fetch(configUrl.toString());
     const configData = await configResponse.json();
@@ -61,7 +49,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     }
 
     return json({
-      shop,
+      shop: context.shop,
       brandingSettings: configData.branding
     });
   } catch (error) {
@@ -69,39 +57,27 @@ export async function loader({ request }: LoaderFunctionArgs) {
     
     // Fallback to defaults
     const brandingSettings = {
-      brandName: shop.split('.')[0],
+      brandName: context.shop.split('.')[0],
       primaryColor: "#007C3B",
       logoUrl: "",
       tagline: "Your mobile shopping experience"
     };
 
     return json({
-      shop,
+      shop: context.shop,
       brandingSettings
     });
   }
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  // Try session token first (for embedded admin)
-  const sessionContext = await getOptionalSession(request);
-  
-  let shop: string;
-  if (sessionContext) {
-    shop = sessionContext.shop;
-  } else {
-    // Fallback to query parameter (for development/testing)
-    const shopParam = new URL(request.url).searchParams.get("shop");
-    if (!shopParam) {
-      throw new Response("Unauthorized - Missing session token or shop parameter", { status: 401 });
-    }
-    shop = shopParam;
-  }
+  const context = await flexibleAuth(request);
+  logRequest(request, context);
 
   try {
     // Forward to settings API
     const settingsUrl = new URL("/api/settings", request.url);
-    settingsUrl.searchParams.set("shop", shop);
+    settingsUrl.searchParams.set("shop", context.shop);
     
     const formData = await request.formData();
     

@@ -1,9 +1,5 @@
 wip_limit_now: 5
 now:
-  - id: session-token-middleware
-    title: Session Token Middleware Hardening
-    desc: JWT verification middleware, 401 error handling, request context shop
-      resolution
   - id: config-api-validation
     title: Config API Schema Validation
     desc: Zod schema validation for config endpoints, error responses, type safety
@@ -17,10 +13,10 @@ now:
   - id: admin-api-integration
     title: Admin API Integration
     desc: GraphQL client setup für Admin API, shop validation, product queries
-next:
   - id: health-endpoints
     title: Health & Monitoring Endpoints
     desc: /healthz, /readiness endpoints, request logging, error tracking setup
+next:
   - id: mobile-demo-scaffold
     title: Mobile Demo Scaffold
     desc: RN/Flutter template consuming /api/config, basic product list, checkout
@@ -68,4 +64,9 @@ done:
   - id: logo-upload-s3
     title: Logo Upload to S3/Cloud Storage
     desc: File upload endpoint, S3/cloud storage integration, asset URL generation
+    doneAt: 2025-08-21
+  - id: session-token-middleware
+    title: Session Token Middleware Hardening
+    desc: JWT verification middleware, 401 error handling, request context shop
+      resolution
     doneAt: 2025-08-21

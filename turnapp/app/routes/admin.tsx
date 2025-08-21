@@ -1,6 +1,6 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData, Outlet, useLocation, Link } from "@remix-run/react";
-import { getOptionalSession } from "~/lib/session.server";
+import { flexibleAuth, logRequest } from "~/lib/middleware.server";
 import { 
   Frame, 
   TopBar, 
@@ -18,37 +18,17 @@ import { useState, useCallback } from "react";
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   
-  // Try session token first (for embedded admin)
-  const sessionContext = await getOptionalSession(request);
+  // Use hardened middleware for authentication
+  const context = await flexibleAuth(request);
+  logRequest(request, context);
   
-  if (sessionContext) {
-    // Embedded admin with session token
-    return json({
-      shop: sessionContext.shop,
-      host: url.searchParams.get("host"),
-      appBridgeConfig: {
-        apiKey: process.env.SHOPIFY_API_KEY || "",
-        shop: sessionContext.shop,
-        host: url.searchParams.get("host") || "",
-      }
-    });
-  }
-  
-  // Fallback to query parameter (for development/testing)
-  const shop = url.searchParams.get("shop");
-  const host = url.searchParams.get("host");
-  
-  if (!shop) {
-    throw new Response("Unauthorized - Missing session token or shop parameter", { status: 401 });
-  }
-
   return json({
-    shop,
-    host,
+    shop: context.shop,
+    host: url.searchParams.get("host"),
     appBridgeConfig: {
       apiKey: process.env.SHOPIFY_API_KEY || "",
-      shop,
-      host: host || "",
+      shop: context.shop,
+      host: url.searchParams.get("host") || "",
     }
   });
 }

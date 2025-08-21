@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs } from '@remix-run/node';
 import { json, unstable_parseMultipartFormData, unstable_createFileUploadHandler } from '@remix-run/node';
-import { getOptionalSession } from '~/lib/session.server';
+import { flexibleAuth, logRequest } from '~/lib/middleware.server';
 import { prisma } from '~/lib/prisma.server';
 import path from 'node:path';
 import { randomBytes } from 'node:crypto';
@@ -21,29 +21,9 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   try {
-    // Auth check - session or shop param
-    const sessionContext = await getOptionalSession(request);
-    let shop: string;
-    
-    if (sessionContext) {
-      shop = sessionContext.shop;
-    } else {
-      const url = new URL(request.url);
-      const shopParam = url.searchParams.get('shop');
-      if (!shopParam) {
-        return json({ error: 'Unauthorized' }, { status: 401 });
-      }
-      shop = shopParam;
-    }
-
-    // Verify shop exists
-    const shopRecord = await prisma.shop.findUnique({
-      where: { shopDomain: shop }
-    });
-
-    if (!shopRecord) {
-      return json({ error: 'Shop not found' }, { status: 404 });
-    }
+    // Use hardened middleware for authentication
+    const context = await flexibleAuth(request);
+    logRequest(request, context);
 
     // Setup file upload handler
     const uploadHandler = unstable_createFileUploadHandler({
@@ -93,7 +73,7 @@ export async function action({ request }: ActionFunctionArgs) {
     // Delete existing asset of same kind
     const existingAsset = await prisma.asset.findFirst({
       where: {
-        shopId: shopRecord.id,
+        shopId: context.shopRecord.id,
         kind: kind
       }
     });
@@ -107,7 +87,7 @@ export async function action({ request }: ActionFunctionArgs) {
     // Save new asset to database
     const asset = await prisma.asset.create({
       data: {
-        shopId: shopRecord.id,
+        shopId: context.shopRecord.id,
         kind: kind,
         url: fileUrl
       }

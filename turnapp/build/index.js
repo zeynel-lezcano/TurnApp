@@ -386,6 +386,98 @@ async function getOptionalSession(request) {
   return await createSessionMiddleware()(request);
 }
 
+// app/lib/middleware.server.ts
+async function flexibleAuth(request) {
+  try {
+    let sessionContext = await getOptionalSession(request);
+    if (sessionContext) {
+      let shopRecord2 = await prisma.shop.findUnique({
+        where: { shopDomain: sessionContext.shop }
+      });
+      if (!shopRecord2 || shopRecord2.uninstalledAt)
+        throw new Response(
+          JSON.stringify({
+            error: "Shop not found or uninstalled",
+            code: "SHOP_INVALID"
+          }),
+          {
+            status: 404,
+            headers: { "Content-Type": "application/json" }
+          }
+        );
+      return {
+        shop: sessionContext.shop,
+        session: sessionContext.session,
+        shopRecord: shopRecord2
+      };
+    }
+    let shopParam = new URL(request.url).searchParams.get("shop");
+    if (!shopParam)
+      throw new Response(
+        JSON.stringify({
+          error: "Authentication required - provide session token or shop parameter",
+          code: "AUTH_REQUIRED"
+        }),
+        {
+          status: 401,
+          headers: { "Content-Type": "application/json" }
+        }
+      );
+    if (!shopParam.endsWith(".myshopify.com"))
+      throw new Response(
+        JSON.stringify({
+          error: "Invalid shop domain format",
+          code: "INVALID_SHOP"
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" }
+        }
+      );
+    let shopRecord = await prisma.shop.findUnique({
+      where: { shopDomain: shopParam }
+    });
+    if (!shopRecord || shopRecord.uninstalledAt)
+      throw new Response(
+        JSON.stringify({
+          error: "Shop not found or uninstalled",
+          code: "SHOP_NOT_FOUND"
+        }),
+        {
+          status: 404,
+          headers: { "Content-Type": "application/json" }
+        }
+      );
+    return {
+      shop: shopParam,
+      session: null,
+      // No session for shop parameter access
+      shopRecord
+    };
+  } catch (error) {
+    throw error instanceof Response ? error : (console.error("Flexible auth middleware error:", error), new Response(
+      JSON.stringify({
+        error: "Authentication failed",
+        code: "AUTH_ERROR"
+      }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" }
+      }
+    ));
+  }
+}
+function logRequest(request, context) {
+  let url = new URL(request.url), logData = {
+    method: request.method,
+    pathname: url.pathname,
+    shop: context?.shop || "unknown",
+    userAgent: request.headers.get("User-Agent"),
+    timestamp: (/* @__PURE__ */ new Date()).toISOString()
+  };
+  console.log("API Request:", JSON.stringify(logData));
+}
+
 // app/routes/admin.branding.tsx
 import {
   Page,
@@ -407,52 +499,38 @@ import { useState, useCallback } from "react";
 import { ImageIcon } from "@shopify/polaris-icons";
 import { jsxDEV as jsxDEV3 } from "react/jsx-dev-runtime";
 async function loader({ request }) {
-  let sessionContext = await getOptionalSession(request), shop;
-  if (sessionContext)
-    shop = sessionContext.shop;
-  else {
-    let shopParam = new URL(request.url).searchParams.get("shop");
-    if (!shopParam)
-      throw new Response("Unauthorized - Missing session token or shop parameter", { status: 401 });
-    shop = shopParam;
-  }
+  let context = await flexibleAuth(request);
+  logRequest(request, context);
   try {
     let configUrl = new URL("/api/config", request.url);
-    configUrl.searchParams.set("shop", shop);
+    configUrl.searchParams.set("shop", context.shop);
     let configResponse = await fetch(configUrl.toString()), configData = await configResponse.json();
     if (!configResponse.ok)
       throw new Error(configData.error || "Failed to load config");
     return json3({
-      shop,
+      shop: context.shop,
       brandingSettings: configData.branding
     });
   } catch (error) {
     console.error("Failed to load branding settings:", error);
     let brandingSettings = {
-      brandName: shop.split(".")[0],
+      brandName: context.shop.split(".")[0],
       primaryColor: "#007C3B",
       logoUrl: "",
       tagline: "Your mobile shopping experience"
     };
     return json3({
-      shop,
+      shop: context.shop,
       brandingSettings
     });
   }
 }
 async function action3({ request }) {
-  let sessionContext = await getOptionalSession(request), shop;
-  if (sessionContext)
-    shop = sessionContext.shop;
-  else {
-    let shopParam = new URL(request.url).searchParams.get("shop");
-    if (!shopParam)
-      throw new Response("Unauthorized - Missing session token or shop parameter", { status: 401 });
-    shop = shopParam;
-  }
+  let context = await flexibleAuth(request);
+  logRequest(request, context);
   try {
     let settingsUrl = new URL("/api/settings", request.url);
-    settingsUrl.searchParams.set("shop", shop);
+    settingsUrl.searchParams.set("shop", context.shop);
     let formData = await request.formData(), settingsResponse = await fetch(settingsUrl.toString(), {
       method: "POST",
       body: formData
@@ -492,19 +570,19 @@ function AdminBranding() {
           actionData?.success && /* @__PURE__ */ jsxDEV3(Banner, { tone: "success", onDismiss: () => {
           }, children: actionData.message }, void 0, !1, {
             fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 179,
+            lineNumber: 155,
             columnNumber: 13
           }, this),
           actionData?.error && /* @__PURE__ */ jsxDEV3(Banner, { tone: "critical", onDismiss: () => {
           }, children: actionData.error }, void 0, !1, {
             fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 184,
+            lineNumber: 160,
             columnNumber: 13
           }, this),
           /* @__PURE__ */ jsxDEV3(Card, { children: /* @__PURE__ */ jsxDEV3(Form, { method: "post", children: /* @__PURE__ */ jsxDEV3(FormLayout, { children: [
             /* @__PURE__ */ jsxDEV3(Text, { variant: "headingSm", as: "h3", children: "Basic Information" }, void 0, !1, {
               fileName: "app/routes/admin.branding.tsx",
-              lineNumber: 192,
+              lineNumber: 168,
               columnNumber: 17
             }, this),
             /* @__PURE__ */ jsxDEV3(
@@ -521,7 +599,7 @@ function AdminBranding() {
               !1,
               {
                 fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 194,
+                lineNumber: 170,
                 columnNumber: 17
               },
               this
@@ -540,19 +618,19 @@ function AdminBranding() {
               !1,
               {
                 fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 203,
+                lineNumber: 179,
                 columnNumber: 17
               },
               this
             ),
             /* @__PURE__ */ jsxDEV3(Divider, {}, void 0, !1, {
               fileName: "app/routes/admin.branding.tsx",
-              lineNumber: 212,
+              lineNumber: 188,
               columnNumber: 17
             }, this),
             /* @__PURE__ */ jsxDEV3(Text, { variant: "headingSm", as: "h3", children: "Visual Design" }, void 0, !1, {
               fileName: "app/routes/admin.branding.tsx",
-              lineNumber: 214,
+              lineNumber: 190,
               columnNumber: 17
             }, this),
             /* @__PURE__ */ jsxDEV3(
@@ -571,7 +649,7 @@ function AdminBranding() {
               !1,
               {
                 fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 216,
+                lineNumber: 192,
                 columnNumber: 17
               },
               this
@@ -579,7 +657,7 @@ function AdminBranding() {
             /* @__PURE__ */ jsxDEV3("div", { children: [
               /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", fontWeight: "medium", children: "Logo Upload" }, void 0, !1, {
                 fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 228,
+                lineNumber: 204,
                 columnNumber: 19
               }, this),
               /* @__PURE__ */ jsxDEV3("div", { style: { marginTop: "8px" }, children: /* @__PURE__ */ jsxDEV3(DropZone, { onDrop: handleDropZoneDrop, accept: "image/*", type: "image", children: uploadedFile ? /* @__PURE__ */ jsxDEV3(BlockStack, { gap: "200", children: [
@@ -594,29 +672,29 @@ function AdminBranding() {
                   !1,
                   {
                     fileName: "app/routes/admin.branding.tsx",
-                    lineNumber: 233,
+                    lineNumber: 209,
                     columnNumber: 27
                   },
                   this
                 ),
                 /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", alignment: "center", children: uploadedFile.name }, void 0, !1, {
                   fileName: "app/routes/admin.branding.tsx",
-                  lineNumber: 238,
+                  lineNumber: 214,
                   columnNumber: 27
                 }, this),
                 uploadFetcher.state === "submitting" && /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", alignment: "center", children: "Uploading..." }, void 0, !1, {
                   fileName: "app/routes/admin.branding.tsx",
-                  lineNumber: 242,
+                  lineNumber: 218,
                   columnNumber: 29
                 }, this),
                 uploadFetcher.data?.success && /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", alignment: "center", tone: "success", children: "Upload successful!" }, void 0, !1, {
                   fileName: "app/routes/admin.branding.tsx",
-                  lineNumber: 247,
+                  lineNumber: 223,
                   columnNumber: 29
                 }, this)
               ] }, void 0, !0, {
                 fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 232,
+                lineNumber: 208,
                 columnNumber: 25
               }, this) : logoUrl ? /* @__PURE__ */ jsxDEV3(BlockStack, { gap: "200", children: [
                 /* @__PURE__ */ jsxDEV3(
@@ -630,58 +708,58 @@ function AdminBranding() {
                   !1,
                   {
                     fileName: "app/routes/admin.branding.tsx",
-                    lineNumber: 254,
+                    lineNumber: 230,
                     columnNumber: 27
                   },
                   this
                 ),
                 /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", alignment: "center", children: "Current logo" }, void 0, !1, {
                   fileName: "app/routes/admin.branding.tsx",
-                  lineNumber: 259,
+                  lineNumber: 235,
                   columnNumber: 27
                 }, this)
               ] }, void 0, !0, {
                 fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 253,
+                lineNumber: 229,
                 columnNumber: 25
               }, this) : /* @__PURE__ */ jsxDEV3(BlockStack, { gap: "200", children: [
                 /* @__PURE__ */ jsxDEV3(Icon, { source: ImageIcon, tone: "subdued" }, void 0, !1, {
                   fileName: "app/routes/admin.branding.tsx",
-                  lineNumber: 265,
+                  lineNumber: 241,
                   columnNumber: 27
                 }, this),
                 /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", alignment: "center", children: "Drop logo here or click to upload" }, void 0, !1, {
                   fileName: "app/routes/admin.branding.tsx",
-                  lineNumber: 266,
+                  lineNumber: 242,
                   columnNumber: 27
                 }, this),
                 /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", alignment: "center", tone: "subdued", children: "Supports JPG, PNG, WebP, SVG (max 2MB)" }, void 0, !1, {
                   fileName: "app/routes/admin.branding.tsx",
-                  lineNumber: 269,
+                  lineNumber: 245,
                   columnNumber: 27
                 }, this)
               ] }, void 0, !0, {
                 fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 264,
+                lineNumber: 240,
                 columnNumber: 25
               }, this) }, void 0, !1, {
                 fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 230,
+                lineNumber: 206,
                 columnNumber: 21
               }, this) }, void 0, !1, {
                 fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 229,
+                lineNumber: 205,
                 columnNumber: 19
               }, this),
               uploadFetcher.data?.error && /* @__PURE__ */ jsxDEV3(Banner, { tone: "critical", onDismiss: () => {
               }, children: uploadFetcher.data?.error || "Upload error" }, void 0, !1, {
                 fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 277,
+                lineNumber: 253,
                 columnNumber: 21
               }, this)
             ] }, void 0, !0, {
               fileName: "app/routes/admin.branding.tsx",
-              lineNumber: 227,
+              lineNumber: 203,
               columnNumber: 17
             }, this),
             /* @__PURE__ */ jsxDEV3(
@@ -698,42 +776,42 @@ function AdminBranding() {
               !1,
               {
                 fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 283,
+                lineNumber: 259,
                 columnNumber: 17
               },
               this
             ),
             /* @__PURE__ */ jsxDEV3(InlineStack, { align: "end", children: /* @__PURE__ */ jsxDEV3(Button, { variant: "primary", submit: !0, children: "Save Settings" }, void 0, !1, {
               fileName: "app/routes/admin.branding.tsx",
-              lineNumber: 293,
+              lineNumber: 269,
               columnNumber: 19
             }, this) }, void 0, !1, {
               fileName: "app/routes/admin.branding.tsx",
-              lineNumber: 292,
+              lineNumber: 268,
               columnNumber: 17
             }, this)
           ] }, void 0, !0, {
             fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 191,
+            lineNumber: 167,
             columnNumber: 15
           }, this) }, void 0, !1, {
             fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 190,
+            lineNumber: 166,
             columnNumber: 13
           }, this) }, void 0, !1, {
             fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 189,
+            lineNumber: 165,
             columnNumber: 11
           }, this)
         ] }, void 0, !0, {
           fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 177,
+          lineNumber: 153,
           columnNumber: 9
         }, this),
         /* @__PURE__ */ jsxDEV3(Layout.Section, { variant: "oneThird", children: /* @__PURE__ */ jsxDEV3(Card, { children: /* @__PURE__ */ jsxDEV3("div", { style: { padding: "20px" }, children: [
           /* @__PURE__ */ jsxDEV3(Text, { variant: "headingSm", as: "h3", children: "Preview" }, void 0, !1, {
             fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 305,
+            lineNumber: 281,
             columnNumber: 15
           }, this),
           /* @__PURE__ */ jsxDEV3("div", { style: { marginTop: "16px" }, children: /* @__PURE__ */ jsxDEV3(
@@ -749,12 +827,12 @@ function AdminBranding() {
               children: [
                 /* @__PURE__ */ jsxDEV3(Text, { variant: "headingLg", as: "h2", children: brandName || "Your App Name" }, void 0, !1, {
                   fileName: "app/routes/admin.branding.tsx",
-                  lineNumber: 316,
+                  lineNumber: 292,
                   columnNumber: 19
                 }, this),
                 /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", children: tagline || "Your tagline here" }, void 0, !1, {
                   fileName: "app/routes/admin.branding.tsx",
-                  lineNumber: 319,
+                  lineNumber: 295,
                   columnNumber: 19
                 }, this)
               ]
@@ -763,31 +841,31 @@ function AdminBranding() {
             !0,
             {
               fileName: "app/routes/admin.branding.tsx",
-              lineNumber: 307,
+              lineNumber: 283,
               columnNumber: 17
             },
             this
           ) }, void 0, !1, {
             fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 306,
+            lineNumber: 282,
             columnNumber: 15
           }, this)
         ] }, void 0, !0, {
           fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 304,
+          lineNumber: 280,
           columnNumber: 13
         }, this) }, void 0, !1, {
           fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 303,
+          lineNumber: 279,
           columnNumber: 11
         }, this) }, void 0, !1, {
           fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 302,
+          lineNumber: 278,
           columnNumber: 9
         }, this)
       ] }, void 0, !0, {
         fileName: "app/routes/admin.branding.tsx",
-        lineNumber: 176,
+        lineNumber: 152,
         columnNumber: 7
       }, this)
     },
@@ -795,7 +873,7 @@ function AdminBranding() {
     !1,
     {
       fileName: "app/routes/admin.branding.tsx",
-      lineNumber: 169,
+      lineNumber: 145,
       columnNumber: 5
     },
     this
@@ -1077,28 +1155,21 @@ __export(api_config_exports, {
 });
 import { json as json5 } from "@remix-run/node";
 async function loader4({ request }) {
-  let sessionContext = await getOptionalSession(request), shop;
-  if (sessionContext)
-    shop = sessionContext.shop;
-  else {
-    let shopParam = new URL(request.url).searchParams.get("shop");
-    if (!shopParam)
-      return json5({ error: "Shop parameter or session token required" }, { status: 400 });
-    shop = shopParam;
-  }
+  let context = await flexibleAuth(request);
+  logRequest(request, context);
   try {
-    let settings = await getShopSettings(shop);
+    let settings = await getShopSettings(context.shop);
     if (!settings)
       return json5({ error: "Shop not found or not active" }, { status: 404 });
     let branding = {
-      brandName: settings.brandName || shop.split(".")[0],
+      brandName: settings.brandName || context.shop.split(".")[0],
       primaryColor: settings.primaryColor || "#007C3B",
       logoUrl: settings.logoUrl || "",
       tagline: settings.tagline || "Your mobile shopping experience"
     }, configResponse = {
-      shop,
+      shop: context.shop,
       branding,
-      storefrontEndpoint: `https://${shop}/api/2024-01/graphql.json`,
+      storefrontEndpoint: `https://${context.shop}/api/2024-01/graphql.json`,
       appVersion: "1.0.0"
     }, validatedConfig = ConfigResponseSchema.parse(configResponse);
     return json5(validatedConfig, {
@@ -1131,20 +1202,8 @@ async function action5({ request }) {
   if (request.method !== "POST")
     return json6({ error: "Method not allowed" }, { status: 405 });
   try {
-    let sessionContext = await getOptionalSession(request), shop;
-    if (sessionContext)
-      shop = sessionContext.shop;
-    else {
-      let shopParam = new URL(request.url).searchParams.get("shop");
-      if (!shopParam)
-        return json6({ error: "Unauthorized" }, { status: 401 });
-      shop = shopParam;
-    }
-    let shopRecord = await prisma.shop.findUnique({
-      where: { shopDomain: shop }
-    });
-    if (!shopRecord)
-      return json6({ error: "Shop not found" }, { status: 404 });
+    let context = await flexibleAuth(request);
+    logRequest(request, context);
     let uploadHandler = unstable_createFileUploadHandler({
       directory: path.join(process.cwd(), "public", "uploads"),
       file: ({ filename, contentType }) => {
@@ -1167,7 +1226,7 @@ async function action5({ request }) {
       }, { status: 400 });
     let fileUrl = `/uploads/${file.name}`, existingAsset = await prisma.asset.findFirst({
       where: {
-        shopId: shopRecord.id,
+        shopId: context.shopRecord.id,
         kind
       }
     });
@@ -1176,7 +1235,7 @@ async function action5({ request }) {
     });
     let asset = await prisma.asset.create({
       data: {
-        shopId: shopRecord.id,
+        shopId: context.shopRecord.id,
         kind,
         url: fileUrl
       }
@@ -1538,27 +1597,14 @@ import {
 import { useState as useState2, useCallback as useCallback2 } from "react";
 import { jsxDEV as jsxDEV6 } from "react/jsx-dev-runtime";
 async function loader8({ request }) {
-  let url = new URL(request.url), sessionContext = await getOptionalSession(request);
-  if (sessionContext)
-    return json10({
-      shop: sessionContext.shop,
-      host: url.searchParams.get("host"),
-      appBridgeConfig: {
-        apiKey: process.env.SHOPIFY_API_KEY || "",
-        shop: sessionContext.shop,
-        host: url.searchParams.get("host") || ""
-      }
-    });
-  let shop = url.searchParams.get("shop"), host = url.searchParams.get("host");
-  if (!shop)
-    throw new Response("Unauthorized - Missing session token or shop parameter", { status: 401 });
-  return json10({
-    shop,
-    host,
+  let url = new URL(request.url), context = await flexibleAuth(request);
+  return logRequest(request, context), json10({
+    shop: context.shop,
+    host: url.searchParams.get("host"),
     appBridgeConfig: {
       apiKey: process.env.SHOPIFY_API_KEY || "",
-      shop,
-      host: host || ""
+      shop: context.shop,
+      host: url.searchParams.get("host") || ""
     }
   });
 }
@@ -1588,13 +1634,13 @@ function AdminLayout() {
     !1,
     {
       fileName: "app/routes/admin.tsx",
-      lineNumber: 68,
+      lineNumber: 48,
       columnNumber: 7
     },
     this
   ) }, void 0, !1, {
     fileName: "app/routes/admin.tsx",
-    lineNumber: 67,
+    lineNumber: 47,
     columnNumber: 5
   }, this), topBarMarkup = /* @__PURE__ */ jsxDEV6(
     TopBar,
@@ -1606,7 +1652,7 @@ function AdminLayout() {
     !1,
     {
       fileName: "app/routes/admin.tsx",
-      lineNumber: 88,
+      lineNumber: 68,
       columnNumber: 5
     },
     this
@@ -1622,12 +1668,12 @@ function AdminLayout() {
         /* @__PURE__ */ jsxDEV6(Layout2.Section, { children: /* @__PURE__ */ jsxDEV6(Card2, { children: /* @__PURE__ */ jsxDEV6("div", { style: { padding: "20px" }, children: [
           /* @__PURE__ */ jsxDEV6(Text2, { variant: "headingMd", as: "h2", children: "Welcome to TurnApp" }, void 0, !1, {
             fileName: "app/routes/admin.tsx",
-            lineNumber: 110,
+            lineNumber: 90,
             columnNumber: 19
           }, this),
           /* @__PURE__ */ jsxDEV6(Text2, { variant: "bodyMd", as: "p", tone: "subdued", children: "Transform your Shopify store into a mobile shopping app" }, void 0, !1, {
             fileName: "app/routes/admin.tsx",
-            lineNumber: 111,
+            lineNumber: 91,
             columnNumber: 19
           }, this),
           /* @__PURE__ */ jsxDEV6("div", { style: { marginTop: "20px" }, children: /* @__PURE__ */ jsxDEV6(Text2, { variant: "headingSm", as: "h3", children: [
@@ -1635,85 +1681,85 @@ function AdminLayout() {
             shop
           ] }, void 0, !0, {
             fileName: "app/routes/admin.tsx",
-            lineNumber: 115,
+            lineNumber: 95,
             columnNumber: 21
           }, this) }, void 0, !1, {
             fileName: "app/routes/admin.tsx",
-            lineNumber: 114,
+            lineNumber: 94,
             columnNumber: 19
           }, this),
           /* @__PURE__ */ jsxDEV6("div", { style: { marginTop: "20px" }, children: /* @__PURE__ */ jsxDEV6(Link3, { to: "/admin/branding", children: /* @__PURE__ */ jsxDEV6(Button2, { variant: "primary", children: "Configure Branding" }, void 0, !1, {
             fileName: "app/routes/admin.tsx",
-            lineNumber: 119,
+            lineNumber: 99,
             columnNumber: 23
           }, this) }, void 0, !1, {
             fileName: "app/routes/admin.tsx",
-            lineNumber: 118,
+            lineNumber: 98,
             columnNumber: 21
           }, this) }, void 0, !1, {
             fileName: "app/routes/admin.tsx",
-            lineNumber: 117,
+            lineNumber: 97,
             columnNumber: 19
           }, this)
         ] }, void 0, !0, {
           fileName: "app/routes/admin.tsx",
-          lineNumber: 109,
+          lineNumber: 89,
           columnNumber: 17
         }, this) }, void 0, !1, {
           fileName: "app/routes/admin.tsx",
-          lineNumber: 108,
+          lineNumber: 88,
           columnNumber: 15
         }, this) }, void 0, !1, {
           fileName: "app/routes/admin.tsx",
-          lineNumber: 107,
+          lineNumber: 87,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ jsxDEV6(Layout2.Section, { variant: "oneThird", children: /* @__PURE__ */ jsxDEV6(Card2, { children: /* @__PURE__ */ jsxDEV6("div", { style: { padding: "20px" }, children: [
           /* @__PURE__ */ jsxDEV6(Text2, { variant: "headingSm", as: "h3", children: "Quick Stats" }, void 0, !1, {
             fileName: "app/routes/admin.tsx",
-            lineNumber: 129,
+            lineNumber: 109,
             columnNumber: 19
           }, this),
           /* @__PURE__ */ jsxDEV6("div", { style: { marginTop: "12px" }, children: [
             /* @__PURE__ */ jsxDEV6(Text2, { variant: "bodyMd", as: "p", children: "Status: Active" }, void 0, !1, {
               fileName: "app/routes/admin.tsx",
-              lineNumber: 131,
+              lineNumber: 111,
               columnNumber: 21
             }, this),
             /* @__PURE__ */ jsxDEV6(Text2, { variant: "bodyMd", as: "p", children: "App Version: 1.0.0" }, void 0, !1, {
               fileName: "app/routes/admin.tsx",
-              lineNumber: 132,
+              lineNumber: 112,
               columnNumber: 21
             }, this)
           ] }, void 0, !0, {
             fileName: "app/routes/admin.tsx",
-            lineNumber: 130,
+            lineNumber: 110,
             columnNumber: 19
           }, this)
         ] }, void 0, !0, {
           fileName: "app/routes/admin.tsx",
-          lineNumber: 128,
+          lineNumber: 108,
           columnNumber: 17
         }, this) }, void 0, !1, {
           fileName: "app/routes/admin.tsx",
-          lineNumber: 127,
+          lineNumber: 107,
           columnNumber: 15
         }, this) }, void 0, !1, {
           fileName: "app/routes/admin.tsx",
-          lineNumber: 126,
+          lineNumber: 106,
           columnNumber: 13
         }, this)
       ] }, void 0, !0, {
         fileName: "app/routes/admin.tsx",
-        lineNumber: 106,
+        lineNumber: 86,
         columnNumber: 11
       }, this) }, void 0, !1, {
         fileName: "app/routes/admin.tsx",
-        lineNumber: 105,
+        lineNumber: 85,
         columnNumber: 9
       }, this) : /* @__PURE__ */ jsxDEV6(Outlet2, {}, void 0, !1, {
         fileName: "app/routes/admin.tsx",
-        lineNumber: 140,
+        lineNumber: 120,
         columnNumber: 9
       }, this)
     },
@@ -1721,7 +1767,7 @@ function AdminLayout() {
     !1,
     {
       fileName: "app/routes/admin.tsx",
-      lineNumber: 98,
+      lineNumber: 78,
       columnNumber: 5
     },
     this
@@ -1729,7 +1775,7 @@ function AdminLayout() {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-IMMRVYYP.js", imports: ["/build/_shared/chunk-XC6BC2BP.js", "/build/_shared/chunk-LW6LB2HF.js", "/build/_shared/chunk-ALN5UVCC.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-56LDNGDG.js", "/build/_shared/chunk-PMI65YMG.js", "/build/_shared/chunk-2Q7FBYOG.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-VQC54PAV.js", imports: ["/build/_shared/chunk-RRH55SMP.js"], hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-5T3DDPHO.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin": { id: "routes/admin", parentId: "root", path: "admin", index: void 0, caseSensitive: void 0, module: "/build/routes/admin-ZZMVBB2B.js", imports: ["/build/_shared/chunk-EV32D4DT.js", "/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin.branding": { id: "routes/admin.branding", parentId: "routes/admin", path: "branding", index: void 0, caseSensitive: void 0, module: "/build/routes/admin.branding-EN2SGFBL.js", imports: ["/build/_shared/chunk-RRH55SMP.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.config": { id: "routes/api.config", parentId: "root", path: "api/config", index: void 0, caseSensitive: void 0, module: "/build/routes/api.config-F6QT7IN6.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.settings": { id: "routes/api.settings", parentId: "root", path: "api/settings", index: void 0, caseSensitive: void 0, module: "/build/routes/api.settings-C6JUPEZG.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.upload": { id: "routes/api.upload", parentId: "root", path: "api/upload", index: void 0, caseSensitive: void 0, module: "/build/routes/api.upload-NKI3ERUQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.callback": { id: "routes/auth.callback", parentId: "root", path: "auth/callback", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.callback-HTHTBQTT.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.install": { id: "routes/auth.install", parentId: "root", path: "auth/install", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.install-GWWDNMQD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/healthz": { id: "routes/healthz", parentId: "root", path: "healthz", index: void 0, caseSensitive: void 0, module: "/build/routes/healthz-47L4ZWTK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/test.oauth": { id: "routes/test.oauth", parentId: "root", path: "test/oauth", index: void 0, caseSensitive: void 0, module: "/build/routes/test.oauth-2MXZLR7I.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.app_uninstalled": { id: "routes/webhooks.app_uninstalled", parentId: "root", path: "webhooks/app_uninstalled", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.app_uninstalled-QBHIURQQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.products_update": { id: "routes/webhooks.products_update", parentId: "root", path: "webhooks/products_update", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.products_update-JGCI7S77.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "ff943b25", hmr: { runtime: "/build/_shared/chunk-ALN5UVCC.js", timestamp: 1755765288647 }, url: "/build/manifest-FF943B25.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-VWERPWTD.js", imports: ["/build/_shared/chunk-XC6BC2BP.js", "/build/_shared/chunk-D3JE7QQY.js", "/build/_shared/chunk-ALN5UVCC.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-56LDNGDG.js", "/build/_shared/chunk-PMI65YMG.js", "/build/_shared/chunk-2Q7FBYOG.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-TNNAZQ72.js", imports: ["/build/_shared/chunk-RRH55SMP.js"], hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-L66HS5MY.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin": { id: "routes/admin", parentId: "root", path: "admin", index: void 0, caseSensitive: void 0, module: "/build/routes/admin-OYLTO3LW.js", imports: ["/build/_shared/chunk-Q4XQCCJX.js", "/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin.branding": { id: "routes/admin.branding", parentId: "routes/admin", path: "branding", index: void 0, caseSensitive: void 0, module: "/build/routes/admin.branding-J4OQHBI7.js", imports: ["/build/_shared/chunk-RRH55SMP.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.config": { id: "routes/api.config", parentId: "root", path: "api/config", index: void 0, caseSensitive: void 0, module: "/build/routes/api.config-F6QT7IN6.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.settings": { id: "routes/api.settings", parentId: "root", path: "api/settings", index: void 0, caseSensitive: void 0, module: "/build/routes/api.settings-C6JUPEZG.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.upload": { id: "routes/api.upload", parentId: "root", path: "api/upload", index: void 0, caseSensitive: void 0, module: "/build/routes/api.upload-NKI3ERUQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.callback": { id: "routes/auth.callback", parentId: "root", path: "auth/callback", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.callback-HTHTBQTT.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.install": { id: "routes/auth.install", parentId: "root", path: "auth/install", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.install-GWWDNMQD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/healthz": { id: "routes/healthz", parentId: "root", path: "healthz", index: void 0, caseSensitive: void 0, module: "/build/routes/healthz-47L4ZWTK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/test.oauth": { id: "routes/test.oauth", parentId: "root", path: "test/oauth", index: void 0, caseSensitive: void 0, module: "/build/routes/test.oauth-AGY54P2T.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.app_uninstalled": { id: "routes/webhooks.app_uninstalled", parentId: "root", path: "webhooks/app_uninstalled", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.app_uninstalled-QBHIURQQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.products_update": { id: "routes/webhooks.products_update", parentId: "root", path: "webhooks/products_update", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.products_update-JGCI7S77.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "47084f07", hmr: { runtime: "/build/_shared/chunk-ALN5UVCC.js", timestamp: 1755766467347 }, url: "/build/manifest-47084F07.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public/build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1, v3_throwAbortReason: !1, v3_routeConfig: !1, v3_singleFetch: !1, v3_lazyRouteDiscovery: !1, unstable_optimizeDeps: !1 }, publicPath = "/build/", entry = { module: entry_server_node_exports }, routes = {
