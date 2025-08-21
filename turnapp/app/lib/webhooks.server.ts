@@ -1,4 +1,5 @@
 import { createHmac } from "node:crypto";
+import { buildWebhookUrl } from './tunnel.server.js';
 
 export function verifyWebhookHmac(
   body: string | Buffer, 
@@ -41,17 +42,25 @@ export interface WebhookRegistration {
 export async function registerWebhooks(
   shop: string,
   accessToken: string,
-  baseUrl: string
+  baseUrl?: string
 ): Promise<void> {
+  // Use tunnel-aware URL building if baseUrl not provided
+  const getWebhookAddress = (path: string) => {
+    if (baseUrl) {
+      return `${baseUrl}${path}`;
+    }
+    return buildWebhookUrl(path);
+  };
+
   const webhooks: WebhookRegistration[] = [
     {
       topic: 'app/uninstalled',
-      address: `${baseUrl}/webhooks/app_uninstalled`,
+      address: getWebhookAddress('/webhooks/app_uninstalled'),
       format: 'json'
     },
     {
       topic: 'products/update',
-      address: `${baseUrl}/webhooks/products_update`, 
+      address: getWebhookAddress('/webhooks/products_update'), 
       format: 'json'
     }
   ];
