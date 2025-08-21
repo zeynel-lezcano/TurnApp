@@ -1,5 +1,12 @@
+## 0.4.0 (2025-08-21)
+
+* feat: implement session token middleware hardening system b95bf95
+
+
+
 ## 0.3.0 (2025-08-21)
 
+* chore(release): 0.3.0 a685ff2
 * feat: implement logo upload to local storage system ae48a27
 
 
