@@ -1,5 +1,12 @@
+## 0.7.0 (2025-08-21)
+
+* feat: implement dev tunnel setup with ngrok integration c43d31e
+
+
+
 ## 0.6.0 (2025-08-21)
 
+* chore(release): 0.6.0 c055553
 * feat: implement storefront API setup with GraphQL product proxy 5026239
 
 
