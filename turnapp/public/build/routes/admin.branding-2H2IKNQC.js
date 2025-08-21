@@ -1,4 +1,10 @@
 import {
+  require_session
+} from "/build/_shared/chunk-EV32D4DT.js";
+import {
+  require_node
+} from "/build/_shared/chunk-G7CHZRZX.js";
+import {
   Banner,
   Button,
   Card,
@@ -11,21 +17,18 @@ import {
   TextField
 } from "/build/_shared/chunk-ANTKSAN7.js";
 import {
-  require_node
-} from "/build/_shared/chunk-G7CHZRZX.js";
-import {
   Form,
   useActionData,
   useLoaderData
-} from "/build/_shared/chunk-D3JE7QQY.js";
+} from "/build/_shared/chunk-LW6LB2HF.js";
 import {
   createHotContext
 } from "/build/_shared/chunk-ALN5UVCC.js";
 import "/build/_shared/chunk-UWV35TSL.js";
-import "/build/_shared/chunk-56LDNGDG.js";
 import {
   require_jsx_dev_runtime
 } from "/build/_shared/chunk-PMI65YMG.js";
+import "/build/_shared/chunk-56LDNGDG.js";
 import {
   require_react
 } from "/build/_shared/chunk-2Q7FBYOG.js";
@@ -35,6 +38,7 @@ import {
 
 // app/routes/admin.branding.tsx
 var import_node = __toESM(require_node(), 1);
+var import_session = __toESM(require_session(), 1);
 var import_react2 = __toESM(require_react(), 1);
 var import_jsx_dev_runtime = __toESM(require_jsx_dev_runtime(), 1);
 if (!window.$RefreshReg$ || !window.$RefreshSig$ || !window.$RefreshRuntime$) {
@@ -55,7 +59,7 @@ if (import.meta) {
     //@ts-expect-error
     "app/routes/admin.branding.tsx"
   );
-  import.meta.hot.lastModified = "1755726457798.826";
+  import.meta.hot.lastModified = "1755762071971.8945";
 }
 function AdminBranding() {
   _s();
@@ -78,70 +82,76 @@ function AdminBranding() {
       actionData?.success && /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Banner, { tone: "success", onDismiss: () => {
       }, children: actionData.message }, void 0, false, {
         fileName: "app/routes/admin.branding.tsx",
-        lineNumber: 99,
+        lineNumber: 135,
         columnNumber: 35
+      }, this),
+      actionData?.error && /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Banner, { tone: "critical", onDismiss: () => {
+      }, children: actionData.error }, void 0, false, {
+        fileName: "app/routes/admin.branding.tsx",
+        lineNumber: 138,
+        columnNumber: 33
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Card, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Form, { method: "post", children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(FormLayout, { children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Text, { variant: "headingSm", as: "h3", children: "Basic Information" }, void 0, false, {
           fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 106,
+          lineNumber: 145,
           columnNumber: 17
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(TextField, { label: "App Name", value: brandName, onChange: handleBrandNameChange, name: "brandName", helpText: "This will be the name of your mobile app", autoComplete: "off" }, void 0, false, {
           fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 108,
+          lineNumber: 147,
           columnNumber: 17
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(TextField, { label: "Tagline", value: tagline, onChange: handleTaglineChange, name: "tagline", helpText: "A short description for your mobile app", autoComplete: "off" }, void 0, false, {
           fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 110,
+          lineNumber: 149,
           columnNumber: 17
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Divider, {}, void 0, false, {
           fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 112,
+          lineNumber: 151,
           columnNumber: 17
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Text, { variant: "headingSm", as: "h3", children: "Visual Design" }, void 0, false, {
           fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 114,
+          lineNumber: 153,
           columnNumber: 17
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(TextField, { label: "Primary Color", value: primaryColor, onChange: setPrimaryColor, name: "primaryColor", helpText: "Hex color code for your app's primary color", autoComplete: "off", prefix: "#", placeholder: "007C3B" }, void 0, false, {
           fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 116,
+          lineNumber: 155,
           columnNumber: 17
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(TextField, { label: "Logo URL", value: logoUrl, onChange: handleLogoUrlChange, name: "logoUrl", helpText: "URL to your app logo (optional)", autoComplete: "off" }, void 0, false, {
           fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 118,
+          lineNumber: 157,
           columnNumber: 17
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(InlineStack, { align: "end", children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Button, { variant: "primary", submit: true, children: "Save Settings" }, void 0, false, {
           fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 121,
+          lineNumber: 160,
           columnNumber: 19
         }, this) }, void 0, false, {
           fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 120,
+          lineNumber: 159,
           columnNumber: 17
         }, this)
       ] }, void 0, true, {
         fileName: "app/routes/admin.branding.tsx",
-        lineNumber: 105,
+        lineNumber: 144,
         columnNumber: 15
       }, this) }, void 0, false, {
         fileName: "app/routes/admin.branding.tsx",
-        lineNumber: 104,
+        lineNumber: 143,
         columnNumber: 13
       }, this) }, void 0, false, {
         fileName: "app/routes/admin.branding.tsx",
-        lineNumber: 103,
+        lineNumber: 142,
         columnNumber: 11
       }, this)
     ] }, void 0, true, {
       fileName: "app/routes/admin.branding.tsx",
-      lineNumber: 98,
+      lineNumber: 134,
       columnNumber: 9
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Layout.Section, { variant: "oneThird", children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Card, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { style: {
@@ -149,7 +159,7 @@ function AdminBranding() {
     }, children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Text, { variant: "headingSm", as: "h3", children: "Preview" }, void 0, false, {
         fileName: "app/routes/admin.branding.tsx",
-        lineNumber: 135,
+        lineNumber: 174,
         columnNumber: 15
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { style: {
@@ -163,43 +173,43 @@ function AdminBranding() {
       }, children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Text, { variant: "headingLg", as: "h2", children: brandName || "Your App Name" }, void 0, false, {
           fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 146,
+          lineNumber: 185,
           columnNumber: 19
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Text, { variant: "bodyMd", as: "p", children: tagline || "Your tagline here" }, void 0, false, {
           fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 149,
+          lineNumber: 188,
           columnNumber: 19
         }, this)
       ] }, void 0, true, {
         fileName: "app/routes/admin.branding.tsx",
-        lineNumber: 139,
+        lineNumber: 178,
         columnNumber: 17
       }, this) }, void 0, false, {
         fileName: "app/routes/admin.branding.tsx",
-        lineNumber: 136,
+        lineNumber: 175,
         columnNumber: 15
       }, this)
     ] }, void 0, true, {
       fileName: "app/routes/admin.branding.tsx",
-      lineNumber: 132,
+      lineNumber: 171,
       columnNumber: 13
     }, this) }, void 0, false, {
       fileName: "app/routes/admin.branding.tsx",
-      lineNumber: 131,
+      lineNumber: 170,
       columnNumber: 11
     }, this) }, void 0, false, {
       fileName: "app/routes/admin.branding.tsx",
-      lineNumber: 130,
+      lineNumber: 169,
       columnNumber: 9
     }, this)
   ] }, void 0, true, {
     fileName: "app/routes/admin.branding.tsx",
-    lineNumber: 97,
+    lineNumber: 133,
     columnNumber: 7
   }, this) }, void 0, false, {
     fileName: "app/routes/admin.branding.tsx",
-    lineNumber: 94,
+    lineNumber: 130,
     columnNumber: 10
   }, this);
 }
@@ -214,4 +224,4 @@ window.$RefreshSig$ = prevRefreshSig;
 export {
   AdminBranding as default
 };
-//# sourceMappingURL=/build/routes/admin.branding-MA6NY6DG.js.map
+//# sourceMappingURL=/build/routes/admin.branding-2H2IKNQC.js.map

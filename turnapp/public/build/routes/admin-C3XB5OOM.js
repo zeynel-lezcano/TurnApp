@@ -1,4 +1,10 @@
 import {
+  require_session
+} from "/build/_shared/chunk-EV32D4DT.js";
+import {
+  require_node
+} from "/build/_shared/chunk-G7CHZRZX.js";
+import {
   Button,
   Card,
   Frame,
@@ -9,22 +15,19 @@ import {
   TopBar
 } from "/build/_shared/chunk-ANTKSAN7.js";
 import {
-  require_node
-} from "/build/_shared/chunk-G7CHZRZX.js";
-import {
   Link,
   Outlet,
   useLoaderData,
   useLocation
-} from "/build/_shared/chunk-D3JE7QQY.js";
+} from "/build/_shared/chunk-LW6LB2HF.js";
 import {
   createHotContext
 } from "/build/_shared/chunk-ALN5UVCC.js";
 import "/build/_shared/chunk-UWV35TSL.js";
-import "/build/_shared/chunk-56LDNGDG.js";
 import {
   require_jsx_dev_runtime
 } from "/build/_shared/chunk-PMI65YMG.js";
+import "/build/_shared/chunk-56LDNGDG.js";
 import {
   require_react
 } from "/build/_shared/chunk-2Q7FBYOG.js";
@@ -34,6 +37,7 @@ import {
 
 // app/routes/admin.tsx
 var import_node = __toESM(require_node(), 1);
+var import_session = __toESM(require_session(), 1);
 var import_react2 = __toESM(require_react(), 1);
 var import_jsx_dev_runtime = __toESM(require_jsx_dev_runtime(), 1);
 if (!window.$RefreshReg$ || !window.$RefreshSig$ || !window.$RefreshRuntime$) {
@@ -54,7 +58,7 @@ if (import.meta) {
     //@ts-expect-error
     "app/routes/admin.tsx"
   );
-  import.meta.hot.lastModified = "1755726628749.004";
+  import.meta.hot.lastModified = "1755762071971.9812";
 }
 function AdminLayout() {
   _s();
@@ -76,16 +80,16 @@ function AdminLayout() {
     selected: location.pathname === "/admin/branding"
   }] }, void 0, false, {
     fileName: "app/routes/admin.tsx",
-    lineNumber: 61,
+    lineNumber: 77,
     columnNumber: 7
   }, this) }, void 0, false, {
     fileName: "app/routes/admin.tsx",
-    lineNumber: 60,
+    lineNumber: 76,
     columnNumber: 28
   }, this);
   const topBarMarkup = /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(TopBar, { showNavigationToggle: true, onNavigationToggle: toggleMobileNavigationActive }, void 0, false, {
     fileName: "app/routes/admin.tsx",
-    lineNumber: 73,
+    lineNumber: 89,
     columnNumber: 24
   }, this);
   const currentPath = location.pathname;
@@ -96,12 +100,12 @@ function AdminLayout() {
     }, children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Text, { variant: "headingMd", as: "h2", children: "Welcome to TurnApp" }, void 0, false, {
         fileName: "app/routes/admin.tsx",
-        lineNumber: 84,
+        lineNumber: 100,
         columnNumber: 19
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Text, { variant: "bodyMd", as: "p", tone: "subdued", children: "Transform your Shopify store into a mobile shopping app" }, void 0, false, {
         fileName: "app/routes/admin.tsx",
-        lineNumber: 85,
+        lineNumber: 101,
         columnNumber: 19
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { style: {
@@ -111,39 +115,39 @@ function AdminLayout() {
         shop
       ] }, void 0, true, {
         fileName: "app/routes/admin.tsx",
-        lineNumber: 91,
+        lineNumber: 107,
         columnNumber: 21
       }, this) }, void 0, false, {
         fileName: "app/routes/admin.tsx",
-        lineNumber: 88,
+        lineNumber: 104,
         columnNumber: 19
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { style: {
         marginTop: "20px"
       }, children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, { to: "/admin/branding", children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Button, { variant: "primary", children: "Configure Branding" }, void 0, false, {
         fileName: "app/routes/admin.tsx",
-        lineNumber: 97,
+        lineNumber: 113,
         columnNumber: 23
       }, this) }, void 0, false, {
         fileName: "app/routes/admin.tsx",
-        lineNumber: 96,
+        lineNumber: 112,
         columnNumber: 21
       }, this) }, void 0, false, {
         fileName: "app/routes/admin.tsx",
-        lineNumber: 93,
+        lineNumber: 109,
         columnNumber: 19
       }, this)
     ] }, void 0, true, {
       fileName: "app/routes/admin.tsx",
-      lineNumber: 81,
+      lineNumber: 97,
       columnNumber: 17
     }, this) }, void 0, false, {
       fileName: "app/routes/admin.tsx",
-      lineNumber: 80,
+      lineNumber: 96,
       columnNumber: 15
     }, this) }, void 0, false, {
       fileName: "app/routes/admin.tsx",
-      lineNumber: 79,
+      lineNumber: 95,
       columnNumber: 13
     }, this),
     /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Layout.Section, { variant: "oneThird", children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Card, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { style: {
@@ -151,7 +155,7 @@ function AdminLayout() {
     }, children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Text, { variant: "headingSm", as: "h3", children: "Quick Stats" }, void 0, false, {
         fileName: "app/routes/admin.tsx",
-        lineNumber: 109,
+        lineNumber: 125,
         columnNumber: 19
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { style: {
@@ -159,47 +163,47 @@ function AdminLayout() {
       }, children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Text, { variant: "bodyMd", as: "p", children: "Status: Active" }, void 0, false, {
           fileName: "app/routes/admin.tsx",
-          lineNumber: 113,
+          lineNumber: 129,
           columnNumber: 21
         }, this),
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Text, { variant: "bodyMd", as: "p", children: "App Version: 1.0.0" }, void 0, false, {
           fileName: "app/routes/admin.tsx",
-          lineNumber: 114,
+          lineNumber: 130,
           columnNumber: 21
         }, this)
       ] }, void 0, true, {
         fileName: "app/routes/admin.tsx",
-        lineNumber: 110,
+        lineNumber: 126,
         columnNumber: 19
       }, this)
     ] }, void 0, true, {
       fileName: "app/routes/admin.tsx",
-      lineNumber: 106,
+      lineNumber: 122,
       columnNumber: 17
     }, this) }, void 0, false, {
       fileName: "app/routes/admin.tsx",
-      lineNumber: 105,
+      lineNumber: 121,
       columnNumber: 15
     }, this) }, void 0, false, {
       fileName: "app/routes/admin.tsx",
-      lineNumber: 104,
+      lineNumber: 120,
       columnNumber: 13
     }, this)
   ] }, void 0, true, {
     fileName: "app/routes/admin.tsx",
-    lineNumber: 78,
+    lineNumber: 94,
     columnNumber: 11
   }, this) }, void 0, false, {
     fileName: "app/routes/admin.tsx",
-    lineNumber: 77,
+    lineNumber: 93,
     columnNumber: 21
   }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Outlet, {}, void 0, false, {
     fileName: "app/routes/admin.tsx",
-    lineNumber: 120,
+    lineNumber: 136,
     columnNumber: 19
   }, this) }, void 0, false, {
     fileName: "app/routes/admin.tsx",
-    lineNumber: 76,
+    lineNumber: 92,
     columnNumber: 10
   }, this);
 }
@@ -214,4 +218,4 @@ window.$RefreshSig$ = prevRefreshSig;
 export {
   AdminLayout as default
 };
-//# sourceMappingURL=/build/routes/admin-YWHCOTUA.js.map
+//# sourceMappingURL=/build/routes/admin-C3XB5OOM.js.map

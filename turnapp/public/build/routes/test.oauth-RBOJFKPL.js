@@ -4,15 +4,15 @@ import {
 import {
   Link,
   useLoaderData
-} from "/build/_shared/chunk-D3JE7QQY.js";
+} from "/build/_shared/chunk-LW6LB2HF.js";
 import {
   createHotContext
 } from "/build/_shared/chunk-ALN5UVCC.js";
 import "/build/_shared/chunk-UWV35TSL.js";
-import "/build/_shared/chunk-56LDNGDG.js";
 import {
   require_jsx_dev_runtime
 } from "/build/_shared/chunk-PMI65YMG.js";
+import "/build/_shared/chunk-56LDNGDG.js";
 import "/build/_shared/chunk-2Q7FBYOG.js";
 import {
   __toESM
@@ -39,7 +39,7 @@ if (import.meta) {
     //@ts-expect-error
     "app/routes/test.oauth.tsx"
   );
-  import.meta.hot.lastModified = "1755715486676.0037";
+  import.meta.hot.lastModified = "1755762071972.3708";
 }
 function TestOAuth() {
   _s();
@@ -178,4 +178,4 @@ window.$RefreshSig$ = prevRefreshSig;
 export {
   TestOAuth as default
 };
-//# sourceMappingURL=/build/routes/test.oauth-FN45O3XH.js.map
+//# sourceMappingURL=/build/routes/test.oauth-RBOJFKPL.js.map

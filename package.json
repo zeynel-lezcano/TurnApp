@@ -1,6 +1,6 @@
 {
 	"name": "turnapp",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"devDependencies": {
 		"@commitlint/cli": "^19.8.1",
 		"@commitlint/config-conventional": "^19.8.1",
@@ -30,7 +30,7 @@
 		"release:first": "standard-version --first-release",
 		"changelog": "conventional-changelog -p conventionalcommits -i docs/CHANGELOG.md -s -r 0",
 		"postrelease": "echo 'Release completed, skipping push'",
-    	"commitlint": "commitlint -x @commitlint/config-conventional",
+		"commitlint": "commitlint -x @commitlint/config-conventional",
 		"todo:refresh": "node scripts/todo-refresh.mjs"
 	},
 	"lint-staged": {
@@ -44,7 +44,7 @@
 		}
 	},
 	"standard-version": {
-    "preset": "conventionalcommits",
-    "infile": "docs/CHANGELOG.md"
-  }
+		"preset": "conventionalcommits",
+		"infile": "docs/CHANGELOG.md"
+	}
 }
