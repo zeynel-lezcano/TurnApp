@@ -1068,12 +1068,152 @@ async function loader2({ request }) {
   }
 }
 
-// app/routes/api.settings.tsx
-var api_settings_exports = {};
-__export(api_settings_exports, {
-  action: () => action4
+// app/routes/api.products.tsx
+var api_products_exports = {};
+__export(api_products_exports, {
+  loader: () => loader3
 });
 import { json as json4 } from "@remix-run/node";
+
+// app/lib/storefront.server.ts
+var STOREFRONT_API_VERSION = "2024-01", PRODUCTS_QUERY = `
+  query getProducts($first: Int!, $after: String) {
+    products(first: $first, after: $after) {
+      edges {
+        node {
+          id
+          title
+          handle
+          description(truncateAt: 250)
+          images(first: 3) {
+            edges {
+              node {
+                url(transform: { maxWidth: 600, maxHeight: 600 })
+                altText
+              }
+            }
+          }
+          variants(first: 3) {
+            edges {
+              node {
+                id
+                title
+                price {
+                  amount
+                  currencyCode
+                }
+                compareAtPrice {
+                  amount
+                  currencyCode
+                }
+                availableForSale
+              }
+            }
+          }
+          priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+        }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+  }
+`;
+async function createStorefrontAccessToken(shopDomain) {
+  try {
+    let shopData = await getShopWithToken(shopDomain);
+    if (!shopData)
+      return console.error("Shop not found or inactive:", shopDomain), null;
+    let adminUrl = `https://${shopDomain}/admin/api/${STOREFRONT_API_VERSION}/storefront_access_tokens.json`, response = await fetch(adminUrl, {
+      method: "POST",
+      headers: {
+        "X-Shopify-Access-Token": shopData.accessToken,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        storefront_access_token: {
+          title: "TurnApp Mobile Access Token"
+        }
+      })
+    });
+    if (!response.ok) {
+      let error = await response.text();
+      return console.error("Failed to create Storefront access token:", error), null;
+    }
+    return (await response.json()).storefront_access_token?.access_token || null;
+  } catch (error) {
+    return console.error("Error creating Storefront access token:", error), null;
+  }
+}
+async function getStorefrontAccessToken(shopDomain) {
+  return await createStorefrontAccessToken(shopDomain);
+}
+async function queryStorefrontAPI(shopDomain, query, variables = {}) {
+  try {
+    let accessToken = await getStorefrontAccessToken(shopDomain);
+    if (!accessToken)
+      throw new Error("Failed to get Storefront access token");
+    let storefrontUrl = `https://${shopDomain}/api/${STOREFRONT_API_VERSION}/graphql.json`, response = await fetch(storefrontUrl, {
+      method: "POST",
+      headers: {
+        "X-Shopify-Storefront-Access-Token": accessToken,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ query, variables })
+    });
+    if (!response.ok) {
+      let error = await response.text();
+      throw new Error(`Storefront API error: ${response.status} ${error}`);
+    }
+    let data = await response.json();
+    if (data.errors && data.errors.length > 0)
+      throw console.error("GraphQL errors:", data.errors), new Error(`GraphQL error: ${data.errors[0].message}`);
+    return data;
+  } catch (error) {
+    throw console.error("Storefront API query failed:", error), error;
+  }
+}
+async function fetchProducts(shopDomain, first = 10, after) {
+  try {
+    let variables = { first, ...after && { after } };
+    return await queryStorefrontAPI(shopDomain, PRODUCTS_QUERY, variables);
+  } catch (error) {
+    throw console.error("Failed to fetch products:", error), error;
+  }
+}
+function checkStorefrontRateLimit(shopDomain) {
+  return !0;
+}
+function transformProductForMobile(product) {
+  return {
+    id: product.id,
+    title: product.title,
+    handle: product.handle,
+    description: product.description,
+    image: product.images.edges[0]?.node.url || null,
+    images: product.images.edges.map((edge) => ({
+      url: edge.node.url,
+      altText: edge.node.altText
+    })),
+    price: {
+      amount: product.priceRange.minVariantPrice.amount,
+      currency: product.priceRange.minVariantPrice.currencyCode
+    },
+    variants: product.variants.edges.map((edge) => ({
+      id: edge.node.id,
+      title: edge.node.title,
+      price: edge.node.price,
+      compareAtPrice: edge.node.compareAtPrice,
+      available: edge.node.availableForSale
+    }))
+  };
+}
 
 // app/lib/validation.server.ts
 import { z } from "zod";
@@ -1148,12 +1288,111 @@ var validateBrandingData = (data) => {
   error: message,
   code,
   details
+}), ProductSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  handle: z.string(),
+  description: z.string(),
+  image: z.string().nullable(),
+  images: z.array(z.object({
+    url: z.string().url(),
+    altText: z.string().nullable()
+  })),
+  price: z.object({
+    amount: z.string(),
+    currency: z.string().length(3)
+    // ISO currency code
+  }),
+  variants: z.array(z.object({
+    id: z.string(),
+    title: z.string(),
+    price: z.object({
+      amount: z.string(),
+      currencyCode: z.string().length(3)
+    }),
+    compareAtPrice: z.object({
+      amount: z.string(),
+      currencyCode: z.string().length(3)
+    }).nullable(),
+    available: z.boolean()
+  }))
+}), ProductsResponseSchema = z.object({
+  products: z.array(ProductSchema),
+  pageInfo: z.object({
+    hasNextPage: z.boolean(),
+    hasPreviousPage: z.boolean()
+  }),
+  shop: ShopDomainSchema,
+  total: z.number().int().nonnegative()
 });
 
+// app/routes/api.products.tsx
+async function loader3({ request }) {
+  try {
+    let context = await flexibleAuth(request);
+    logRequest(request, context);
+    let url = new URL(request.url), first = Math.min(parseInt(url.searchParams.get("first") || "10"), 50), after = url.searchParams.get("after") || void 0;
+    if (first < 1)
+      return json4(createErrorResponse(
+        'Invalid "first" parameter. Must be between 1 and 50.',
+        "INVALID_PARAMETER"
+      ), { status: 400 });
+    if (!checkStorefrontRateLimit(context.shop))
+      return json4(createErrorResponse(
+        "Rate limit exceeded. Please try again later.",
+        "RATE_LIMIT_EXCEEDED"
+      ), { status: 429 });
+    let productsResponse = await fetchProducts(context.shop, first, after), transformedProducts = productsResponse.data.products.edges.map(
+      (edge) => transformProductForMobile(edge.node)
+    ), response = {
+      products: transformedProducts,
+      pageInfo: productsResponse.data.products.pageInfo,
+      shop: context.shop,
+      total: transformedProducts.length
+    }, validatedResponse = ProductsResponseSchema.parse(response);
+    return json4(validatedResponse, {
+      headers: {
+        "Cache-Control": "public, max-age=300",
+        // 5 minutes cache
+        "Content-Type": "application/json"
+      }
+    });
+  } catch (error) {
+    if (console.error("Products API error:", error), error instanceof Response)
+      throw error;
+    if (error instanceof Error) {
+      if (error.message.includes("Storefront API error: 401"))
+        return json4(createErrorResponse(
+          "Shop authentication failed",
+          "AUTH_ERROR"
+        ), { status: 401 });
+      if (error.message.includes("Storefront API error: 402"))
+        return json4(createErrorResponse(
+          "Shop subscription required",
+          "SUBSCRIPTION_ERROR"
+        ), { status: 402 });
+      if (error.message.includes("Rate limit"))
+        return json4(createErrorResponse(
+          "Shopify rate limit exceeded",
+          "SHOPIFY_RATE_LIMIT"
+        ), { status: 429 });
+    }
+    return json4(createErrorResponse(
+      "Failed to fetch products",
+      "INTERNAL_ERROR"
+    ), { status: 500 });
+  }
+}
+
 // app/routes/api.settings.tsx
+var api_settings_exports = {};
+__export(api_settings_exports, {
+  action: () => action4
+});
+import { json as json5 } from "@remix-run/node";
 async function action4({ request }) {
   if (request.method !== "POST")
-    return json4(createErrorResponse("Method not allowed", "METHOD_NOT_ALLOWED"), { status: 405 });
+    return json5(createErrorResponse("Method not allowed", "METHOD_NOT_ALLOWED"), { status: 405 });
   try {
     let context = await flexibleAuth(request);
     logRequest(request, context);
@@ -1170,7 +1409,7 @@ async function action4({ request }) {
     return await prisma.shop.update({
       where: { shopDomain: context.shop },
       data: { settings: updatedSettings }
-    }), console.log(`Updated branding settings for shop: ${context.shop}`, validatedBranding), json4({
+    }), console.log(`Updated branding settings for shop: ${context.shop}`, validatedBranding), json5({
       success: !0,
       message: "Branding settings saved successfully!",
       branding: validatedBranding
@@ -1178,10 +1417,10 @@ async function action4({ request }) {
   } catch (error) {
     if (console.error("Settings API error:", error), error instanceof Response)
       throw error;
-    return error instanceof Error && error.message.includes("Validation failed") ? json4(createErrorResponse(
+    return error instanceof Error && error.message.includes("Validation failed") ? json5(createErrorResponse(
       error.message,
       "VALIDATION_ERROR"
-    ), { status: 400 }) : json4(createErrorResponse(
+    ), { status: 400 }) : json5(createErrorResponse(
       "Failed to update settings",
       "INTERNAL_ERROR"
     ), { status: 500 });
@@ -1191,10 +1430,10 @@ async function action4({ request }) {
 // app/routes/auth.install.tsx
 var auth_install_exports = {};
 __export(auth_install_exports, {
-  loader: () => loader3
+  loader: () => loader4
 });
 import { redirect as redirect2 } from "@remix-run/node";
-async function loader3({ request }) {
+async function loader4({ request }) {
   let shop = new URL(request.url).searchParams.get("shop");
   if (!shop)
     throw new Response("Missing shop parameter", { status: 400 });
@@ -1211,16 +1450,16 @@ async function loader3({ request }) {
 // app/routes/api.config.tsx
 var api_config_exports = {};
 __export(api_config_exports, {
-  loader: () => loader4
+  loader: () => loader5
 });
-import { json as json5 } from "@remix-run/node";
-async function loader4({ request }) {
+import { json as json6 } from "@remix-run/node";
+async function loader5({ request }) {
   let context = await flexibleAuth(request);
   logRequest(request, context);
   try {
     let settings = await getShopSettings(context.shop);
     if (!settings)
-      return json5({ error: "Shop not found or not active" }, { status: 404 });
+      return json6({ error: "Shop not found or not active" }, { status: 404 });
     let branding = {
       brandName: settings.brandName || context.shop.split(".")[0],
       primaryColor: settings.primaryColor || "#007C3B",
@@ -1232,7 +1471,7 @@ async function loader4({ request }) {
       storefrontEndpoint: `https://${context.shop}/api/2024-01/graphql.json`,
       appVersion: "1.0.0"
     }, validatedConfig = ConfigResponseSchema.parse(configResponse);
-    return json5(validatedConfig, {
+    return json6(validatedConfig, {
       headers: {
         "Cache-Control": "public, max-age=300",
         // 5 minutes cache
@@ -1240,7 +1479,7 @@ async function loader4({ request }) {
       }
     });
   } catch (error) {
-    return console.error("Config API error:", error), json5({ error: "Internal server error" }, { status: 500 });
+    return console.error("Config API error:", error), json6({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -1249,7 +1488,7 @@ var api_upload_exports = {};
 __export(api_upload_exports, {
   action: () => action5
 });
-import { json as json6, unstable_parseMultipartFormData, unstable_createFileUploadHandler } from "@remix-run/node";
+import { json as json7, unstable_parseMultipartFormData, unstable_createFileUploadHandler } from "@remix-run/node";
 import path from "node:path";
 import { randomBytes as randomBytes2 } from "node:crypto";
 var ALLOWED_MIME_TYPES = [
@@ -1260,7 +1499,7 @@ var ALLOWED_MIME_TYPES = [
 ], MAX_FILE_SIZE = 2 * 1024 * 1024;
 async function action5({ request }) {
   if (request.method !== "POST")
-    return json6(createErrorResponse("Method not allowed", "METHOD_NOT_ALLOWED"), { status: 405 });
+    return json7(createErrorResponse("Method not allowed", "METHOD_NOT_ALLOWED"), { status: 405 });
   try {
     let context = await flexibleAuth(request);
     logRequest(request, context);
@@ -1275,16 +1514,16 @@ async function action5({ request }) {
       maxPartSize: MAX_FILE_SIZE
     }), formData = await unstable_parseMultipartFormData(request, uploadHandler), file = formData.get("file"), kindParam = formData.get("kind") || "logo";
     if (!file)
-      return json6(createErrorResponse("No file provided", "FILE_REQUIRED"), { status: 400 });
+      return json7(createErrorResponse("No file provided", "FILE_REQUIRED"), { status: 400 });
     let validationResult = UploadRequestSchema.safeParse({ kind: kindParam });
     if (!validationResult.success)
-      return json6(createErrorResponse(
+      return json7(createErrorResponse(
         validationResult.error.errors[0].message,
         "VALIDATION_ERROR"
       ), { status: 400 });
     let { kind } = validationResult.data;
     if (file.size > MAX_FILE_SIZE)
-      return json6(createErrorResponse(
+      return json7(createErrorResponse(
         `File too large. Maximum size is ${MAX_FILE_SIZE / 1024 / 1024}MB`,
         "FILE_TOO_LARGE"
       ), { status: 400 });
@@ -1313,11 +1552,11 @@ async function action5({ request }) {
       },
       message: `${kind} uploaded successfully`
     }, validatedResponse = UploadResponseSchema.parse(response);
-    return json6(validatedResponse);
+    return json7(validatedResponse);
   } catch (error) {
     if (console.error("Upload API error:", error), error instanceof Response)
       throw error;
-    return json6(createErrorResponse(
+    return json7(createErrorResponse(
       error instanceof Error ? error.message : "Upload failed",
       "UPLOAD_ERROR"
     ), { status: 500 });
@@ -1328,14 +1567,14 @@ async function action5({ request }) {
 var test_oauth_exports = {};
 __export(test_oauth_exports, {
   default: () => TestOAuth,
-  loader: () => loader5
+  loader: () => loader6
 });
-import { json as json7 } from "@remix-run/node";
+import { json as json8 } from "@remix-run/node";
 import { useLoaderData as useLoaderData2, Link } from "@remix-run/react";
 import { jsxDEV as jsxDEV4 } from "react/jsx-dev-runtime";
-async function loader5() {
+async function loader6() {
   let testShop = "zeytestshop", installUrl = `/auth/install?shop=${testShop}.myshopify.com`;
-  return json7({
+  return json8({
     testShop,
     installUrl,
     apiKey: process.env.SHOPIFY_API_KEY || "NOT_SET",
@@ -1465,10 +1704,10 @@ function TestOAuth() {
 // app/routes/healthz.tsx
 var healthz_exports = {};
 __export(healthz_exports, {
-  loader: () => loader6
+  loader: () => loader7
 });
-import { json as json8 } from "@remix-run/node";
-async function loader6({ request }) {
+import { json as json9 } from "@remix-run/node";
+async function loader7({ request }) {
   try {
     let shopCount = await prisma.shop.count(), cryptoOk = testCrypto(), health = {
       status: "healthy",
@@ -1482,7 +1721,7 @@ async function loader6({ request }) {
       },
       version: process.env.npm_package_version || "unknown"
     }, validatedHealth = HealthResponseSchema.parse(health);
-    return json8(validatedHealth, {
+    return json9(validatedHealth, {
       status: 200,
       headers: {
         "Cache-Control": "no-cache, no-store, must-revalidate"
@@ -1495,7 +1734,7 @@ async function loader6({ request }) {
       timestamp: (/* @__PURE__ */ new Date()).toISOString(),
       error: error instanceof Error ? error.message : "Unknown error"
     }, validatedError = HealthResponseSchema.parse(unhealthyResponse);
-    return json8(validatedError, {
+    return json9(validatedError, {
       status: 503,
       headers: {
         "Cache-Control": "no-cache, no-store, must-revalidate"
@@ -1508,12 +1747,12 @@ async function loader6({ request }) {
 var index_exports = {};
 __export(index_exports, {
   default: () => Index,
-  loader: () => loader7
+  loader: () => loader8
 });
-import { json as json9 } from "@remix-run/node";
+import { json as json10 } from "@remix-run/node";
 import { useLoaderData as useLoaderData3, Link as Link2 } from "@remix-run/react";
 import { jsxDEV as jsxDEV5 } from "react/jsx-dev-runtime";
-async function loader7() {
+async function loader8() {
   try {
     await prisma.$queryRaw`SELECT 1`;
     let shopCount = await prisma.shop.count(), recentShops = await prisma.shop.findMany({
@@ -1525,7 +1764,7 @@ async function loader7() {
         uninstalledAt: !0
       }
     });
-    return json9({
+    return json10({
       message: "TurnApp - Shopify App Admin Dashboard",
       timestamp: (/* @__PURE__ */ new Date()).toISOString(),
       dbStatus: "connected",
@@ -1533,7 +1772,7 @@ async function loader7() {
       recentShops
     });
   } catch {
-    return json9({
+    return json10({
       message: "TurnApp - Shopify App Admin Dashboard",
       timestamp: (/* @__PURE__ */ new Date()).toISOString(),
       dbStatus: "error",
@@ -1649,9 +1888,9 @@ function Index() {
 var admin_exports = {};
 __export(admin_exports, {
   default: () => AdminLayout,
-  loader: () => loader8
+  loader: () => loader9
 });
-import { json as json10 } from "@remix-run/node";
+import { json as json11 } from "@remix-run/node";
 import { useLoaderData as useLoaderData4, Outlet as Outlet2, useLocation, Link as Link3 } from "@remix-run/react";
 import {
   Frame,
@@ -1665,9 +1904,9 @@ import {
 } from "@shopify/polaris";
 import { useState as useState2, useCallback as useCallback2 } from "react";
 import { jsxDEV as jsxDEV6 } from "react/jsx-dev-runtime";
-async function loader8({ request }) {
+async function loader9({ request }) {
   let url = new URL(request.url), context = await flexibleAuth(request);
-  return logRequest(request, context), json10({
+  return logRequest(request, context), json11({
     shop: context.shop,
     host: url.searchParams.get("host"),
     appBridgeConfig: {
@@ -1844,7 +2083,7 @@ function AdminLayout() {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-VWERPWTD.js", imports: ["/build/_shared/chunk-XC6BC2BP.js", "/build/_shared/chunk-D3JE7QQY.js", "/build/_shared/chunk-ALN5UVCC.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-56LDNGDG.js", "/build/_shared/chunk-PMI65YMG.js", "/build/_shared/chunk-2Q7FBYOG.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-TNNAZQ72.js", imports: ["/build/_shared/chunk-RRH55SMP.js"], hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-L66HS5MY.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin": { id: "routes/admin", parentId: "root", path: "admin", index: void 0, caseSensitive: void 0, module: "/build/routes/admin-OYLTO3LW.js", imports: ["/build/_shared/chunk-Q4XQCCJX.js", "/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin.branding": { id: "routes/admin.branding", parentId: "routes/admin", path: "branding", index: void 0, caseSensitive: void 0, module: "/build/routes/admin.branding-J4OQHBI7.js", imports: ["/build/_shared/chunk-RRH55SMP.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.config": { id: "routes/api.config", parentId: "root", path: "api/config", index: void 0, caseSensitive: void 0, module: "/build/routes/api.config-F6QT7IN6.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.settings": { id: "routes/api.settings", parentId: "root", path: "api/settings", index: void 0, caseSensitive: void 0, module: "/build/routes/api.settings-C6JUPEZG.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.upload": { id: "routes/api.upload", parentId: "root", path: "api/upload", index: void 0, caseSensitive: void 0, module: "/build/routes/api.upload-NKI3ERUQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.callback": { id: "routes/auth.callback", parentId: "root", path: "auth/callback", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.callback-HTHTBQTT.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.install": { id: "routes/auth.install", parentId: "root", path: "auth/install", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.install-GWWDNMQD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/healthz": { id: "routes/healthz", parentId: "root", path: "healthz", index: void 0, caseSensitive: void 0, module: "/build/routes/healthz-47L4ZWTK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/test.oauth": { id: "routes/test.oauth", parentId: "root", path: "test/oauth", index: void 0, caseSensitive: void 0, module: "/build/routes/test.oauth-AGY54P2T.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.app_uninstalled": { id: "routes/webhooks.app_uninstalled", parentId: "root", path: "webhooks/app_uninstalled", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.app_uninstalled-QBHIURQQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.products_update": { id: "routes/webhooks.products_update", parentId: "root", path: "webhooks/products_update", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.products_update-JGCI7S77.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "47084f07", hmr: { runtime: "/build/_shared/chunk-ALN5UVCC.js", timestamp: 1755768686439 }, url: "/build/manifest-47084F07.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-IMMRVYYP.js", imports: ["/build/_shared/chunk-XC6BC2BP.js", "/build/_shared/chunk-LW6LB2HF.js", "/build/_shared/chunk-ALN5UVCC.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-56LDNGDG.js", "/build/_shared/chunk-PMI65YMG.js", "/build/_shared/chunk-2Q7FBYOG.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-VQC54PAV.js", imports: ["/build/_shared/chunk-RRH55SMP.js"], hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-5T3DDPHO.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin": { id: "routes/admin", parentId: "root", path: "admin", index: void 0, caseSensitive: void 0, module: "/build/routes/admin-UZ47KXIG.js", imports: ["/build/_shared/chunk-Q4XQCCJX.js", "/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin.branding": { id: "routes/admin.branding", parentId: "routes/admin", path: "branding", index: void 0, caseSensitive: void 0, module: "/build/routes/admin.branding-WJXWEVRL.js", imports: ["/build/_shared/chunk-RRH55SMP.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.config": { id: "routes/api.config", parentId: "root", path: "api/config", index: void 0, caseSensitive: void 0, module: "/build/routes/api.config-F6QT7IN6.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.products": { id: "routes/api.products", parentId: "root", path: "api/products", index: void 0, caseSensitive: void 0, module: "/build/routes/api.products-BMEWO7CE.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.settings": { id: "routes/api.settings", parentId: "root", path: "api/settings", index: void 0, caseSensitive: void 0, module: "/build/routes/api.settings-C6JUPEZG.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.upload": { id: "routes/api.upload", parentId: "root", path: "api/upload", index: void 0, caseSensitive: void 0, module: "/build/routes/api.upload-NKI3ERUQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.callback": { id: "routes/auth.callback", parentId: "root", path: "auth/callback", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.callback-HTHTBQTT.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.install": { id: "routes/auth.install", parentId: "root", path: "auth/install", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.install-GWWDNMQD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/healthz": { id: "routes/healthz", parentId: "root", path: "healthz", index: void 0, caseSensitive: void 0, module: "/build/routes/healthz-47L4ZWTK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/test.oauth": { id: "routes/test.oauth", parentId: "root", path: "test/oauth", index: void 0, caseSensitive: void 0, module: "/build/routes/test.oauth-2MXZLR7I.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.app_uninstalled": { id: "routes/webhooks.app_uninstalled", parentId: "root", path: "webhooks/app_uninstalled", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.app_uninstalled-QBHIURQQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.products_update": { id: "routes/webhooks.products_update", parentId: "root", path: "webhooks/products_update", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.products_update-JGCI7S77.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "1b950704", hmr: { runtime: "/build/_shared/chunk-ALN5UVCC.js", timestamp: 1755784402178 }, url: "/build/manifest-1B950704.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public/build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1, v3_throwAbortReason: !1, v3_routeConfig: !1, v3_singleFetch: !1, v3_lazyRouteDiscovery: !1, unstable_optimizeDeps: !1 }, publicPath = "/build/", entry = { module: entry_server_node_exports }, routes = {
@@ -1887,6 +2126,14 @@ var mode = "development", assetsBuildDirectory = "public/build", future = { v3_f
     index: void 0,
     caseSensitive: void 0,
     module: auth_callback_exports
+  },
+  "routes/api.products": {
+    id: "routes/api.products",
+    parentId: "root",
+    path: "api/products",
+    index: void 0,
+    caseSensitive: void 0,
+    module: api_products_exports
   },
   "routes/api.settings": {
     id: "routes/api.settings",

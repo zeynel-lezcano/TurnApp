@@ -1,5 +1,5 @@
-import { prisma } from "~/lib/prisma.server";
-import { decryptToken } from "~/lib/crypto.server";
+import { prisma } from "./prisma.server.js";
+import { decryptToken } from "./crypto.server.js";
 
 export interface ShopWithToken {
   shopDomain: string;

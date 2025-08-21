@@ -1,9 +1,5 @@
 wip_limit_now: 5
 now:
-  - id: storefront-api-setup
-    title: Storefront API Setup
-    desc: GET /api/products proxy mit Shopify Storefront GraphQL, error handling,
-      rate limits
   - id: dev-tunnel-setup
     title: Dev Tunnel Setup (ngrok)
     desc: ngrok integration für local dev, webhook endpoint routing, .env setup
@@ -17,7 +13,19 @@ now:
     title: Mobile Demo Scaffold
     desc: RN/Flutter template consuming /api/config, basic product list, checkout
       links
-next: []
+  - id: cache-integration
+    title: Simple Cache Integration
+    desc: Redis/memory cache für Product Proxy, 60s TTL, cache invalidation
+next:
+  - id: error-tracking-setup
+    title: Error Tracking Setup
+    desc: Sentry integration, structured logging, error reporting setup
+  - id: rate-limit-implementation
+    title: Rate Limit Implementation
+    desc: Rate limiting für API endpoints, Shopify GraphQL budget management
+  - id: ci-cd-setup
+    title: CI/CD Pipeline Setup
+    desc: GitHub Actions, lint/test gates, automated deployment setup
 later:
   - id: product-proxy
     title: Product Proxy + Cache
@@ -70,4 +78,9 @@ done:
   - id: config-api-validation
     title: Config API Schema Validation
     desc: Zod schema validation for config endpoints, error responses, type safety
+    doneAt: 2025-08-21
+  - id: storefront-api-setup
+    title: Storefront API Setup
+    desc: GET /api/products proxy mit Shopify Storefront GraphQL, error handling,
+      rate limits
     doneAt: 2025-08-21
