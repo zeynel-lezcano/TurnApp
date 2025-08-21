@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+set -e
+
+# 1) Backlog <-> TODO sync
+pnpm todo:refresh
+
+# 2) Generierte Dateien mitnehmen
+git add docs/TODO.md docs/backlog.yaml
+
+# 3) Lint/Format nur für staged Files
+pnpm lint-staged

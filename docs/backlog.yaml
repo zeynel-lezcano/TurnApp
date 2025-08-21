@@ -1,20 +1,52 @@
 wip_limit_now: 5
 now:
-  - id: oauth-tenant
-    title: OAuth & Shop-Registry fertigstellen
-    desc: Offline-Token verschlüsselt speichern, HMAC prüfen
-  - id: admin-shell
-    title: Embedded Admin Shell
-    desc: Polaris+App Bridge, Overview + Branding Seite
-  - id: branding-config-api
-    title: Branding & Config API
-    desc: /api/config GET, /api/settings POST + Zod
-  - id: webhooks-min
-    title: Webhooks (APP_UNINSTALLED, PRODUCTS_UPDATE)
-    desc: Registrierung + Handler, idempotent
+  - id: dev-seed-script
+    title: Dev Seed Script
+    desc: pnpm seed command with dummy shop data, smoke test scripts
+  - id: logo-upload-s3
+    title: Logo Upload to S3/Cloud Storage
+    desc: File upload endpoint, S3/cloud storage integration, asset URL generation
+  - id: session-token-middleware
+    title: Session Token Middleware Hardening
+    desc: JWT verification middleware, 401 error handling, request context shop
+      resolution
+  - id: config-api-validation
+    title: Config API Schema Validation
+    desc: Zod schema validation for config endpoints, error responses, type safety
 next: []
 later:
   - id: product-proxy
     title: Product Proxy + Cache
     desc: GET /api/products, 60s Cache
-done: []
+done:
+  - id: oauth-setup
+    title: Shopify CLI App Setup + DB Schema
+    desc: Shopify CLI scaffolding, Prisma schema für shops table, .env template
+  - id: oauth-flow
+    title: OAuth Install-Flow + HMAC
+    desc: /auth/callback endpoint, HMAC-Validierung, Code-Token-Tausch
+    doneAt: 2025-08-20
+  - id: admin-shell
+    title: Embedded Admin Shell
+    desc: Polaris+App Bridge, Overview + Branding Seite
+    doneAt: 2025-08-21
+  - id: branding-config-api
+    title: Branding & Config API
+    desc: /api/config GET, /api/settings POST + Zod
+    doneAt: 2025-08-21
+  - id: webhooks-min
+    title: Webhooks (APP_UNINSTALLED, PRODUCTS_UPDATE)
+    desc: Registrierung + Handler, idempotent
+    doneAt: 2025-08-21
+  - id: token-encryption
+    title: Token-Verschlüsselung at rest
+    desc: crypto utilities, AES-256-GCM für access_token_enc
+    doneAt: 2025-08-21
+  - id: shop-registry
+    title: Shop-Registrierung + Session
+    desc: Shop-Model CRUD, Session-Token für embedded admin
+    doneAt: 2025-08-21
+  - id: oauth-tests
+    title: OAuth Auth-Flow Tests
+    desc: Unit tests für HMAC, encryption, integration test install-flow
+    doneAt: 2025-08-21

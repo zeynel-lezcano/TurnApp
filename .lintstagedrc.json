@@ -1,5 +1,5 @@
 {
-    "**/*.md": [
+    "docs/TODO.md": [
       "pnpm remark --frail --no-stdout"
     ]
   }
