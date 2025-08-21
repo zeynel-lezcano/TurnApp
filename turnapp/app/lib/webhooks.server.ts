@@ -1,5 +1,6 @@
 import { createHmac } from "node:crypto";
 import { buildWebhookUrl } from './tunnel.server.js';
+import { validateShopAccess } from './admin-api.server.js';
 
 export function verifyWebhookHmac(
   body: string | Buffer, 
@@ -44,6 +45,13 @@ export async function registerWebhooks(
   accessToken: string,
   baseUrl?: string
 ): Promise<void> {
+  // Validate shop access before registering webhooks
+  const isValidShop = await validateShopAccess(shop);
+  if (!isValidShop) {
+    console.error('Shop validation failed, skipping webhook registration:', shop);
+    return;
+  }
+
   // Use tunnel-aware URL building if baseUrl not provided
   const getWebhookAddress = (path: string) => {
     if (baseUrl) {

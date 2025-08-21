@@ -1,8 +1,5 @@
 wip_limit_now: 5
 now:
-  - id: admin-api-integration
-    title: Admin API Integration
-    desc: GraphQL client setup für Admin API, shop validation, product queries
   - id: health-endpoints
     title: Health & Monitoring Endpoints
     desc: /healthz, /readiness endpoints, request logging, error tracking setup
@@ -16,10 +13,10 @@ now:
   - id: error-tracking-setup
     title: Error Tracking Setup
     desc: Sentry integration, structured logging, error reporting setup
-next:
   - id: rate-limit-implementation
     title: Rate Limit Implementation
     desc: Rate limiting für API endpoints, Shopify GraphQL budget management
+next:
   - id: ci-cd-setup
     title: CI/CD Pipeline Setup
     desc: GitHub Actions, lint/test gates, automated deployment setup
@@ -84,4 +81,8 @@ done:
   - id: dev-tunnel-setup
     title: Dev Tunnel Setup (ngrok)
     desc: ngrok integration für local dev, webhook endpoint routing, .env setup
+    doneAt: 2025-08-21
+  - id: admin-api-integration
+    title: Admin API Integration
+    desc: GraphQL client setup für Admin API, shop validation, product queries
     doneAt: 2025-08-21

@@ -174,6 +174,78 @@ export const ProductsResponseSchema = z.object({
   total: z.number().int().nonnegative()
 });
 
+// Admin API schemas
+export const AdminProductVariantSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  sku: z.string(),
+  price: z.string(),
+  compareAtPrice: z.string().nullable(),
+  inventoryQuantity: z.number().int(),
+  availableForSale: z.boolean()
+});
+
+export const AdminProductImageSchema = z.object({
+  id: z.string(),
+  url: z.string().url(),
+  altText: z.string().nullable(),
+  width: z.number().int().positive(),
+  height: z.number().int().positive()
+});
+
+export const AdminProductSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  handle: z.string(),
+  status: z.enum(['ACTIVE', 'ARCHIVED', 'DRAFT']),
+  productType: z.string(),
+  vendor: z.string(),
+  tags: z.array(z.string()),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+  variants: z.object({
+    edges: z.array(z.object({
+      node: AdminProductVariantSchema
+    }))
+  }),
+  images: z.object({
+    edges: z.array(z.object({
+      node: AdminProductImageSchema
+    }))
+  })
+});
+
+export const ShopInfoSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  domain: z.string(),
+  email: z.string().email(),
+  myshopifyDomain: z.string().regex(/^[a-z0-9-]+\.myshopify\.com$/),
+  plan: z.object({
+    displayName: z.string(),
+    partnerDevelopment: z.boolean()
+  }),
+  primaryLocale: z.string(),
+  currencyCode: z.string().length(3), // ISO currency code
+  weightUnit: z.enum(['POUNDS', 'OUNCES', 'KILOGRAMS', 'GRAMS']),
+  timezone: z.string()
+});
+
+export const AdminProductsResponseSchema = z.object({
+  products: z.array(AdminProductSchema),
+  hasNextPage: z.boolean(),
+  endCursor: z.string().optional(),
+  shop: ShopDomainSchema,
+  total: z.number().int().nonnegative()
+});
+
+// Shop validation response schema
+export const ShopValidationResponseSchema = z.object({
+  valid: z.boolean(),
+  shop: ShopInfoSchema.optional(),
+  error: z.string().optional()
+});
+
 // Type exports
 export type BrandingSettings = z.infer<typeof BrandingSettingsSchema>;
 export type ConfigResponse = z.infer<typeof ConfigResponseSchema>;
@@ -184,3 +256,7 @@ export type SettingsUpdate = z.infer<typeof SettingsUpdateSchema>;
 export type HealthResponse = z.infer<typeof HealthResponseSchema>;
 export type Product = z.infer<typeof ProductSchema>;
 export type ProductsResponse = z.infer<typeof ProductsResponseSchema>;
+export type AdminProduct = z.infer<typeof AdminProductSchema>;
+export type AdminProductsResponse = z.infer<typeof AdminProductsResponseSchema>;
+export type ShopInfo = z.infer<typeof ShopInfoSchema>;
+export type ShopValidationResponse = z.infer<typeof ShopValidationResponseSchema>;

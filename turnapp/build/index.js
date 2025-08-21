@@ -199,7 +199,7 @@ __export(webhooks_app_uninstalled_exports, {
 import { json } from "@remix-run/node";
 
 // app/lib/webhooks.server.ts
-import { createHmac } from "node:crypto";
+import { createHmac as createHmac2 } from "node:crypto";
 
 // app/lib/tunnel.server.ts
 function isTunnelActive() {
@@ -213,9 +213,312 @@ function buildWebhookUrl(webhookPath) {
   return `${baseUrl}${cleanPath}`;
 }
 
+// app/lib/admin-api.server.ts
+import { GraphQLClient } from "graphql-request";
+
+// app/lib/prisma.server.ts
+import { PrismaClient } from "@prisma/client";
+var prisma;
+global.__db__ || (global.__db__ = new PrismaClient()), prisma = global.__db__, prisma.$connect();
+
+// app/lib/crypto.server.ts
+import { randomBytes, createCipheriv, createDecipheriv, pbkdf2Sync, createHmac } from "node:crypto";
+var ALGORITHM = "aes-256-cbc", IV_LENGTH = 16, KEY_LENGTH = 32, HMAC_LENGTH = 32;
+function getEncryptionKey() {
+  let envKey = process.env.ENCRYPTION_KEY;
+  if (envKey) {
+    if (envKey.length === 64)
+      return Buffer.from(envKey, "hex");
+    {
+      let salt2 = Buffer.from("turnapp-static-salt-v1", "utf8");
+      return pbkdf2Sync(envKey, salt2, 1e5, KEY_LENGTH, "sha256");
+    }
+  }
+  let fallbackSeed = "development-turnapp-dev-key-v1", salt = Buffer.from("dev-salt-turnapp", "utf8");
+  return pbkdf2Sync(fallbackSeed, salt, 1e4, KEY_LENGTH, "sha256");
+}
+function encryptToken(plaintext) {
+  if (!plaintext || plaintext.length === 0)
+    throw new Error("Cannot encrypt empty token");
+  try {
+    let key = getEncryptionKey(), iv = randomBytes(IV_LENGTH), cipher = createCipheriv(ALGORITHM, key, iv), encrypted = cipher.update(plaintext, "utf8", "hex");
+    encrypted += cipher.final("hex");
+    let hmac = createHmac("sha256", key);
+    hmac.update(iv), hmac.update(Buffer.from(encrypted, "hex"));
+    let authTag = hmac.digest();
+    return iv.toString("hex") + encrypted + authTag.toString("hex");
+  } catch (error) {
+    throw console.error("Encryption failed:", error), new Error("Failed to encrypt token");
+  }
+}
+function decryptToken(ciphertext) {
+  try {
+    if (ciphertext.length < IV_LENGTH * 2 + HMAC_LENGTH * 2)
+      throw new Error("Invalid ciphertext format");
+    let ivHex = ciphertext.substring(0, IV_LENGTH * 2), hmacHex = ciphertext.substring(ciphertext.length - HMAC_LENGTH * 2), encryptedHex = ciphertext.substring(IV_LENGTH * 2, ciphertext.length - HMAC_LENGTH * 2), iv = Buffer.from(ivHex, "hex"), providedHmac = Buffer.from(hmacHex, "hex"), encrypted = Buffer.from(encryptedHex, "hex"), key = getEncryptionKey(), hmac = createHmac("sha256", key);
+    if (hmac.update(iv), hmac.update(encrypted), !hmac.digest().equals(providedHmac))
+      throw new Error("Token integrity check failed");
+    let decipher = createDecipheriv(ALGORITHM, key, iv), decrypted = decipher.update(encryptedHex, "hex", "utf8");
+    return decrypted += decipher.final("utf8"), decrypted;
+  } catch (error) {
+    throw console.error("Decryption failed:", error), new Error("Failed to decrypt token");
+  }
+}
+function testCrypto() {
+  try {
+    let testData = "test-access-token-12345", encrypted = encryptToken(testData), decrypted = decryptToken(encrypted);
+    return testData === decrypted;
+  } catch (error) {
+    return console.error("Crypto test failed:", error), !1;
+  }
+}
+
+// app/lib/shop.server.ts
+async function getShopWithToken(shopDomain) {
+  try {
+    let shop = await prisma.shop.findUnique({
+      where: { shopDomain }
+    });
+    if (!shop || shop.uninstalledAt)
+      return null;
+    let accessToken = decryptToken(shop.accessTokenEnc);
+    return {
+      shopDomain: shop.shopDomain,
+      accessToken,
+      installedAt: shop.installedAt,
+      uninstalledAt: shop.uninstalledAt,
+      settings: shop.settings ? JSON.parse(shop.settings) : {}
+    };
+  } catch (error) {
+    return console.error("Failed to get shop with token:", error), null;
+  }
+}
+async function getShopSettings(shopDomain) {
+  try {
+    let shop = await prisma.shop.findUnique({
+      where: { shopDomain },
+      select: { settings: !0, uninstalledAt: !0 }
+    });
+    return !shop || shop.uninstalledAt ? null : shop.settings ? JSON.parse(shop.settings) : {};
+  } catch (error) {
+    return console.error("Failed to get shop settings:", error), null;
+  }
+}
+
+// app/lib/admin-api.server.ts
+var ADMIN_API_VERSION = "2024-01", SHOP_QUERY = `
+  query getShop {
+    shop {
+      id
+      name
+      domain
+      email
+      myshopifyDomain
+      plan {
+        displayName
+        partnerDevelopment
+      }
+      primaryLocale
+      currencyCode
+      weightUnit
+      timezone
+    }
+  }
+`, PRODUCTS_QUERY = `
+  query getProducts($first: Int!, $after: String) {
+    products(first: $first, after: $after) {
+      edges {
+        node {
+          id
+          title
+          handle
+          status
+          productType
+          vendor
+          tags
+          createdAt
+          updatedAt
+          variants(first: 10) {
+            edges {
+              node {
+                id
+                title
+                sku
+                price
+                compareAtPrice
+                inventoryQuantity
+                availableForSale
+              }
+            }
+          }
+          images(first: 5) {
+            edges {
+              node {
+                id
+                url
+                altText
+                width
+                height
+              }
+            }
+          }
+        }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        endCursor
+        startCursor
+      }
+    }
+  }
+`, PRODUCT_BY_ID_QUERY = `
+  query getProduct($id: ID!) {
+    product(id: $id) {
+      id
+      title
+      handle
+      status
+      productType
+      vendor
+      tags
+      createdAt
+      updatedAt
+      variants(first: 10) {
+        edges {
+          node {
+            id
+            title
+            sku
+            price
+            compareAtPrice
+            inventoryQuantity
+            availableForSale
+          }
+        }
+      }
+      images(first: 5) {
+        edges {
+          node {
+            id
+            url
+            altText
+            width
+            height
+          }
+        }
+      }
+    }
+  }
+`;
+function createAdminClient(shopDomain, accessToken) {
+  let endpoint = `https://${shopDomain}/admin/api/${ADMIN_API_VERSION}/graphql.json`;
+  return new GraphQLClient(endpoint, {
+    headers: {
+      "X-Shopify-Access-Token": accessToken,
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    },
+    // Enable rate limit handling
+    errorPolicy: "all"
+  });
+}
+async function getShopInfo(shopDomain) {
+  try {
+    let shopData = await getShopWithToken(shopDomain);
+    if (!shopData)
+      return console.error("Shop not found or inactive:", shopDomain), null;
+    let response = await createAdminClient(shopDomain, shopData.accessToken).request(SHOP_QUERY);
+    return response.shop ? response.shop : (console.error("No shop data returned from Admin API"), null);
+  } catch (error) {
+    return console.error("Failed to get shop info:", error), error instanceof Error && error.message.includes("401") && console.error("Admin API authentication failed for shop:", shopDomain), null;
+  }
+}
+async function validateShopAccess(shopDomain) {
+  try {
+    let shopInfo = await getShopInfo(shopDomain);
+    return shopInfo ? shopInfo.myshopifyDomain !== shopDomain ? (console.error("Shop domain mismatch:", {
+      expected: shopDomain,
+      actual: shopInfo.myshopifyDomain
+    }), !1) : (console.log("Shop validation successful:", {
+      name: shopInfo.name,
+      domain: shopInfo.domain,
+      plan: shopInfo.plan.displayName
+    }), !0) : !1;
+  } catch (error) {
+    return console.error("Shop validation failed:", error), !1;
+  }
+}
+async function getAdminProducts(shopDomain, first = 50, after) {
+  try {
+    let shopData = await getShopWithToken(shopDomain);
+    if (!shopData)
+      throw new Error("Shop not found or inactive");
+    let client = createAdminClient(shopDomain, shopData.accessToken), variables = { first, ...after && { after } }, response = await client.request(PRODUCTS_QUERY, variables);
+    return {
+      products: response.products.edges.map((edge) => edge.node),
+      hasNextPage: response.products.pageInfo.hasNextPage,
+      endCursor: response.products.pageInfo.endCursor
+    };
+  } catch (error) {
+    if (console.error("Failed to get admin products:", error), error instanceof Error) {
+      if (error.message.includes("401"))
+        throw new Error("Admin API authentication failed");
+      if (error.message.includes("402"))
+        throw new Error("Shop subscription required");
+      if (error.message.includes("429"))
+        throw new Error("Admin API rate limit exceeded");
+    }
+    return null;
+  }
+}
+async function getAdminProduct(shopDomain, productId) {
+  try {
+    let shopData = await getShopWithToken(shopDomain);
+    if (!shopData)
+      throw new Error("Shop not found or inactive");
+    return (await createAdminClient(shopDomain, shopData.accessToken).request(
+      PRODUCT_BY_ID_QUERY,
+      { id: productId }
+    )).product;
+  } catch (error) {
+    return console.error("Failed to get admin product:", error), null;
+  }
+}
+function extractRateLimitInfo(error) {
+  try {
+    return error?.response?.extensions?.cost ? {
+      requestedQueryCost: error.response.extensions.cost.requestedQueryCost,
+      actualQueryCost: error.response.extensions.cost.actualQueryCost,
+      throttleStatus: error.response.extensions.cost.throttleStatus
+    } : null;
+  } catch {
+    return null;
+  }
+}
+async function withRateLimit(operation, maxRetries = 3) {
+  let lastError;
+  for (let attempt = 0; attempt <= maxRetries; attempt++)
+    try {
+      return await operation();
+    } catch (error) {
+      if (lastError = error, !error || !error.toString().includes("429"))
+        throw error;
+      if (attempt === maxRetries)
+        throw new Error(`Max retries reached: ${lastError.message}`);
+      let rateLimitInfo = extractRateLimitInfo(error), baseDelay = Math.pow(2, attempt) * 1e3, jitter = Math.random() * 1e3, delay = baseDelay + jitter;
+      console.log(`Rate limit hit, retrying in ${Math.round(delay)}ms (attempt ${attempt + 1}/${maxRetries + 1})`), rateLimitInfo && console.log("Rate limit info:", {
+        available: rateLimitInfo.throttleStatus.currentlyAvailable,
+        maximum: rateLimitInfo.throttleStatus.maximumAvailable,
+        restoreRate: rateLimitInfo.throttleStatus.restoreRate
+      }), await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+  throw lastError;
+}
+
 // app/lib/webhooks.server.ts
 function verifyWebhookHmac(body, hmacHeader, secret) {
-  let bodyString = typeof body == "string" ? body : body.toString("utf8"), calculatedHmac = createHmac("sha256", secret).update(bodyString, "utf8").digest("base64"), providedHmac = hmacHeader.replace("sha256=", "");
+  let bodyString = typeof body == "string" ? body : body.toString("utf8"), calculatedHmac = createHmac2("sha256", secret).update(bodyString, "utf8").digest("base64"), providedHmac = hmacHeader.replace("sha256=", "");
   return timingSafeEqual(
     Buffer.from(calculatedHmac, "base64"),
     Buffer.from(providedHmac, "base64")
@@ -230,6 +533,10 @@ function timingSafeEqual(a, b) {
   return result === 0;
 }
 async function registerWebhooks(shop, accessToken, baseUrl) {
+  if (!await validateShopAccess(shop)) {
+    console.error("Shop validation failed, skipping webhook registration:", shop);
+    return;
+  }
   let getWebhookAddress = (path2) => baseUrl ? `${baseUrl}${path2}` : buildWebhookUrl(path2), webhooks = [
     {
       topic: "app/uninstalled",
@@ -263,11 +570,6 @@ async function registerWebhooks(shop, accessToken, baseUrl) {
       console.error(`Error registering webhook ${webhook.topic}:`, error);
     }
 }
-
-// app/lib/prisma.server.ts
-import { PrismaClient } from "@prisma/client";
-var prisma;
-global.__db__ || (global.__db__ = new PrismaClient()), prisma = global.__db__, prisma.$connect();
 
 // app/routes/webhooks.app_uninstalled.tsx
 async function action({ request }) {
@@ -337,18 +639,15 @@ async function action2({ request }) {
   }
 }
 
-// app/routes/admin.branding.tsx
-var admin_branding_exports = {};
-__export(admin_branding_exports, {
-  action: () => action3,
-  default: () => AdminBranding,
+// app/routes/api.admin.products.tsx
+var api_admin_products_exports = {};
+__export(api_admin_products_exports, {
   loader: () => loader
 });
 import { json as json3 } from "@remix-run/node";
-import { useLoaderData, Form, useActionData, useFetcher } from "@remix-run/react";
 
 // app/lib/session.server.ts
-import { createHmac as createHmac2 } from "node:crypto";
+import { createHmac as createHmac3 } from "node:crypto";
 function decodeJWT(token) {
   try {
     let parts = token.split(".");
@@ -365,7 +664,7 @@ function verifyJWTSignature(token, secret) {
     let parts = token.split(".");
     if (parts.length !== 3)
       return !1;
-    let [header, payload, signature] = parts, data = `${header}.${payload}`, expectedSignature = createHmac2("sha256", secret).update(data).digest("base64url");
+    let [header, payload, signature] = parts, data = `${header}.${payload}`, expectedSignature = createHmac3("sha256", secret).update(data).digest("base64url");
     return signature === expectedSignature;
   } catch (error) {
     return console.error("JWT signature verification failed:", error), !1;
@@ -396,11 +695,67 @@ function createSessionMiddleware() {
     } : null;
   };
 }
+async function requireValidSession(request) {
+  let context = await createSessionMiddleware()(request);
+  if (!context)
+    throw new Response("Unauthorized - Invalid or missing session token", {
+      status: 401,
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+  return context;
+}
 async function getOptionalSession(request) {
   return await createSessionMiddleware()(request);
 }
 
 // app/lib/middleware.server.ts
+async function requireSession(request) {
+  try {
+    let sessionContext = await requireValidSession(request), shopRecord = await prisma.shop.findUnique({
+      where: { shopDomain: sessionContext.shop }
+    });
+    if (!shopRecord)
+      throw console.error(`Shop not found in database: ${sessionContext.shop}`), new Response(
+        JSON.stringify({
+          error: "Shop not registered",
+          code: "SHOP_NOT_FOUND"
+        }),
+        {
+          status: 404,
+          headers: { "Content-Type": "application/json" }
+        }
+      );
+    if (shopRecord.uninstalledAt)
+      throw console.error(`Shop uninstalled: ${sessionContext.shop}`), new Response(
+        JSON.stringify({
+          error: "Shop access revoked",
+          code: "SHOP_UNINSTALLED"
+        }),
+        {
+          status: 403,
+          headers: { "Content-Type": "application/json" }
+        }
+      );
+    return {
+      shop: sessionContext.shop,
+      session: sessionContext.session,
+      shopRecord
+    };
+  } catch (error) {
+    throw error instanceof Response ? error : (console.error("Session middleware error:", error), new Response(
+      JSON.stringify({
+        error: "Authentication failed",
+        code: "AUTH_ERROR"
+      }),
+      {
+        status: 401,
+        headers: { "Content-Type": "application/json" }
+      }
+    ));
+  }
+}
 async function flexibleAuth(request) {
   try {
     let sessionContext = await getOptionalSession(request);
@@ -492,7 +847,260 @@ function logRequest(request, context) {
   console.log("API Request:", JSON.stringify(logData));
 }
 
+// app/lib/validation.server.ts
+import { z } from "zod";
+var ShopDomainSchema = z.string().regex(/^[a-z0-9-]+\.myshopify\.com$/, "Invalid shop domain format"), HexColorSchema = z.string().regex(/^#[0-9A-F]{6}$/i, "Invalid hex color format"), UrlSchema = z.string().refine((url) => {
+  if (url === "")
+    return !0;
+  try {
+    let parsed = new URL(url);
+    return !["javascript:", "data:", "vbscript:", "file:", "ftp:"].includes(parsed.protocol);
+  } catch {
+    return !1;
+  }
+}, "Invalid or unsafe URL").optional().or(z.literal("")), BrandingSettingsSchema = z.object({
+  brandName: z.string().min(1, "Brand name is required").max(50, "Brand name too long").regex(/^[a-zA-Z0-9\s\-_]+$/, "Brand name contains invalid characters"),
+  primaryColor: HexColorSchema,
+  logoUrl: UrlSchema,
+  tagline: z.string().max(100, "Tagline too long").optional().or(z.literal(""))
+}), ConfigResponseSchema = z.object({
+  shop: ShopDomainSchema,
+  branding: BrandingSettingsSchema,
+  storefrontEndpoint: z.string().url("Invalid storefront endpoint"),
+  appVersion: z.string().regex(/^\d+\.\d+\.\d+$/, "Invalid version format")
+}), UploadRequestSchema = z.object({
+  kind: z.enum(["logo", "banner"], {
+    errorMap: () => ({ message: "Asset kind must be 'logo' or 'banner'" })
+  })
+}), UploadResponseSchema = z.object({
+  success: z.boolean(),
+  asset: z.object({
+    id: z.string().uuid(),
+    kind: z.enum(["logo", "banner"]),
+    url: z.string().url(),
+    filename: z.string()
+  }).optional(),
+  message: z.string().optional(),
+  error: z.string().optional()
+}), ErrorResponseSchema = z.object({
+  error: z.string(),
+  code: z.string().optional(),
+  details: z.record(z.string()).optional()
+}), SettingsUpdateSchema = z.object({
+  brandName: z.string().min(1, "Brand name is required").max(50, "Brand name too long").optional(),
+  primaryColor: HexColorSchema.optional(),
+  logoUrl: UrlSchema.optional(),
+  tagline: z.string().max(100, "Tagline too long").optional()
+}), HealthResponseSchema = z.object({
+  status: z.enum(["healthy", "unhealthy"]),
+  timestamp: z.string().datetime(),
+  database: z.object({
+    connected: z.boolean(),
+    shops: z.number().int().nonnegative()
+  }).optional(),
+  crypto: z.object({
+    working: z.boolean()
+  }).optional(),
+  version: z.string().optional(),
+  error: z.string().optional()
+});
+var validateBrandingData = (data) => {
+  try {
+    return BrandingSettingsSchema.parse(data);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      let fieldErrors = error.errors.map(
+        (err) => `${err.path.join(".")}: ${err.message}`
+      ).join(", ");
+      throw new Error(`Validation failed: ${fieldErrors}`);
+    }
+    throw error;
+  }
+}, createErrorResponse = (message, code, details) => ({
+  error: message,
+  code,
+  details
+}), ProductSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  handle: z.string(),
+  description: z.string(),
+  image: z.string().nullable(),
+  images: z.array(z.object({
+    url: z.string().url(),
+    altText: z.string().nullable()
+  })),
+  price: z.object({
+    amount: z.string(),
+    currency: z.string().length(3)
+    // ISO currency code
+  }),
+  variants: z.array(z.object({
+    id: z.string(),
+    title: z.string(),
+    price: z.object({
+      amount: z.string(),
+      currencyCode: z.string().length(3)
+    }),
+    compareAtPrice: z.object({
+      amount: z.string(),
+      currencyCode: z.string().length(3)
+    }).nullable(),
+    available: z.boolean()
+  }))
+}), ProductsResponseSchema = z.object({
+  products: z.array(ProductSchema),
+  pageInfo: z.object({
+    hasNextPage: z.boolean(),
+    hasPreviousPage: z.boolean()
+  }),
+  shop: ShopDomainSchema,
+  total: z.number().int().nonnegative()
+}), AdminProductVariantSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  sku: z.string(),
+  price: z.string(),
+  compareAtPrice: z.string().nullable(),
+  inventoryQuantity: z.number().int(),
+  availableForSale: z.boolean()
+}), AdminProductImageSchema = z.object({
+  id: z.string(),
+  url: z.string().url(),
+  altText: z.string().nullable(),
+  width: z.number().int().positive(),
+  height: z.number().int().positive()
+}), AdminProductSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  handle: z.string(),
+  status: z.enum(["ACTIVE", "ARCHIVED", "DRAFT"]),
+  productType: z.string(),
+  vendor: z.string(),
+  tags: z.array(z.string()),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+  variants: z.object({
+    edges: z.array(z.object({
+      node: AdminProductVariantSchema
+    }))
+  }),
+  images: z.object({
+    edges: z.array(z.object({
+      node: AdminProductImageSchema
+    }))
+  })
+}), ShopInfoSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  domain: z.string(),
+  email: z.string().email(),
+  myshopifyDomain: z.string().regex(/^[a-z0-9-]+\.myshopify\.com$/),
+  plan: z.object({
+    displayName: z.string(),
+    partnerDevelopment: z.boolean()
+  }),
+  primaryLocale: z.string(),
+  currencyCode: z.string().length(3),
+  // ISO currency code
+  weightUnit: z.enum(["POUNDS", "OUNCES", "KILOGRAMS", "GRAMS"]),
+  timezone: z.string()
+}), AdminProductsResponseSchema = z.object({
+  products: z.array(AdminProductSchema),
+  hasNextPage: z.boolean(),
+  endCursor: z.string().optional(),
+  shop: ShopDomainSchema,
+  total: z.number().int().nonnegative()
+}), ShopValidationResponseSchema = z.object({
+  valid: z.boolean(),
+  shop: ShopInfoSchema.optional(),
+  error: z.string().optional()
+});
+
+// app/routes/api.admin.products.tsx
+async function loader({ request }) {
+  try {
+    let context = await requireSession(request), url = new URL(request.url), first = Math.min(parseInt(url.searchParams.get("first") || "20"), 50), after = url.searchParams.get("after") || void 0, productId = url.searchParams.get("id");
+    if (first < 1)
+      return json3(createErrorResponse(
+        'Invalid "first" parameter. Must be between 1 and 50.',
+        "INVALID_PARAMETER"
+      ), { status: 400 });
+    if (productId) {
+      let product = await withRateLimit(async () => await getAdminProduct(context.shop, productId));
+      return product ? json3(product, {
+        headers: {
+          "Cache-Control": "private, max-age=300",
+          // 5 minutes cache
+          "Content-Type": "application/json"
+        }
+      }) : json3(createErrorResponse(
+        "Product not found",
+        "PRODUCT_NOT_FOUND"
+      ), { status: 404 });
+    } else {
+      let result = await withRateLimit(async () => await getAdminProducts(context.shop, first, after));
+      if (!result)
+        return json3(createErrorResponse(
+          "Failed to fetch products",
+          "PRODUCTS_FETCH_ERROR"
+        ), { status: 500 });
+      let response = {
+        products: result.products,
+        hasNextPage: result.hasNextPage,
+        endCursor: result.endCursor,
+        shop: context.shop,
+        total: result.products.length
+      }, validatedResponse = AdminProductsResponseSchema.parse(response);
+      return json3(validatedResponse, {
+        headers: {
+          "Cache-Control": "private, max-age=300",
+          // 5 minutes cache
+          "Content-Type": "application/json"
+        }
+      });
+    }
+  } catch (error) {
+    if (console.error("Admin products API error:", error), error instanceof Response)
+      throw error;
+    if (error instanceof Error) {
+      if (error.message.includes("Admin API authentication failed"))
+        return json3(createErrorResponse(
+          "Shop authentication failed",
+          "ADMIN_AUTH_ERROR"
+        ), { status: 401 });
+      if (error.message.includes("Shop subscription required"))
+        return json3(createErrorResponse(
+          "Shop subscription required for Admin API access",
+          "SUBSCRIPTION_ERROR"
+        ), { status: 402 });
+      if (error.message.includes("Admin API rate limit exceeded"))
+        return json3(createErrorResponse(
+          "Admin API rate limit exceeded",
+          "ADMIN_RATE_LIMIT"
+        ), { status: 429 });
+      if (error.message.includes("Max retries reached"))
+        return json3(createErrorResponse(
+          "Admin API temporarily unavailable",
+          "SERVICE_UNAVAILABLE"
+        ), { status: 503 });
+    }
+    return json3(createErrorResponse(
+      "Failed to fetch products",
+      "INTERNAL_ERROR"
+    ), { status: 500 });
+  }
+}
+
 // app/routes/admin.branding.tsx
+var admin_branding_exports = {};
+__export(admin_branding_exports, {
+  action: () => action3,
+  default: () => AdminBranding,
+  loader: () => loader2
+});
+import { json as json4 } from "@remix-run/node";
+import { useLoaderData, Form, useActionData, useFetcher } from "@remix-run/react";
 import {
   Page,
   Layout,
@@ -512,7 +1120,7 @@ import {
 import { useState, useCallback } from "react";
 import { ImageIcon } from "@shopify/polaris-icons";
 import { jsxDEV as jsxDEV3 } from "react/jsx-dev-runtime";
-async function loader({ request }) {
+async function loader2({ request }) {
   let context = await flexibleAuth(request);
   logRequest(request, context);
   try {
@@ -521,7 +1129,7 @@ async function loader({ request }) {
     let configResponse = await fetch(configUrl.toString()), configData = await configResponse.json();
     if (!configResponse.ok)
       throw new Error(configData.error || "Failed to load config");
-    return json3({
+    return json4({
       shop: context.shop,
       brandingSettings: configData.branding
     });
@@ -533,7 +1141,7 @@ async function loader({ request }) {
       logoUrl: "",
       tagline: "Your mobile shopping experience"
     };
-    return json3({
+    return json4({
       shop: context.shop,
       brandingSettings
     });
@@ -551,9 +1159,9 @@ async function action3({ request }) {
     }), settingsData = await settingsResponse.json();
     if (!settingsResponse.ok)
       throw new Error(settingsData.error || "Failed to save settings");
-    return json3(settingsData);
+    return json4(settingsData);
   } catch (error) {
-    return console.error("Failed to save branding settings:", error), json3({
+    return console.error("Failed to save branding settings:", error), json4({
       error: error instanceof Error ? error.message : "Failed to save settings"
     }, { status: 500 });
   }
@@ -894,22 +1502,88 @@ function AdminBranding() {
   );
 }
 
+// app/routes/api.admin.shop.tsx
+var api_admin_shop_exports = {};
+__export(api_admin_shop_exports, {
+  loader: () => loader3
+});
+import { json as json5 } from "@remix-run/node";
+async function loader3({ request }) {
+  try {
+    let context = await requireSession(request);
+    if (new URL(request.url).searchParams.get("validate") === "true") {
+      if (!await validateShopAccess(context.shop))
+        return json5(createErrorResponse(
+          "Shop validation failed",
+          "SHOP_VALIDATION_FAILED"
+        ), { status: 400 });
+      let validationResponse = {
+        valid: !0,
+        shop: await getShopInfo(context.shop)
+      }, validatedResponse = ShopValidationResponseSchema.parse(validationResponse);
+      return json5(validatedResponse, {
+        headers: {
+          "Cache-Control": "private, max-age=300",
+          // 5 minutes cache
+          "Content-Type": "application/json"
+        }
+      });
+    } else {
+      let shopInfo = await getShopInfo(context.shop);
+      return shopInfo ? json5(shopInfo, {
+        headers: {
+          "Cache-Control": "private, max-age=300",
+          // 5 minutes cache
+          "Content-Type": "application/json"
+        }
+      }) : json5(createErrorResponse(
+        "Failed to retrieve shop information",
+        "SHOP_INFO_ERROR"
+      ), { status: 500 });
+    }
+  } catch (error) {
+    if (console.error("Admin shop API error:", error), error instanceof Response)
+      throw error;
+    if (error instanceof Error) {
+      if (error.message.includes("Admin API authentication failed"))
+        return json5(createErrorResponse(
+          "Shop authentication failed",
+          "ADMIN_AUTH_ERROR"
+        ), { status: 401 });
+      if (error.message.includes("Shop subscription required"))
+        return json5(createErrorResponse(
+          "Shop subscription required for Admin API access",
+          "SUBSCRIPTION_ERROR"
+        ), { status: 402 });
+      if (error.message.includes("rate limit"))
+        return json5(createErrorResponse(
+          "Admin API rate limit exceeded",
+          "ADMIN_RATE_LIMIT"
+        ), { status: 429 });
+    }
+    return json5(createErrorResponse(
+      "Failed to retrieve shop information",
+      "INTERNAL_ERROR"
+    ), { status: 500 });
+  }
+}
+
 // app/routes/auth.callback.tsx
 var auth_callback_exports = {};
 __export(auth_callback_exports, {
-  loader: () => loader2
+  loader: () => loader4
 });
 import { redirect } from "@remix-run/node";
 
 // app/lib/shopify-auth.server.ts
-import { createHmac as createHmac3, timingSafeEqual as timingSafeEqual2 } from "crypto";
+import { createHmac as createHmac4, timingSafeEqual as timingSafeEqual2 } from "crypto";
 function verifyShopifyHmac(query, secret) {
   try {
     let params = query instanceof URLSearchParams ? query : new URLSearchParams(query), hmac = params.get("hmac");
     if (!hmac)
       return !1;
     params.delete("hmac"), params.delete("signature");
-    let sortedParams = Array.from(params.entries()).sort(([a], [b]) => a.localeCompare(b)).map(([key, value]) => `${key}=${value}`).join("&"), expectedHmac = createHmac3("sha256", secret).update(sortedParams).digest("hex");
+    let sortedParams = Array.from(params.entries()).sort(([a], [b]) => a.localeCompare(b)).map(([key, value]) => `${key}=${value}`).join("&"), expectedHmac = createHmac4("sha256", secret).update(sortedParams).digest("hex");
     return hmac.length !== expectedHmac.length ? !1 : timingSafeEqual2(
       Buffer.from(hmac, "hex"),
       Buffer.from(expectedHmac, "hex")
@@ -950,92 +1624,8 @@ function createNonce() {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
 
-// app/lib/crypto.server.ts
-import { randomBytes, createCipheriv, createDecipheriv, pbkdf2Sync, createHmac as createHmac4 } from "node:crypto";
-var ALGORITHM = "aes-256-cbc", IV_LENGTH = 16, KEY_LENGTH = 32, HMAC_LENGTH = 32;
-function getEncryptionKey() {
-  let envKey = process.env.ENCRYPTION_KEY;
-  if (envKey) {
-    if (envKey.length === 64)
-      return Buffer.from(envKey, "hex");
-    {
-      let salt2 = Buffer.from("turnapp-static-salt-v1", "utf8");
-      return pbkdf2Sync(envKey, salt2, 1e5, KEY_LENGTH, "sha256");
-    }
-  }
-  let fallbackSeed = "development-turnapp-dev-key-v1", salt = Buffer.from("dev-salt-turnapp", "utf8");
-  return pbkdf2Sync(fallbackSeed, salt, 1e4, KEY_LENGTH, "sha256");
-}
-function encryptToken(plaintext) {
-  if (!plaintext || plaintext.length === 0)
-    throw new Error("Cannot encrypt empty token");
-  try {
-    let key = getEncryptionKey(), iv = randomBytes(IV_LENGTH), cipher = createCipheriv(ALGORITHM, key, iv), encrypted = cipher.update(plaintext, "utf8", "hex");
-    encrypted += cipher.final("hex");
-    let hmac = createHmac4("sha256", key);
-    hmac.update(iv), hmac.update(Buffer.from(encrypted, "hex"));
-    let authTag = hmac.digest();
-    return iv.toString("hex") + encrypted + authTag.toString("hex");
-  } catch (error) {
-    throw console.error("Encryption failed:", error), new Error("Failed to encrypt token");
-  }
-}
-function decryptToken(ciphertext) {
-  try {
-    if (ciphertext.length < IV_LENGTH * 2 + HMAC_LENGTH * 2)
-      throw new Error("Invalid ciphertext format");
-    let ivHex = ciphertext.substring(0, IV_LENGTH * 2), hmacHex = ciphertext.substring(ciphertext.length - HMAC_LENGTH * 2), encryptedHex = ciphertext.substring(IV_LENGTH * 2, ciphertext.length - HMAC_LENGTH * 2), iv = Buffer.from(ivHex, "hex"), providedHmac = Buffer.from(hmacHex, "hex"), encrypted = Buffer.from(encryptedHex, "hex"), key = getEncryptionKey(), hmac = createHmac4("sha256", key);
-    if (hmac.update(iv), hmac.update(encrypted), !hmac.digest().equals(providedHmac))
-      throw new Error("Token integrity check failed");
-    let decipher = createDecipheriv(ALGORITHM, key, iv), decrypted = decipher.update(encryptedHex, "hex", "utf8");
-    return decrypted += decipher.final("utf8"), decrypted;
-  } catch (error) {
-    throw console.error("Decryption failed:", error), new Error("Failed to decrypt token");
-  }
-}
-function testCrypto() {
-  try {
-    let testData = "test-access-token-12345", encrypted = encryptToken(testData), decrypted = decryptToken(encrypted);
-    return testData === decrypted;
-  } catch (error) {
-    return console.error("Crypto test failed:", error), !1;
-  }
-}
-
-// app/lib/shop.server.ts
-async function getShopWithToken(shopDomain) {
-  try {
-    let shop = await prisma.shop.findUnique({
-      where: { shopDomain }
-    });
-    if (!shop || shop.uninstalledAt)
-      return null;
-    let accessToken = decryptToken(shop.accessTokenEnc);
-    return {
-      shopDomain: shop.shopDomain,
-      accessToken,
-      installedAt: shop.installedAt,
-      uninstalledAt: shop.uninstalledAt,
-      settings: shop.settings ? JSON.parse(shop.settings) : {}
-    };
-  } catch (error) {
-    return console.error("Failed to get shop with token:", error), null;
-  }
-}
-async function getShopSettings(shopDomain) {
-  try {
-    let shop = await prisma.shop.findUnique({
-      where: { shopDomain },
-      select: { settings: !0, uninstalledAt: !0 }
-    });
-    return !shop || shop.uninstalledAt ? null : shop.settings ? JSON.parse(shop.settings) : {};
-  } catch (error) {
-    return console.error("Failed to get shop settings:", error), null;
-  }
-}
-
 // app/routes/auth.callback.tsx
-async function loader2({ request }) {
+async function loader4({ request }) {
   let url = new URL(request.url), queryParams = Object.fromEntries(url.searchParams.entries()), { shop, code, hmac, state } = queryParams;
   if (!shop || !code || !hmac)
     throw new Response("Missing required OAuth parameters", { status: 400 });
@@ -1085,12 +1675,12 @@ async function loader2({ request }) {
 // app/routes/api.products.tsx
 var api_products_exports = {};
 __export(api_products_exports, {
-  loader: () => loader3
+  loader: () => loader5
 });
-import { json as json4 } from "@remix-run/node";
+import { json as json6 } from "@remix-run/node";
 
 // app/lib/storefront.server.ts
-var STOREFRONT_API_VERSION = "2024-01", PRODUCTS_QUERY = `
+var STOREFRONT_API_VERSION = "2024-01", PRODUCTS_QUERY2 = `
   query getProducts($first: Int!, $after: String) {
     products(first: $first, after: $after) {
       edges {
@@ -1196,7 +1786,7 @@ async function queryStorefrontAPI(shopDomain, query, variables = {}) {
 async function fetchProducts(shopDomain, first = 10, after) {
   try {
     let variables = { first, ...after && { after } };
-    return await queryStorefrontAPI(shopDomain, PRODUCTS_QUERY, variables);
+    return await queryStorefrontAPI(shopDomain, PRODUCTS_QUERY2, variables);
   } catch (error) {
     throw console.error("Failed to fetch products:", error), error;
   }
@@ -1229,130 +1819,19 @@ function transformProductForMobile(product) {
   };
 }
 
-// app/lib/validation.server.ts
-import { z } from "zod";
-var ShopDomainSchema = z.string().regex(/^[a-z0-9-]+\.myshopify\.com$/, "Invalid shop domain format"), HexColorSchema = z.string().regex(/^#[0-9A-F]{6}$/i, "Invalid hex color format"), UrlSchema = z.string().refine((url) => {
-  if (url === "")
-    return !0;
-  try {
-    let parsed = new URL(url);
-    return !["javascript:", "data:", "vbscript:", "file:", "ftp:"].includes(parsed.protocol);
-  } catch {
-    return !1;
-  }
-}, "Invalid or unsafe URL").optional().or(z.literal("")), BrandingSettingsSchema = z.object({
-  brandName: z.string().min(1, "Brand name is required").max(50, "Brand name too long").regex(/^[a-zA-Z0-9\s\-_]+$/, "Brand name contains invalid characters"),
-  primaryColor: HexColorSchema,
-  logoUrl: UrlSchema,
-  tagline: z.string().max(100, "Tagline too long").optional().or(z.literal(""))
-}), ConfigResponseSchema = z.object({
-  shop: ShopDomainSchema,
-  branding: BrandingSettingsSchema,
-  storefrontEndpoint: z.string().url("Invalid storefront endpoint"),
-  appVersion: z.string().regex(/^\d+\.\d+\.\d+$/, "Invalid version format")
-}), UploadRequestSchema = z.object({
-  kind: z.enum(["logo", "banner"], {
-    errorMap: () => ({ message: "Asset kind must be 'logo' or 'banner'" })
-  })
-}), UploadResponseSchema = z.object({
-  success: z.boolean(),
-  asset: z.object({
-    id: z.string().uuid(),
-    kind: z.enum(["logo", "banner"]),
-    url: z.string().url(),
-    filename: z.string()
-  }).optional(),
-  message: z.string().optional(),
-  error: z.string().optional()
-}), ErrorResponseSchema = z.object({
-  error: z.string(),
-  code: z.string().optional(),
-  details: z.record(z.string()).optional()
-}), SettingsUpdateSchema = z.object({
-  brandName: z.string().min(1, "Brand name is required").max(50, "Brand name too long").optional(),
-  primaryColor: HexColorSchema.optional(),
-  logoUrl: UrlSchema.optional(),
-  tagline: z.string().max(100, "Tagline too long").optional()
-}), HealthResponseSchema = z.object({
-  status: z.enum(["healthy", "unhealthy"]),
-  timestamp: z.string().datetime(),
-  database: z.object({
-    connected: z.boolean(),
-    shops: z.number().int().nonnegative()
-  }).optional(),
-  crypto: z.object({
-    working: z.boolean()
-  }).optional(),
-  version: z.string().optional(),
-  error: z.string().optional()
-});
-var validateBrandingData = (data) => {
-  try {
-    return BrandingSettingsSchema.parse(data);
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      let fieldErrors = error.errors.map(
-        (err) => `${err.path.join(".")}: ${err.message}`
-      ).join(", ");
-      throw new Error(`Validation failed: ${fieldErrors}`);
-    }
-    throw error;
-  }
-}, createErrorResponse = (message, code, details) => ({
-  error: message,
-  code,
-  details
-}), ProductSchema = z.object({
-  id: z.string(),
-  title: z.string(),
-  handle: z.string(),
-  description: z.string(),
-  image: z.string().nullable(),
-  images: z.array(z.object({
-    url: z.string().url(),
-    altText: z.string().nullable()
-  })),
-  price: z.object({
-    amount: z.string(),
-    currency: z.string().length(3)
-    // ISO currency code
-  }),
-  variants: z.array(z.object({
-    id: z.string(),
-    title: z.string(),
-    price: z.object({
-      amount: z.string(),
-      currencyCode: z.string().length(3)
-    }),
-    compareAtPrice: z.object({
-      amount: z.string(),
-      currencyCode: z.string().length(3)
-    }).nullable(),
-    available: z.boolean()
-  }))
-}), ProductsResponseSchema = z.object({
-  products: z.array(ProductSchema),
-  pageInfo: z.object({
-    hasNextPage: z.boolean(),
-    hasPreviousPage: z.boolean()
-  }),
-  shop: ShopDomainSchema,
-  total: z.number().int().nonnegative()
-});
-
 // app/routes/api.products.tsx
-async function loader3({ request }) {
+async function loader5({ request }) {
   try {
     let context = await flexibleAuth(request);
     logRequest(request, context);
     let url = new URL(request.url), first = Math.min(parseInt(url.searchParams.get("first") || "10"), 50), after = url.searchParams.get("after") || void 0;
     if (first < 1)
-      return json4(createErrorResponse(
+      return json6(createErrorResponse(
         'Invalid "first" parameter. Must be between 1 and 50.',
         "INVALID_PARAMETER"
       ), { status: 400 });
     if (!checkStorefrontRateLimit(context.shop))
-      return json4(createErrorResponse(
+      return json6(createErrorResponse(
         "Rate limit exceeded. Please try again later.",
         "RATE_LIMIT_EXCEEDED"
       ), { status: 429 });
@@ -1364,7 +1843,7 @@ async function loader3({ request }) {
       shop: context.shop,
       total: transformedProducts.length
     }, validatedResponse = ProductsResponseSchema.parse(response);
-    return json4(validatedResponse, {
+    return json6(validatedResponse, {
       headers: {
         "Cache-Control": "public, max-age=300",
         // 5 minutes cache
@@ -1376,22 +1855,22 @@ async function loader3({ request }) {
       throw error;
     if (error instanceof Error) {
       if (error.message.includes("Storefront API error: 401"))
-        return json4(createErrorResponse(
+        return json6(createErrorResponse(
           "Shop authentication failed",
           "AUTH_ERROR"
         ), { status: 401 });
       if (error.message.includes("Storefront API error: 402"))
-        return json4(createErrorResponse(
+        return json6(createErrorResponse(
           "Shop subscription required",
           "SUBSCRIPTION_ERROR"
         ), { status: 402 });
       if (error.message.includes("Rate limit"))
-        return json4(createErrorResponse(
+        return json6(createErrorResponse(
           "Shopify rate limit exceeded",
           "SHOPIFY_RATE_LIMIT"
         ), { status: 429 });
     }
-    return json4(createErrorResponse(
+    return json6(createErrorResponse(
       "Failed to fetch products",
       "INTERNAL_ERROR"
     ), { status: 500 });
@@ -1403,10 +1882,10 @@ var api_settings_exports = {};
 __export(api_settings_exports, {
   action: () => action4
 });
-import { json as json5 } from "@remix-run/node";
+import { json as json7 } from "@remix-run/node";
 async function action4({ request }) {
   if (request.method !== "POST")
-    return json5(createErrorResponse("Method not allowed", "METHOD_NOT_ALLOWED"), { status: 405 });
+    return json7(createErrorResponse("Method not allowed", "METHOD_NOT_ALLOWED"), { status: 405 });
   try {
     let context = await flexibleAuth(request);
     logRequest(request, context);
@@ -1423,7 +1902,7 @@ async function action4({ request }) {
     return await prisma.shop.update({
       where: { shopDomain: context.shop },
       data: { settings: updatedSettings }
-    }), console.log(`Updated branding settings for shop: ${context.shop}`, validatedBranding), json5({
+    }), console.log(`Updated branding settings for shop: ${context.shop}`, validatedBranding), json7({
       success: !0,
       message: "Branding settings saved successfully!",
       branding: validatedBranding
@@ -1431,10 +1910,10 @@ async function action4({ request }) {
   } catch (error) {
     if (console.error("Settings API error:", error), error instanceof Response)
       throw error;
-    return error instanceof Error && error.message.includes("Validation failed") ? json5(createErrorResponse(
+    return error instanceof Error && error.message.includes("Validation failed") ? json7(createErrorResponse(
       error.message,
       "VALIDATION_ERROR"
-    ), { status: 400 }) : json5(createErrorResponse(
+    ), { status: 400 }) : json7(createErrorResponse(
       "Failed to update settings",
       "INTERNAL_ERROR"
     ), { status: 500 });
@@ -1444,10 +1923,10 @@ async function action4({ request }) {
 // app/routes/auth.install.tsx
 var auth_install_exports = {};
 __export(auth_install_exports, {
-  loader: () => loader4
+  loader: () => loader6
 });
 import { redirect as redirect2 } from "@remix-run/node";
-async function loader4({ request }) {
+async function loader6({ request }) {
   let shop = new URL(request.url).searchParams.get("shop");
   if (!shop)
     throw new Response("Missing shop parameter", { status: 400 });
@@ -1464,16 +1943,16 @@ async function loader4({ request }) {
 // app/routes/api.config.tsx
 var api_config_exports = {};
 __export(api_config_exports, {
-  loader: () => loader5
+  loader: () => loader7
 });
-import { json as json6 } from "@remix-run/node";
-async function loader5({ request }) {
+import { json as json8 } from "@remix-run/node";
+async function loader7({ request }) {
   let context = await flexibleAuth(request);
   logRequest(request, context);
   try {
     let settings = await getShopSettings(context.shop);
     if (!settings)
-      return json6({ error: "Shop not found or not active" }, { status: 404 });
+      return json8({ error: "Shop not found or not active" }, { status: 404 });
     let branding = {
       brandName: settings.brandName || context.shop.split(".")[0],
       primaryColor: settings.primaryColor || "#007C3B",
@@ -1485,7 +1964,7 @@ async function loader5({ request }) {
       storefrontEndpoint: `https://${context.shop}/api/2024-01/graphql.json`,
       appVersion: "1.0.0"
     }, validatedConfig = ConfigResponseSchema.parse(configResponse);
-    return json6(validatedConfig, {
+    return json8(validatedConfig, {
       headers: {
         "Cache-Control": "public, max-age=300",
         // 5 minutes cache
@@ -1493,7 +1972,7 @@ async function loader5({ request }) {
       }
     });
   } catch (error) {
-    return console.error("Config API error:", error), json6({ error: "Internal server error" }, { status: 500 });
+    return console.error("Config API error:", error), json8({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -1502,7 +1981,7 @@ var api_upload_exports = {};
 __export(api_upload_exports, {
   action: () => action5
 });
-import { json as json7, unstable_parseMultipartFormData, unstable_createFileUploadHandler } from "@remix-run/node";
+import { json as json9, unstable_parseMultipartFormData, unstable_createFileUploadHandler } from "@remix-run/node";
 import path from "node:path";
 import { randomBytes as randomBytes2 } from "node:crypto";
 var ALLOWED_MIME_TYPES = [
@@ -1513,7 +1992,7 @@ var ALLOWED_MIME_TYPES = [
 ], MAX_FILE_SIZE = 2 * 1024 * 1024;
 async function action5({ request }) {
   if (request.method !== "POST")
-    return json7(createErrorResponse("Method not allowed", "METHOD_NOT_ALLOWED"), { status: 405 });
+    return json9(createErrorResponse("Method not allowed", "METHOD_NOT_ALLOWED"), { status: 405 });
   try {
     let context = await flexibleAuth(request);
     logRequest(request, context);
@@ -1528,16 +2007,16 @@ async function action5({ request }) {
       maxPartSize: MAX_FILE_SIZE
     }), formData = await unstable_parseMultipartFormData(request, uploadHandler), file = formData.get("file"), kindParam = formData.get("kind") || "logo";
     if (!file)
-      return json7(createErrorResponse("No file provided", "FILE_REQUIRED"), { status: 400 });
+      return json9(createErrorResponse("No file provided", "FILE_REQUIRED"), { status: 400 });
     let validationResult = UploadRequestSchema.safeParse({ kind: kindParam });
     if (!validationResult.success)
-      return json7(createErrorResponse(
+      return json9(createErrorResponse(
         validationResult.error.errors[0].message,
         "VALIDATION_ERROR"
       ), { status: 400 });
     let { kind } = validationResult.data;
     if (file.size > MAX_FILE_SIZE)
-      return json7(createErrorResponse(
+      return json9(createErrorResponse(
         `File too large. Maximum size is ${MAX_FILE_SIZE / 1024 / 1024}MB`,
         "FILE_TOO_LARGE"
       ), { status: 400 });
@@ -1566,11 +2045,11 @@ async function action5({ request }) {
       },
       message: `${kind} uploaded successfully`
     }, validatedResponse = UploadResponseSchema.parse(response);
-    return json7(validatedResponse);
+    return json9(validatedResponse);
   } catch (error) {
     if (console.error("Upload API error:", error), error instanceof Response)
       throw error;
-    return json7(createErrorResponse(
+    return json9(createErrorResponse(
       error instanceof Error ? error.message : "Upload failed",
       "UPLOAD_ERROR"
     ), { status: 500 });
@@ -1581,14 +2060,14 @@ async function action5({ request }) {
 var test_oauth_exports = {};
 __export(test_oauth_exports, {
   default: () => TestOAuth,
-  loader: () => loader6
+  loader: () => loader8
 });
-import { json as json8 } from "@remix-run/node";
+import { json as json10 } from "@remix-run/node";
 import { useLoaderData as useLoaderData2, Link } from "@remix-run/react";
 import { jsxDEV as jsxDEV4 } from "react/jsx-dev-runtime";
-async function loader6() {
+async function loader8() {
   let testShop = "zeytestshop", installUrl = `/auth/install?shop=${testShop}.myshopify.com`;
-  return json8({
+  return json10({
     testShop,
     installUrl,
     apiKey: process.env.SHOPIFY_API_KEY || "NOT_SET",
@@ -1718,10 +2197,10 @@ function TestOAuth() {
 // app/routes/healthz.tsx
 var healthz_exports = {};
 __export(healthz_exports, {
-  loader: () => loader7
+  loader: () => loader9
 });
-import { json as json9 } from "@remix-run/node";
-async function loader7({ request }) {
+import { json as json11 } from "@remix-run/node";
+async function loader9({ request }) {
   try {
     let shopCount = await prisma.shop.count(), cryptoOk = testCrypto(), health = {
       status: "healthy",
@@ -1735,7 +2214,7 @@ async function loader7({ request }) {
       },
       version: process.env.npm_package_version || "unknown"
     }, validatedHealth = HealthResponseSchema.parse(health);
-    return json9(validatedHealth, {
+    return json11(validatedHealth, {
       status: 200,
       headers: {
         "Cache-Control": "no-cache, no-store, must-revalidate"
@@ -1748,7 +2227,7 @@ async function loader7({ request }) {
       timestamp: (/* @__PURE__ */ new Date()).toISOString(),
       error: error instanceof Error ? error.message : "Unknown error"
     }, validatedError = HealthResponseSchema.parse(unhealthyResponse);
-    return json9(validatedError, {
+    return json11(validatedError, {
       status: 503,
       headers: {
         "Cache-Control": "no-cache, no-store, must-revalidate"
@@ -1761,12 +2240,12 @@ async function loader7({ request }) {
 var index_exports = {};
 __export(index_exports, {
   default: () => Index,
-  loader: () => loader8
+  loader: () => loader10
 });
-import { json as json10 } from "@remix-run/node";
+import { json as json12 } from "@remix-run/node";
 import { useLoaderData as useLoaderData3, Link as Link2 } from "@remix-run/react";
 import { jsxDEV as jsxDEV5 } from "react/jsx-dev-runtime";
-async function loader8() {
+async function loader10() {
   try {
     await prisma.$queryRaw`SELECT 1`;
     let shopCount = await prisma.shop.count(), recentShops = await prisma.shop.findMany({
@@ -1778,7 +2257,7 @@ async function loader8() {
         uninstalledAt: !0
       }
     });
-    return json10({
+    return json12({
       message: "TurnApp - Shopify App Admin Dashboard",
       timestamp: (/* @__PURE__ */ new Date()).toISOString(),
       dbStatus: "connected",
@@ -1786,7 +2265,7 @@ async function loader8() {
       recentShops
     });
   } catch {
-    return json10({
+    return json12({
       message: "TurnApp - Shopify App Admin Dashboard",
       timestamp: (/* @__PURE__ */ new Date()).toISOString(),
       dbStatus: "error",
@@ -1902,9 +2381,9 @@ function Index() {
 var admin_exports = {};
 __export(admin_exports, {
   default: () => AdminLayout,
-  loader: () => loader9
+  loader: () => loader11
 });
-import { json as json11 } from "@remix-run/node";
+import { json as json13 } from "@remix-run/node";
 import { useLoaderData as useLoaderData4, Outlet as Outlet2, useLocation, Link as Link3 } from "@remix-run/react";
 import {
   Frame,
@@ -1918,9 +2397,9 @@ import {
 } from "@shopify/polaris";
 import { useState as useState2, useCallback as useCallback2 } from "react";
 import { jsxDEV as jsxDEV6 } from "react/jsx-dev-runtime";
-async function loader9({ request }) {
+async function loader11({ request }) {
   let url = new URL(request.url), context = await flexibleAuth(request);
-  return logRequest(request, context), json11({
+  return logRequest(request, context), json13({
     shop: context.shop,
     host: url.searchParams.get("host"),
     appBridgeConfig: {
@@ -2097,7 +2576,7 @@ function AdminLayout() {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-VWERPWTD.js", imports: ["/build/_shared/chunk-XC6BC2BP.js", "/build/_shared/chunk-D3JE7QQY.js", "/build/_shared/chunk-ALN5UVCC.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-56LDNGDG.js", "/build/_shared/chunk-PMI65YMG.js", "/build/_shared/chunk-2Q7FBYOG.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-TNNAZQ72.js", imports: ["/build/_shared/chunk-RRH55SMP.js"], hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-L66HS5MY.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin": { id: "routes/admin", parentId: "root", path: "admin", index: void 0, caseSensitive: void 0, module: "/build/routes/admin-OYLTO3LW.js", imports: ["/build/_shared/chunk-Q4XQCCJX.js", "/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin.branding": { id: "routes/admin.branding", parentId: "routes/admin", path: "branding", index: void 0, caseSensitive: void 0, module: "/build/routes/admin.branding-J4OQHBI7.js", imports: ["/build/_shared/chunk-RRH55SMP.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.config": { id: "routes/api.config", parentId: "root", path: "api/config", index: void 0, caseSensitive: void 0, module: "/build/routes/api.config-F6QT7IN6.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.products": { id: "routes/api.products", parentId: "root", path: "api/products", index: void 0, caseSensitive: void 0, module: "/build/routes/api.products-BMEWO7CE.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.settings": { id: "routes/api.settings", parentId: "root", path: "api/settings", index: void 0, caseSensitive: void 0, module: "/build/routes/api.settings-C6JUPEZG.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.upload": { id: "routes/api.upload", parentId: "root", path: "api/upload", index: void 0, caseSensitive: void 0, module: "/build/routes/api.upload-NKI3ERUQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.callback": { id: "routes/auth.callback", parentId: "root", path: "auth/callback", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.callback-HTHTBQTT.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.install": { id: "routes/auth.install", parentId: "root", path: "auth/install", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.install-GWWDNMQD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/healthz": { id: "routes/healthz", parentId: "root", path: "healthz", index: void 0, caseSensitive: void 0, module: "/build/routes/healthz-47L4ZWTK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/test.oauth": { id: "routes/test.oauth", parentId: "root", path: "test/oauth", index: void 0, caseSensitive: void 0, module: "/build/routes/test.oauth-AGY54P2T.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.app_uninstalled": { id: "routes/webhooks.app_uninstalled", parentId: "root", path: "webhooks/app_uninstalled", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.app_uninstalled-QBHIURQQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.products_update": { id: "routes/webhooks.products_update", parentId: "root", path: "webhooks/products_update", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.products_update-JGCI7S77.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "f36815a8", hmr: { runtime: "/build/_shared/chunk-ALN5UVCC.js", timestamp: 1755790659997 }, url: "/build/manifest-F36815A8.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-67FQXOVZ.js", imports: ["/build/_shared/chunk-XC6BC2BP.js", "/build/_shared/chunk-PMI65YMG.js", "/build/_shared/chunk-LW6LB2HF.js", "/build/_shared/chunk-ALN5UVCC.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-56LDNGDG.js", "/build/_shared/chunk-2Q7FBYOG.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-5QZ7LQEG.js", imports: ["/build/_shared/chunk-RRH55SMP.js"], hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-CHYCFESN.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin": { id: "routes/admin", parentId: "root", path: "admin", index: void 0, caseSensitive: void 0, module: "/build/routes/admin-F5AJ46IP.js", imports: ["/build/_shared/chunk-Q4XQCCJX.js", "/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin.branding": { id: "routes/admin.branding", parentId: "routes/admin", path: "branding", index: void 0, caseSensitive: void 0, module: "/build/routes/admin.branding-42YCTP4W.js", imports: ["/build/_shared/chunk-RRH55SMP.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.admin.products": { id: "routes/api.admin.products", parentId: "root", path: "api/admin/products", index: void 0, caseSensitive: void 0, module: "/build/routes/api.admin.products-O44RSELZ.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.admin.shop": { id: "routes/api.admin.shop", parentId: "root", path: "api/admin/shop", index: void 0, caseSensitive: void 0, module: "/build/routes/api.admin.shop-HY5KR6PZ.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.config": { id: "routes/api.config", parentId: "root", path: "api/config", index: void 0, caseSensitive: void 0, module: "/build/routes/api.config-F6QT7IN6.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.products": { id: "routes/api.products", parentId: "root", path: "api/products", index: void 0, caseSensitive: void 0, module: "/build/routes/api.products-BMEWO7CE.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.settings": { id: "routes/api.settings", parentId: "root", path: "api/settings", index: void 0, caseSensitive: void 0, module: "/build/routes/api.settings-C6JUPEZG.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.upload": { id: "routes/api.upload", parentId: "root", path: "api/upload", index: void 0, caseSensitive: void 0, module: "/build/routes/api.upload-NKI3ERUQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.callback": { id: "routes/auth.callback", parentId: "root", path: "auth/callback", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.callback-HTHTBQTT.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.install": { id: "routes/auth.install", parentId: "root", path: "auth/install", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.install-GWWDNMQD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/healthz": { id: "routes/healthz", parentId: "root", path: "healthz", index: void 0, caseSensitive: void 0, module: "/build/routes/healthz-47L4ZWTK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/test.oauth": { id: "routes/test.oauth", parentId: "root", path: "test/oauth", index: void 0, caseSensitive: void 0, module: "/build/routes/test.oauth-Y66FJVEF.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.app_uninstalled": { id: "routes/webhooks.app_uninstalled", parentId: "root", path: "webhooks/app_uninstalled", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.app_uninstalled-QBHIURQQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.products_update": { id: "routes/webhooks.products_update", parentId: "root", path: "webhooks/products_update", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.products_update-JGCI7S77.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "46fea322", hmr: { runtime: "/build/_shared/chunk-ALN5UVCC.js", timestamp: 1755796445583 }, url: "/build/manifest-46FEA322.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public/build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1, v3_throwAbortReason: !1, v3_routeConfig: !1, v3_singleFetch: !1, v3_lazyRouteDiscovery: !1, unstable_optimizeDeps: !1 }, publicPath = "/build/", entry = { module: entry_server_node_exports }, routes = {
@@ -2125,6 +2604,14 @@ var mode = "development", assetsBuildDirectory = "public/build", future = { v3_f
     caseSensitive: void 0,
     module: webhooks_products_update_exports
   },
+  "routes/api.admin.products": {
+    id: "routes/api.admin.products",
+    parentId: "root",
+    path: "api/admin/products",
+    index: void 0,
+    caseSensitive: void 0,
+    module: api_admin_products_exports
+  },
   "routes/admin.branding": {
     id: "routes/admin.branding",
     parentId: "routes/admin",
@@ -2132,6 +2619,14 @@ var mode = "development", assetsBuildDirectory = "public/build", future = { v3_f
     index: void 0,
     caseSensitive: void 0,
     module: admin_branding_exports
+  },
+  "routes/api.admin.shop": {
+    id: "routes/api.admin.shop",
+    parentId: "root",
+    path: "api/admin/shop",
+    index: void 0,
+    caseSensitive: void 0,
+    module: api_admin_shop_exports
   },
   "routes/auth.callback": {
     id: "routes/auth.callback",

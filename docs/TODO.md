@@ -3,15 +3,14 @@
 > Quelle: docs/backlog.yaml (auto-generiert)
 
 ## NOW
-- [ ] Admin API Integration (id: admin-api-integration) — GraphQL client setup für Admin API, shop validation, product queries
 - [ ] Health & Monitoring Endpoints (id: health-endpoints) — /healthz, /readiness endpoints, request logging, error tracking setup
 - [ ] Mobile Demo Scaffold (id: mobile-demo-scaffold) — RN/Flutter template consuming /api/config, basic product list, checkout links
 - [ ] Simple Cache Integration (id: cache-integration) — Redis/memory cache für Product Proxy, 60s TTL, cache invalidation
 - [ ] Error Tracking Setup (id: error-tracking-setup) — Sentry integration, structured logging, error reporting setup
+- [ ] Rate Limit Implementation (id: rate-limit-implementation) — Rate limiting für API endpoints, Shopify GraphQL budget management
 
 
 ## NEXT
-- [ ] Rate Limit Implementation (id: rate-limit-implementation) — Rate limiting für API endpoints, Shopify GraphQL budget management
 - [ ] CI/CD Pipeline Setup (id: ci-cd-setup) — GitHub Actions, lint/test gates, automated deployment setup
 
 
@@ -34,3 +33,4 @@
 - [x] Config API Schema Validation (id: config-api-validation) — Zod schema validation for config endpoints, error responses, type safety
 - [x] Storefront API Setup (id: storefront-api-setup) — GET /api/products proxy mit Shopify Storefront GraphQL, error handling, rate limits
 - [x] Dev Tunnel Setup (ngrok) (id: dev-tunnel-setup) — ngrok integration für local dev, webhook endpoint routing, .env setup
+- [x] Admin API Integration (id: admin-api-integration) — GraphQL client setup für Admin API, shop validation, product queries
