@@ -1,8 +1,5 @@
 wip_limit_now: 5
 now:
-  - id: config-api-validation
-    title: Config API Schema Validation
-    desc: Zod schema validation for config endpoints, error responses, type safety
   - id: storefront-api-setup
     title: Storefront API Setup
     desc: GET /api/products proxy mit Shopify Storefront GraphQL, error handling,
@@ -16,11 +13,11 @@ now:
   - id: health-endpoints
     title: Health & Monitoring Endpoints
     desc: /healthz, /readiness endpoints, request logging, error tracking setup
-next:
   - id: mobile-demo-scaffold
     title: Mobile Demo Scaffold
     desc: RN/Flutter template consuming /api/config, basic product list, checkout
       links
+next: []
 later:
   - id: product-proxy
     title: Product Proxy + Cache
@@ -69,4 +66,8 @@ done:
     title: Session Token Middleware Hardening
     desc: JWT verification middleware, 401 error handling, request context shop
       resolution
+    doneAt: 2025-08-21
+  - id: config-api-validation
+    title: Config API Schema Validation
+    desc: Zod schema validation for config endpoints, error responses, type safety
     doneAt: 2025-08-21

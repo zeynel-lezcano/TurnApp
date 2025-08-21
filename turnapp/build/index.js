@@ -1077,54 +1077,114 @@ import { json as json4 } from "@remix-run/node";
 
 // app/lib/validation.server.ts
 import { z } from "zod";
-var BrandingSettingsSchema = z.object({
-  brandName: z.string().min(1, "Brand name is required").max(50, "Brand name too long"),
-  primaryColor: z.string().regex(/^#[0-9A-F]{6}$/i, "Invalid hex color format"),
-  logoUrl: z.string().url("Invalid URL").optional().or(z.literal("")),
+var ShopDomainSchema = z.string().regex(/^[a-z0-9-]+\.myshopify\.com$/, "Invalid shop domain format"), HexColorSchema = z.string().regex(/^#[0-9A-F]{6}$/i, "Invalid hex color format"), UrlSchema = z.string().refine((url) => {
+  if (url === "")
+    return !0;
+  try {
+    let parsed = new URL(url);
+    return !["javascript:", "data:", "vbscript:", "file:", "ftp:"].includes(parsed.protocol);
+  } catch {
+    return !1;
+  }
+}, "Invalid or unsafe URL").optional().or(z.literal("")), BrandingSettingsSchema = z.object({
+  brandName: z.string().min(1, "Brand name is required").max(50, "Brand name too long").regex(/^[a-zA-Z0-9\s\-_]+$/, "Brand name contains invalid characters"),
+  primaryColor: HexColorSchema,
+  logoUrl: UrlSchema,
   tagline: z.string().max(100, "Tagline too long").optional().or(z.literal(""))
 }), ConfigResponseSchema = z.object({
-  shop: z.string(),
+  shop: ShopDomainSchema,
   branding: BrandingSettingsSchema,
-  storefrontEndpoint: z.string().url(),
-  appVersion: z.string()
+  storefrontEndpoint: z.string().url("Invalid storefront endpoint"),
+  appVersion: z.string().regex(/^\d+\.\d+\.\d+$/, "Invalid version format")
+}), UploadRequestSchema = z.object({
+  kind: z.enum(["logo", "banner"], {
+    errorMap: () => ({ message: "Asset kind must be 'logo' or 'banner'" })
+  })
+}), UploadResponseSchema = z.object({
+  success: z.boolean(),
+  asset: z.object({
+    id: z.string().uuid(),
+    kind: z.enum(["logo", "banner"]),
+    url: z.string().url(),
+    filename: z.string()
+  }).optional(),
+  message: z.string().optional(),
+  error: z.string().optional()
+}), ErrorResponseSchema = z.object({
+  error: z.string(),
+  code: z.string().optional(),
+  details: z.record(z.string()).optional()
+}), SettingsUpdateSchema = z.object({
+  brandName: z.string().min(1, "Brand name is required").max(50, "Brand name too long").optional(),
+  primaryColor: HexColorSchema.optional(),
+  logoUrl: UrlSchema.optional(),
+  tagline: z.string().max(100, "Tagline too long").optional()
+}), HealthResponseSchema = z.object({
+  status: z.enum(["healthy", "unhealthy"]),
+  timestamp: z.string().datetime(),
+  database: z.object({
+    connected: z.boolean(),
+    shops: z.number().int().nonnegative()
+  }).optional(),
+  crypto: z.object({
+    working: z.boolean()
+  }).optional(),
+  version: z.string().optional(),
+  error: z.string().optional()
+});
+var validateBrandingData = (data) => {
+  try {
+    return BrandingSettingsSchema.parse(data);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      let fieldErrors = error.errors.map(
+        (err) => `${err.path.join(".")}: ${err.message}`
+      ).join(", ");
+      throw new Error(`Validation failed: ${fieldErrors}`);
+    }
+    throw error;
+  }
+}, createErrorResponse = (message, code, details) => ({
+  error: message,
+  code,
+  details
 });
 
 // app/routes/api.settings.tsx
 async function action4({ request }) {
   if (request.method !== "POST")
-    return json4({ error: "Method not allowed" }, { status: 405 });
-  let shop = new URL(request.url).searchParams.get("shop");
-  if (!shop)
-    return json4({ error: "Shop parameter required" }, { status: 400 });
+    return json4(createErrorResponse("Method not allowed", "METHOD_NOT_ALLOWED"), { status: 405 });
   try {
+    let context = await flexibleAuth(request);
+    logRequest(request, context);
     let formData = await request.formData(), brandingData = {
       brandName: formData.get("brandName"),
       primaryColor: formData.get("primaryColor"),
       logoUrl: formData.get("logoUrl") || "",
       tagline: formData.get("tagline") || ""
-    }, validatedBranding = BrandingSettingsSchema.parse(brandingData), shopRecord = await prisma.shop.findUnique({
-      where: { shopDomain: shop }
-    });
-    if (!shopRecord)
-      return json4({ error: "Shop not found" }, { status: 404 });
-    let updatedSettings = {
-      ...shopRecord.settings || {},
+    }, validatedBranding = validateBrandingData(brandingData), updatedSettings = {
+      ...context.shopRecord.settings || {},
       ...validatedBranding,
       updatedAt: (/* @__PURE__ */ new Date()).toISOString()
     };
     return await prisma.shop.update({
-      where: { shopDomain: shop },
+      where: { shopDomain: context.shop },
       data: { settings: updatedSettings }
-    }), console.log(`Updated branding settings for shop: ${shop}`, validatedBranding), json4({
+    }), console.log(`Updated branding settings for shop: ${context.shop}`, validatedBranding), json4({
       success: !0,
       message: "Branding settings saved successfully!",
       branding: validatedBranding
     });
   } catch (error) {
-    return console.error("Settings API error:", error), error instanceof Error && error.name === "ZodError" ? json4({
-      error: "Validation failed",
-      details: error.message
-    }, { status: 400 }) : json4({ error: "Internal server error" }, { status: 500 });
+    if (console.error("Settings API error:", error), error instanceof Response)
+      throw error;
+    return error instanceof Error && error.message.includes("Validation failed") ? json4(createErrorResponse(
+      error.message,
+      "VALIDATION_ERROR"
+    ), { status: 400 }) : json4(createErrorResponse(
+      "Failed to update settings",
+      "INTERNAL_ERROR"
+    ), { status: 500 });
   }
 }
 
@@ -1200,7 +1260,7 @@ var ALLOWED_MIME_TYPES = [
 ], MAX_FILE_SIZE = 2 * 1024 * 1024;
 async function action5({ request }) {
   if (request.method !== "POST")
-    return json6({ error: "Method not allowed" }, { status: 405 });
+    return json6(createErrorResponse("Method not allowed", "METHOD_NOT_ALLOWED"), { status: 405 });
   try {
     let context = await flexibleAuth(request);
     logRequest(request, context);
@@ -1213,17 +1273,21 @@ async function action5({ request }) {
         return `${Date.now()}-${randomId}${ext}`;
       },
       maxPartSize: MAX_FILE_SIZE
-    }), formData = await unstable_parseMultipartFormData(request, uploadHandler), file = formData.get("file"), kind = formData.get("kind") || "logo";
+    }), formData = await unstable_parseMultipartFormData(request, uploadHandler), file = formData.get("file"), kindParam = formData.get("kind") || "logo";
     if (!file)
-      return json6({ error: "No file provided" }, { status: 400 });
-    if (!["logo", "banner"].includes(kind))
-      return json6({
-        error: 'Invalid asset kind. Must be "logo" or "banner"'
-      }, { status: 400 });
+      return json6(createErrorResponse("No file provided", "FILE_REQUIRED"), { status: 400 });
+    let validationResult = UploadRequestSchema.safeParse({ kind: kindParam });
+    if (!validationResult.success)
+      return json6(createErrorResponse(
+        validationResult.error.errors[0].message,
+        "VALIDATION_ERROR"
+      ), { status: 400 });
+    let { kind } = validationResult.data;
     if (file.size > MAX_FILE_SIZE)
-      return json6({
-        error: `File too large. Maximum size is ${MAX_FILE_SIZE / 1024 / 1024}MB`
-      }, { status: 400 });
+      return json6(createErrorResponse(
+        `File too large. Maximum size is ${MAX_FILE_SIZE / 1024 / 1024}MB`,
+        "FILE_TOO_LARGE"
+      ), { status: 400 });
     let fileUrl = `/uploads/${file.name}`, existingAsset = await prisma.asset.findFirst({
       where: {
         shopId: context.shopRecord.id,
@@ -1239,8 +1303,7 @@ async function action5({ request }) {
         kind,
         url: fileUrl
       }
-    });
-    return json6({
+    }), response = {
       success: !0,
       asset: {
         id: asset.id,
@@ -1249,11 +1312,15 @@ async function action5({ request }) {
         filename: file.name
       },
       message: `${kind} uploaded successfully`
-    });
+    }, validatedResponse = UploadResponseSchema.parse(response);
+    return json6(validatedResponse);
   } catch (error) {
-    return console.error("Upload API error:", error), json6({
-      error: error instanceof Error ? error.message : "Upload failed"
-    }, { status: 500 });
+    if (console.error("Upload API error:", error), error instanceof Response)
+      throw error;
+    return json6(createErrorResponse(
+      error instanceof Error ? error.message : "Upload failed",
+      "UPLOAD_ERROR"
+    ), { status: 500 });
   }
 }
 
@@ -1414,19 +1481,21 @@ async function loader6({ request }) {
         working: cryptoOk
       },
       version: process.env.npm_package_version || "unknown"
-    };
-    return json8(health, {
+    }, validatedHealth = HealthResponseSchema.parse(health);
+    return json8(validatedHealth, {
       status: 200,
       headers: {
         "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     });
   } catch (error) {
-    return console.error("Health check failed:", error), json8({
+    console.error("Health check failed:", error);
+    let unhealthyResponse = {
       status: "unhealthy",
       timestamp: (/* @__PURE__ */ new Date()).toISOString(),
       error: error instanceof Error ? error.message : "Unknown error"
-    }, {
+    }, validatedError = HealthResponseSchema.parse(unhealthyResponse);
+    return json8(validatedError, {
       status: 503,
       headers: {
         "Cache-Control": "no-cache, no-store, must-revalidate"
@@ -1775,7 +1844,7 @@ function AdminLayout() {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-VWERPWTD.js", imports: ["/build/_shared/chunk-XC6BC2BP.js", "/build/_shared/chunk-D3JE7QQY.js", "/build/_shared/chunk-ALN5UVCC.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-56LDNGDG.js", "/build/_shared/chunk-PMI65YMG.js", "/build/_shared/chunk-2Q7FBYOG.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-TNNAZQ72.js", imports: ["/build/_shared/chunk-RRH55SMP.js"], hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-L66HS5MY.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin": { id: "routes/admin", parentId: "root", path: "admin", index: void 0, caseSensitive: void 0, module: "/build/routes/admin-OYLTO3LW.js", imports: ["/build/_shared/chunk-Q4XQCCJX.js", "/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin.branding": { id: "routes/admin.branding", parentId: "routes/admin", path: "branding", index: void 0, caseSensitive: void 0, module: "/build/routes/admin.branding-J4OQHBI7.js", imports: ["/build/_shared/chunk-RRH55SMP.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.config": { id: "routes/api.config", parentId: "root", path: "api/config", index: void 0, caseSensitive: void 0, module: "/build/routes/api.config-F6QT7IN6.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.settings": { id: "routes/api.settings", parentId: "root", path: "api/settings", index: void 0, caseSensitive: void 0, module: "/build/routes/api.settings-C6JUPEZG.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.upload": { id: "routes/api.upload", parentId: "root", path: "api/upload", index: void 0, caseSensitive: void 0, module: "/build/routes/api.upload-NKI3ERUQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.callback": { id: "routes/auth.callback", parentId: "root", path: "auth/callback", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.callback-HTHTBQTT.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.install": { id: "routes/auth.install", parentId: "root", path: "auth/install", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.install-GWWDNMQD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/healthz": { id: "routes/healthz", parentId: "root", path: "healthz", index: void 0, caseSensitive: void 0, module: "/build/routes/healthz-47L4ZWTK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/test.oauth": { id: "routes/test.oauth", parentId: "root", path: "test/oauth", index: void 0, caseSensitive: void 0, module: "/build/routes/test.oauth-AGY54P2T.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.app_uninstalled": { id: "routes/webhooks.app_uninstalled", parentId: "root", path: "webhooks/app_uninstalled", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.app_uninstalled-QBHIURQQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.products_update": { id: "routes/webhooks.products_update", parentId: "root", path: "webhooks/products_update", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.products_update-JGCI7S77.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "47084f07", hmr: { runtime: "/build/_shared/chunk-ALN5UVCC.js", timestamp: 1755766467347 }, url: "/build/manifest-47084F07.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-VWERPWTD.js", imports: ["/build/_shared/chunk-XC6BC2BP.js", "/build/_shared/chunk-D3JE7QQY.js", "/build/_shared/chunk-ALN5UVCC.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-56LDNGDG.js", "/build/_shared/chunk-PMI65YMG.js", "/build/_shared/chunk-2Q7FBYOG.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-TNNAZQ72.js", imports: ["/build/_shared/chunk-RRH55SMP.js"], hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-L66HS5MY.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin": { id: "routes/admin", parentId: "root", path: "admin", index: void 0, caseSensitive: void 0, module: "/build/routes/admin-OYLTO3LW.js", imports: ["/build/_shared/chunk-Q4XQCCJX.js", "/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin.branding": { id: "routes/admin.branding", parentId: "routes/admin", path: "branding", index: void 0, caseSensitive: void 0, module: "/build/routes/admin.branding-J4OQHBI7.js", imports: ["/build/_shared/chunk-RRH55SMP.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.config": { id: "routes/api.config", parentId: "root", path: "api/config", index: void 0, caseSensitive: void 0, module: "/build/routes/api.config-F6QT7IN6.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.settings": { id: "routes/api.settings", parentId: "root", path: "api/settings", index: void 0, caseSensitive: void 0, module: "/build/routes/api.settings-C6JUPEZG.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.upload": { id: "routes/api.upload", parentId: "root", path: "api/upload", index: void 0, caseSensitive: void 0, module: "/build/routes/api.upload-NKI3ERUQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.callback": { id: "routes/auth.callback", parentId: "root", path: "auth/callback", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.callback-HTHTBQTT.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.install": { id: "routes/auth.install", parentId: "root", path: "auth/install", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.install-GWWDNMQD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/healthz": { id: "routes/healthz", parentId: "root", path: "healthz", index: void 0, caseSensitive: void 0, module: "/build/routes/healthz-47L4ZWTK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/test.oauth": { id: "routes/test.oauth", parentId: "root", path: "test/oauth", index: void 0, caseSensitive: void 0, module: "/build/routes/test.oauth-AGY54P2T.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.app_uninstalled": { id: "routes/webhooks.app_uninstalled", parentId: "root", path: "webhooks/app_uninstalled", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.app_uninstalled-QBHIURQQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.products_update": { id: "routes/webhooks.products_update", parentId: "root", path: "webhooks/products_update", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.products_update-JGCI7S77.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "47084f07", hmr: { runtime: "/build/_shared/chunk-ALN5UVCC.js", timestamp: 1755768686439 }, url: "/build/manifest-47084F07.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public/build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1, v3_throwAbortReason: !1, v3_routeConfig: !1, v3_singleFetch: !1, v3_lazyRouteDiscovery: !1, unstable_optimizeDeps: !1 }, publicPath = "/build/", entry = { module: entry_server_node_exports }, routes = {

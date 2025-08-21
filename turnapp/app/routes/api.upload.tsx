@@ -2,6 +2,11 @@ import type { ActionFunctionArgs } from '@remix-run/node';
 import { json, unstable_parseMultipartFormData, unstable_createFileUploadHandler } from '@remix-run/node';
 import { flexibleAuth, logRequest } from '~/lib/middleware.server';
 import { prisma } from '~/lib/prisma.server';
+import { 
+  UploadRequestSchema, 
+  UploadResponseSchema,
+  createErrorResponse 
+} from '~/lib/validation.server';
 import path from 'node:path';
 import { randomBytes } from 'node:crypto';
 
@@ -17,7 +22,7 @@ const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
 export async function action({ request }: ActionFunctionArgs) {
   if (request.method !== 'POST') {
-    return json({ error: 'Method not allowed' }, { status: 405 });
+    return json(createErrorResponse('Method not allowed', 'METHOD_NOT_ALLOWED'), { status: 405 });
   }
 
   try {
@@ -47,24 +52,29 @@ export async function action({ request }: ActionFunctionArgs) {
     const formData = await unstable_parseMultipartFormData(request, uploadHandler);
     
     const file = formData.get('file') as File;
-    const kind = (formData.get('kind') as string) || 'logo';
+    const kindParam = (formData.get('kind') as string) || 'logo';
 
     if (!file) {
-      return json({ error: 'No file provided' }, { status: 400 });
+      return json(createErrorResponse('No file provided', 'FILE_REQUIRED'), { status: 400 });
     }
 
-    // Validate kind
-    if (!['logo', 'banner'].includes(kind)) {
-      return json({ 
-        error: 'Invalid asset kind. Must be "logo" or "banner"' 
-      }, { status: 400 });
+    // Validate kind with Zod schema
+    const validationResult = UploadRequestSchema.safeParse({ kind: kindParam });
+    if (!validationResult.success) {
+      return json(createErrorResponse(
+        validationResult.error.errors[0].message,
+        'VALIDATION_ERROR'
+      ), { status: 400 });
     }
+
+    const { kind } = validationResult.data;
 
     // Validate file size
     if (file.size > MAX_FILE_SIZE) {
-      return json({ 
-        error: `File too large. Maximum size is ${MAX_FILE_SIZE / 1024 / 1024}MB` 
-      }, { status: 400 });
+      return json(createErrorResponse(
+        `File too large. Maximum size is ${MAX_FILE_SIZE / 1024 / 1024}MB`,
+        'FILE_TOO_LARGE'
+      ), { status: 400 });
     }
 
     // Get file URL (file.name contains the generated filename)
@@ -93,21 +103,31 @@ export async function action({ request }: ActionFunctionArgs) {
       }
     });
 
-    return json({
+    const response = {
       success: true,
       asset: {
         id: asset.id,
-        kind: asset.kind,
+        kind: asset.kind as "logo" | "banner",
         url: asset.url,
         filename: file.name
       },
       message: `${kind} uploaded successfully`
-    });
+    };
+
+    // Validate response schema
+    const validatedResponse = UploadResponseSchema.parse(response);
+    return json(validatedResponse);
 
   } catch (error) {
     console.error('Upload API error:', error);
-    return json({ 
-      error: error instanceof Error ? error.message : 'Upload failed' 
-    }, { status: 500 });
+    
+    if (error instanceof Response) {
+      throw error; // Re-throw middleware responses
+    }
+
+    return json(createErrorResponse(
+      error instanceof Error ? error.message : 'Upload failed',
+      'UPLOAD_ERROR'
+    ), { status: 500 });
   }
 }

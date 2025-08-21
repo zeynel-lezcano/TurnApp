@@ -1,20 +1,22 @@
 import { json, type ActionFunctionArgs } from "@remix-run/node";
 import { prisma } from "~/lib/prisma.server";
-import { BrandingSettingsSchema } from "~/lib/validation.server";
+import { 
+  validateBrandingData, 
+  createErrorResponse, 
+  ErrorResponseSchema 
+} from "~/lib/validation.server";
+import { flexibleAuth, logRequest } from "~/lib/middleware.server";
 
 export async function action({ request }: ActionFunctionArgs) {
   if (request.method !== "POST") {
-    return json({ error: "Method not allowed" }, { status: 405 });
-  }
-
-  const url = new URL(request.url);
-  const shop = url.searchParams.get("shop");
-  
-  if (!shop) {
-    return json({ error: "Shop parameter required" }, { status: 400 });
+    return json(createErrorResponse("Method not allowed", "METHOD_NOT_ALLOWED"), { status: 405 });
   }
 
   try {
+    // Use hardened middleware for authentication
+    const context = await flexibleAuth(request);
+    logRequest(request, context);
+
     const formData = await request.formData();
     
     // Extract form data
@@ -25,17 +27,11 @@ export async function action({ request }: ActionFunctionArgs) {
       tagline: formData.get("tagline") as string || ""
     };
 
-    // Validate with Zod
-    const validatedBranding = BrandingSettingsSchema.parse(brandingData);
+    // Validate with enhanced Zod validation
+    const validatedBranding = validateBrandingData(brandingData);
 
-    // Find shop in database
-    const shopRecord = await prisma.shop.findUnique({
-      where: { shopDomain: shop }
-    });
-
-    if (!shopRecord) {
-      return json({ error: "Shop not found" }, { status: 404 });
-    }
+    // Shop record already validated by middleware
+    const shopRecord = context.shopRecord;
 
     // Merge with existing settings
     const currentSettings = (shopRecord.settings as any) || {};
@@ -47,11 +43,11 @@ export async function action({ request }: ActionFunctionArgs) {
 
     // Update shop settings
     await prisma.shop.update({
-      where: { shopDomain: shop },
+      where: { shopDomain: context.shop },
       data: { settings: updatedSettings }
     });
 
-    console.log(`Updated branding settings for shop: ${shop}`, validatedBranding);
+    console.log(`Updated branding settings for shop: ${context.shop}`, validatedBranding);
 
     return json({
       success: true,
@@ -62,13 +58,20 @@ export async function action({ request }: ActionFunctionArgs) {
   } catch (error) {
     console.error("Settings API error:", error);
     
-    if (error instanceof Error && error.name === "ZodError") {
-      return json({ 
-        error: "Validation failed", 
-        details: error.message 
-      }, { status: 400 });
+    if (error instanceof Response) {
+      throw error; // Re-throw middleware responses
     }
 
-    return json({ error: "Internal server error" }, { status: 500 });
+    if (error instanceof Error && error.message.includes("Validation failed")) {
+      return json(createErrorResponse(
+        error.message,
+        "VALIDATION_ERROR"
+      ), { status: 400 });
+    }
+
+    return json(createErrorResponse(
+      "Failed to update settings",
+      "INTERNAL_ERROR"
+    ), { status: 500 });
   }
 }
