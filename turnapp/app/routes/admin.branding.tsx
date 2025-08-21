@@ -1,5 +1,5 @@
 import { json, type LoaderFunctionArgs, type ActionFunctionArgs } from "@remix-run/node";
-import { useLoaderData, Form, useActionData } from "@remix-run/react";
+import { useLoaderData, Form, useActionData, useFetcher } from "@remix-run/react";
 import { getOptionalSession } from "~/lib/session.server";
 import {
   Page,
@@ -11,9 +11,26 @@ import {
   Banner,
   Text,
   Divider,
-  InlineStack
+  InlineStack,
+  DropZone,
+  Thumbnail,
+  BlockStack,
+  Icon
 } from "@shopify/polaris";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
+import { ImageIcon } from '@shopify/polaris-icons';
+
+interface UploadResponse {
+  success?: boolean;
+  error?: string;
+  asset?: {
+    id: string;
+    kind: string;
+    url: string;
+    filename: string;
+  };
+  message?: string;
+}
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // Try session token first (for embedded admin)
@@ -112,15 +129,41 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function AdminBranding() {
   const { shop, brandingSettings } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
+  const uploadFetcher = useFetcher();
   
   const [brandName, setBrandName] = useState(brandingSettings.brandName);
   const [primaryColor, setPrimaryColor] = useState(brandingSettings.primaryColor);
   const [logoUrl, setLogoUrl] = useState(brandingSettings.logoUrl);
   const [tagline, setTagline] = useState(brandingSettings.tagline);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
   const handleBrandNameChange = useCallback((value: string) => setBrandName(value), []);
   const handleLogoUrlChange = useCallback((value: string) => setLogoUrl(value), []);
   const handleTaglineChange = useCallback((value: string) => setTagline(value), []);
+  
+  const handleDropZoneDrop = useCallback((files: File[]) => {
+    const file = files[0];
+    if (file) {
+      setUploadedFile(file);
+      
+      // Upload file immediately
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('kind', 'logo');
+      
+      uploadFetcher.submit(formData, {
+        method: 'POST',
+        action: `/api/upload?shop=${shop}`,
+        encType: 'multipart/form-data'
+      });
+    }
+  }, [shop, uploadFetcher]);
+
+  // Update logoUrl when upload completes
+  const uploadData = uploadFetcher.data as UploadResponse;
+  if (uploadData?.success && uploadData.asset?.url && uploadData.asset.url !== logoUrl) {
+    setLogoUrl(uploadData.asset.url);
+  }
 
   return (
     <Page 
@@ -181,12 +224,68 @@ export default function AdminBranding() {
                   placeholder="007C3B"
                 />
 
+                <div>
+                  <Text variant="bodyMd" as="p" fontWeight="medium">Logo Upload</Text>
+                  <div style={{ marginTop: '8px' }}>
+                    <DropZone onDrop={handleDropZoneDrop} accept="image/*" type="image">
+                      {uploadedFile ? (
+                        <BlockStack gap="200">
+                          <Thumbnail
+                            source={URL.createObjectURL(uploadedFile)}
+                            alt={uploadedFile.name}
+                            size="large"
+                          />
+                          <Text variant="bodyMd" as="p" alignment="center">
+                            {uploadedFile.name}
+                          </Text>
+                          {uploadFetcher.state === 'submitting' && (
+                            <Text variant="bodyMd" as="p" alignment="center">
+                              Uploading...
+                            </Text>
+                          )}
+                          {(uploadFetcher.data as UploadResponse)?.success && (
+                            <Text variant="bodyMd" as="p" alignment="center" tone="success">
+                              Upload successful!
+                            </Text>
+                          )}
+                        </BlockStack>
+                      ) : logoUrl ? (
+                        <BlockStack gap="200">
+                          <Thumbnail
+                            source={logoUrl}
+                            alt="Current logo"
+                            size="large"
+                          />
+                          <Text variant="bodyMd" as="p" alignment="center">
+                            Current logo
+                          </Text>
+                        </BlockStack>
+                      ) : (
+                        <BlockStack gap="200">
+                          <Icon source={ImageIcon} tone="subdued" />
+                          <Text variant="bodyMd" as="p" alignment="center">
+                            Drop logo here or click to upload
+                          </Text>
+                          <Text variant="bodyMd" as="p" alignment="center" tone="subdued">
+                            Supports JPG, PNG, WebP, SVG (max 2MB)
+                          </Text>
+                        </BlockStack>
+                      )}
+                    </DropZone>
+                  </div>
+                  {(uploadFetcher.data as UploadResponse)?.error && (
+                    <Banner tone="critical" onDismiss={() => {}}>
+                      {(uploadFetcher.data as UploadResponse)?.error || 'Upload error'}
+                    </Banner>
+                  )}
+                </div>
+
                 <TextField
-                  label="Logo URL"
+                  label="Logo URL (Alternative)"
                   value={logoUrl}
                   onChange={handleLogoUrlChange}
                   name="logoUrl"
-                  helpText="URL to your app logo (optional)"
+                  helpText="Or provide a direct URL to your logo"
                   autoComplete="off"
                 />
 

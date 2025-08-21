@@ -1,8 +1,5 @@
 wip_limit_now: 5
 now:
-  - id: logo-upload-s3
-    title: Logo Upload to S3/Cloud Storage
-    desc: File upload endpoint, S3/cloud storage integration, asset URL generation
   - id: session-token-middleware
     title: Session Token Middleware Hardening
     desc: JWT verification middleware, 401 error handling, request context shop
@@ -17,10 +14,10 @@ now:
   - id: dev-tunnel-setup
     title: Dev Tunnel Setup (ngrok)
     desc: ngrok integration für local dev, webhook endpoint routing, .env setup
-next:
   - id: admin-api-integration
     title: Admin API Integration
     desc: GraphQL client setup für Admin API, shop validation, product queries
+next:
   - id: health-endpoints
     title: Health & Monitoring Endpoints
     desc: /healthz, /readiness endpoints, request logging, error tracking setup
@@ -67,4 +64,8 @@ done:
   - id: dev-seed-script
     title: Dev Seed Script
     desc: pnpm seed command with dummy shop data, smoke test scripts
+    doneAt: 2025-08-21
+  - id: logo-upload-s3
+    title: Logo Upload to S3/Cloud Storage
+    desc: File upload endpoint, S3/cloud storage integration, asset URL generation
     doneAt: 2025-08-21

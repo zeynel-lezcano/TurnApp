@@ -331,7 +331,7 @@ __export(admin_branding_exports, {
   loader: () => loader
 });
 import { json as json3 } from "@remix-run/node";
-import { useLoaderData, Form, useActionData } from "@remix-run/react";
+import { useLoaderData, Form, useActionData, useFetcher } from "@remix-run/react";
 
 // app/lib/session.server.ts
 import { createHmac as createHmac2 } from "node:crypto";
@@ -397,9 +397,14 @@ import {
   Banner,
   Text,
   Divider,
-  InlineStack
+  InlineStack,
+  DropZone,
+  Thumbnail,
+  BlockStack,
+  Icon
 } from "@shopify/polaris";
 import { useState, useCallback } from "react";
+import { ImageIcon } from "@shopify/polaris-icons";
 import { jsxDEV as jsxDEV3 } from "react/jsx-dev-runtime";
 async function loader({ request }) {
   let sessionContext = await getOptionalSession(request), shop;
@@ -462,8 +467,19 @@ async function action3({ request }) {
   }
 }
 function AdminBranding() {
-  let { shop, brandingSettings } = useLoaderData(), actionData = useActionData(), [brandName, setBrandName] = useState(brandingSettings.brandName), [primaryColor, setPrimaryColor] = useState(brandingSettings.primaryColor), [logoUrl, setLogoUrl] = useState(brandingSettings.logoUrl), [tagline, setTagline] = useState(brandingSettings.tagline), handleBrandNameChange = useCallback((value) => setBrandName(value), []), handleLogoUrlChange = useCallback((value) => setLogoUrl(value), []), handleTaglineChange = useCallback((value) => setTagline(value), []);
-  return /* @__PURE__ */ jsxDEV3(
+  let { shop, brandingSettings } = useLoaderData(), actionData = useActionData(), uploadFetcher = useFetcher(), [brandName, setBrandName] = useState(brandingSettings.brandName), [primaryColor, setPrimaryColor] = useState(brandingSettings.primaryColor), [logoUrl, setLogoUrl] = useState(brandingSettings.logoUrl), [tagline, setTagline] = useState(brandingSettings.tagline), [uploadedFile, setUploadedFile] = useState(null), handleBrandNameChange = useCallback((value) => setBrandName(value), []), handleLogoUrlChange = useCallback((value) => setLogoUrl(value), []), handleTaglineChange = useCallback((value) => setTagline(value), []), handleDropZoneDrop = useCallback((files) => {
+    let file = files[0];
+    if (file) {
+      setUploadedFile(file);
+      let formData = new FormData();
+      formData.append("file", file), formData.append("kind", "logo"), uploadFetcher.submit(formData, {
+        method: "POST",
+        action: `/api/upload?shop=${shop}`,
+        encType: "multipart/form-data"
+      });
+    }
+  }, [shop, uploadFetcher]), uploadData = uploadFetcher.data;
+  return uploadData?.success && uploadData.asset?.url && uploadData.asset.url !== logoUrl && setLogoUrl(uploadData.asset.url), /* @__PURE__ */ jsxDEV3(
     Page,
     {
       title: "Branding Configuration",
@@ -476,19 +492,19 @@ function AdminBranding() {
           actionData?.success && /* @__PURE__ */ jsxDEV3(Banner, { tone: "success", onDismiss: () => {
           }, children: actionData.message }, void 0, !1, {
             fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 136,
+            lineNumber: 179,
             columnNumber: 13
           }, this),
           actionData?.error && /* @__PURE__ */ jsxDEV3(Banner, { tone: "critical", onDismiss: () => {
           }, children: actionData.error }, void 0, !1, {
             fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 141,
+            lineNumber: 184,
             columnNumber: 13
           }, this),
           /* @__PURE__ */ jsxDEV3(Card, { children: /* @__PURE__ */ jsxDEV3(Form, { method: "post", children: /* @__PURE__ */ jsxDEV3(FormLayout, { children: [
             /* @__PURE__ */ jsxDEV3(Text, { variant: "headingSm", as: "h3", children: "Basic Information" }, void 0, !1, {
               fileName: "app/routes/admin.branding.tsx",
-              lineNumber: 149,
+              lineNumber: 192,
               columnNumber: 17
             }, this),
             /* @__PURE__ */ jsxDEV3(
@@ -505,7 +521,7 @@ function AdminBranding() {
               !1,
               {
                 fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 151,
+                lineNumber: 194,
                 columnNumber: 17
               },
               this
@@ -524,19 +540,19 @@ function AdminBranding() {
               !1,
               {
                 fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 160,
+                lineNumber: 203,
                 columnNumber: 17
               },
               this
             ),
             /* @__PURE__ */ jsxDEV3(Divider, {}, void 0, !1, {
               fileName: "app/routes/admin.branding.tsx",
-              lineNumber: 169,
+              lineNumber: 212,
               columnNumber: 17
             }, this),
             /* @__PURE__ */ jsxDEV3(Text, { variant: "headingSm", as: "h3", children: "Visual Design" }, void 0, !1, {
               fileName: "app/routes/admin.branding.tsx",
-              lineNumber: 171,
+              lineNumber: 214,
               columnNumber: 17
             }, this),
             /* @__PURE__ */ jsxDEV3(
@@ -555,61 +571,169 @@ function AdminBranding() {
               !1,
               {
                 fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 173,
+                lineNumber: 216,
                 columnNumber: 17
               },
               this
             ),
+            /* @__PURE__ */ jsxDEV3("div", { children: [
+              /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", fontWeight: "medium", children: "Logo Upload" }, void 0, !1, {
+                fileName: "app/routes/admin.branding.tsx",
+                lineNumber: 228,
+                columnNumber: 19
+              }, this),
+              /* @__PURE__ */ jsxDEV3("div", { style: { marginTop: "8px" }, children: /* @__PURE__ */ jsxDEV3(DropZone, { onDrop: handleDropZoneDrop, accept: "image/*", type: "image", children: uploadedFile ? /* @__PURE__ */ jsxDEV3(BlockStack, { gap: "200", children: [
+                /* @__PURE__ */ jsxDEV3(
+                  Thumbnail,
+                  {
+                    source: URL.createObjectURL(uploadedFile),
+                    alt: uploadedFile.name,
+                    size: "large"
+                  },
+                  void 0,
+                  !1,
+                  {
+                    fileName: "app/routes/admin.branding.tsx",
+                    lineNumber: 233,
+                    columnNumber: 27
+                  },
+                  this
+                ),
+                /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", alignment: "center", children: uploadedFile.name }, void 0, !1, {
+                  fileName: "app/routes/admin.branding.tsx",
+                  lineNumber: 238,
+                  columnNumber: 27
+                }, this),
+                uploadFetcher.state === "submitting" && /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", alignment: "center", children: "Uploading..." }, void 0, !1, {
+                  fileName: "app/routes/admin.branding.tsx",
+                  lineNumber: 242,
+                  columnNumber: 29
+                }, this),
+                uploadFetcher.data?.success && /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", alignment: "center", tone: "success", children: "Upload successful!" }, void 0, !1, {
+                  fileName: "app/routes/admin.branding.tsx",
+                  lineNumber: 247,
+                  columnNumber: 29
+                }, this)
+              ] }, void 0, !0, {
+                fileName: "app/routes/admin.branding.tsx",
+                lineNumber: 232,
+                columnNumber: 25
+              }, this) : logoUrl ? /* @__PURE__ */ jsxDEV3(BlockStack, { gap: "200", children: [
+                /* @__PURE__ */ jsxDEV3(
+                  Thumbnail,
+                  {
+                    source: logoUrl,
+                    alt: "Current logo",
+                    size: "large"
+                  },
+                  void 0,
+                  !1,
+                  {
+                    fileName: "app/routes/admin.branding.tsx",
+                    lineNumber: 254,
+                    columnNumber: 27
+                  },
+                  this
+                ),
+                /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", alignment: "center", children: "Current logo" }, void 0, !1, {
+                  fileName: "app/routes/admin.branding.tsx",
+                  lineNumber: 259,
+                  columnNumber: 27
+                }, this)
+              ] }, void 0, !0, {
+                fileName: "app/routes/admin.branding.tsx",
+                lineNumber: 253,
+                columnNumber: 25
+              }, this) : /* @__PURE__ */ jsxDEV3(BlockStack, { gap: "200", children: [
+                /* @__PURE__ */ jsxDEV3(Icon, { source: ImageIcon, tone: "subdued" }, void 0, !1, {
+                  fileName: "app/routes/admin.branding.tsx",
+                  lineNumber: 265,
+                  columnNumber: 27
+                }, this),
+                /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", alignment: "center", children: "Drop logo here or click to upload" }, void 0, !1, {
+                  fileName: "app/routes/admin.branding.tsx",
+                  lineNumber: 266,
+                  columnNumber: 27
+                }, this),
+                /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", alignment: "center", tone: "subdued", children: "Supports JPG, PNG, WebP, SVG (max 2MB)" }, void 0, !1, {
+                  fileName: "app/routes/admin.branding.tsx",
+                  lineNumber: 269,
+                  columnNumber: 27
+                }, this)
+              ] }, void 0, !0, {
+                fileName: "app/routes/admin.branding.tsx",
+                lineNumber: 264,
+                columnNumber: 25
+              }, this) }, void 0, !1, {
+                fileName: "app/routes/admin.branding.tsx",
+                lineNumber: 230,
+                columnNumber: 21
+              }, this) }, void 0, !1, {
+                fileName: "app/routes/admin.branding.tsx",
+                lineNumber: 229,
+                columnNumber: 19
+              }, this),
+              uploadFetcher.data?.error && /* @__PURE__ */ jsxDEV3(Banner, { tone: "critical", onDismiss: () => {
+              }, children: uploadFetcher.data?.error || "Upload error" }, void 0, !1, {
+                fileName: "app/routes/admin.branding.tsx",
+                lineNumber: 277,
+                columnNumber: 21
+              }, this)
+            ] }, void 0, !0, {
+              fileName: "app/routes/admin.branding.tsx",
+              lineNumber: 227,
+              columnNumber: 17
+            }, this),
             /* @__PURE__ */ jsxDEV3(
               TextField,
               {
-                label: "Logo URL",
+                label: "Logo URL (Alternative)",
                 value: logoUrl,
                 onChange: handleLogoUrlChange,
                 name: "logoUrl",
-                helpText: "URL to your app logo (optional)",
+                helpText: "Or provide a direct URL to your logo",
                 autoComplete: "off"
               },
               void 0,
               !1,
               {
                 fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 184,
+                lineNumber: 283,
                 columnNumber: 17
               },
               this
             ),
             /* @__PURE__ */ jsxDEV3(InlineStack, { align: "end", children: /* @__PURE__ */ jsxDEV3(Button, { variant: "primary", submit: !0, children: "Save Settings" }, void 0, !1, {
               fileName: "app/routes/admin.branding.tsx",
-              lineNumber: 194,
+              lineNumber: 293,
               columnNumber: 19
             }, this) }, void 0, !1, {
               fileName: "app/routes/admin.branding.tsx",
-              lineNumber: 193,
+              lineNumber: 292,
               columnNumber: 17
             }, this)
           ] }, void 0, !0, {
             fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 148,
+            lineNumber: 191,
             columnNumber: 15
           }, this) }, void 0, !1, {
             fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 147,
+            lineNumber: 190,
             columnNumber: 13
           }, this) }, void 0, !1, {
             fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 146,
+            lineNumber: 189,
             columnNumber: 11
           }, this)
         ] }, void 0, !0, {
           fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 134,
+          lineNumber: 177,
           columnNumber: 9
         }, this),
         /* @__PURE__ */ jsxDEV3(Layout.Section, { variant: "oneThird", children: /* @__PURE__ */ jsxDEV3(Card, { children: /* @__PURE__ */ jsxDEV3("div", { style: { padding: "20px" }, children: [
           /* @__PURE__ */ jsxDEV3(Text, { variant: "headingSm", as: "h3", children: "Preview" }, void 0, !1, {
             fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 206,
+            lineNumber: 305,
             columnNumber: 15
           }, this),
           /* @__PURE__ */ jsxDEV3("div", { style: { marginTop: "16px" }, children: /* @__PURE__ */ jsxDEV3(
@@ -625,12 +749,12 @@ function AdminBranding() {
               children: [
                 /* @__PURE__ */ jsxDEV3(Text, { variant: "headingLg", as: "h2", children: brandName || "Your App Name" }, void 0, !1, {
                   fileName: "app/routes/admin.branding.tsx",
-                  lineNumber: 217,
+                  lineNumber: 316,
                   columnNumber: 19
                 }, this),
                 /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", children: tagline || "Your tagline here" }, void 0, !1, {
                   fileName: "app/routes/admin.branding.tsx",
-                  lineNumber: 220,
+                  lineNumber: 319,
                   columnNumber: 19
                 }, this)
               ]
@@ -639,31 +763,31 @@ function AdminBranding() {
             !0,
             {
               fileName: "app/routes/admin.branding.tsx",
-              lineNumber: 208,
+              lineNumber: 307,
               columnNumber: 17
             },
             this
           ) }, void 0, !1, {
             fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 207,
+            lineNumber: 306,
             columnNumber: 15
           }, this)
         ] }, void 0, !0, {
           fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 205,
+          lineNumber: 304,
           columnNumber: 13
         }, this) }, void 0, !1, {
           fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 204,
+          lineNumber: 303,
           columnNumber: 11
         }, this) }, void 0, !1, {
           fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 203,
+          lineNumber: 302,
           columnNumber: 9
         }, this)
       ] }, void 0, !0, {
         fileName: "app/routes/admin.branding.tsx",
-        lineNumber: 133,
+        lineNumber: 176,
         columnNumber: 7
       }, this)
     },
@@ -671,7 +795,7 @@ function AdminBranding() {
     !1,
     {
       fileName: "app/routes/admin.branding.tsx",
-      lineNumber: 126,
+      lineNumber: 169,
       columnNumber: 5
     },
     this
@@ -989,18 +1113,103 @@ async function loader4({ request }) {
   }
 }
 
+// app/routes/api.upload.tsx
+var api_upload_exports = {};
+__export(api_upload_exports, {
+  action: () => action5
+});
+import { json as json6, unstable_parseMultipartFormData, unstable_createFileUploadHandler } from "@remix-run/node";
+import path from "node:path";
+import { randomBytes as randomBytes2 } from "node:crypto";
+var ALLOWED_MIME_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/svg+xml"
+], MAX_FILE_SIZE = 2 * 1024 * 1024;
+async function action5({ request }) {
+  if (request.method !== "POST")
+    return json6({ error: "Method not allowed" }, { status: 405 });
+  try {
+    let sessionContext = await getOptionalSession(request), shop;
+    if (sessionContext)
+      shop = sessionContext.shop;
+    else {
+      let shopParam = new URL(request.url).searchParams.get("shop");
+      if (!shopParam)
+        return json6({ error: "Unauthorized" }, { status: 401 });
+      shop = shopParam;
+    }
+    let shopRecord = await prisma.shop.findUnique({
+      where: { shopDomain: shop }
+    });
+    if (!shopRecord)
+      return json6({ error: "Shop not found" }, { status: 404 });
+    let uploadHandler = unstable_createFileUploadHandler({
+      directory: path.join(process.cwd(), "public", "uploads"),
+      file: ({ filename, contentType }) => {
+        if (!ALLOWED_MIME_TYPES.includes(contentType))
+          throw new Error(`Invalid file type: ${contentType}`);
+        let ext = path.extname(filename || ""), randomId = randomBytes2(8).toString("hex");
+        return `${Date.now()}-${randomId}${ext}`;
+      },
+      maxPartSize: MAX_FILE_SIZE
+    }), formData = await unstable_parseMultipartFormData(request, uploadHandler), file = formData.get("file"), kind = formData.get("kind") || "logo";
+    if (!file)
+      return json6({ error: "No file provided" }, { status: 400 });
+    if (!["logo", "banner"].includes(kind))
+      return json6({
+        error: 'Invalid asset kind. Must be "logo" or "banner"'
+      }, { status: 400 });
+    if (file.size > MAX_FILE_SIZE)
+      return json6({
+        error: `File too large. Maximum size is ${MAX_FILE_SIZE / 1024 / 1024}MB`
+      }, { status: 400 });
+    let fileUrl = `/uploads/${file.name}`, existingAsset = await prisma.asset.findFirst({
+      where: {
+        shopId: shopRecord.id,
+        kind
+      }
+    });
+    existingAsset && await prisma.asset.delete({
+      where: { id: existingAsset.id }
+    });
+    let asset = await prisma.asset.create({
+      data: {
+        shopId: shopRecord.id,
+        kind,
+        url: fileUrl
+      }
+    });
+    return json6({
+      success: !0,
+      asset: {
+        id: asset.id,
+        kind: asset.kind,
+        url: asset.url,
+        filename: file.name
+      },
+      message: `${kind} uploaded successfully`
+    });
+  } catch (error) {
+    return console.error("Upload API error:", error), json6({
+      error: error instanceof Error ? error.message : "Upload failed"
+    }, { status: 500 });
+  }
+}
+
 // app/routes/test.oauth.tsx
 var test_oauth_exports = {};
 __export(test_oauth_exports, {
   default: () => TestOAuth,
   loader: () => loader5
 });
-import { json as json6 } from "@remix-run/node";
+import { json as json7 } from "@remix-run/node";
 import { useLoaderData as useLoaderData2, Link } from "@remix-run/react";
 import { jsxDEV as jsxDEV4 } from "react/jsx-dev-runtime";
 async function loader5() {
   let testShop = "zeytestshop", installUrl = `/auth/install?shop=${testShop}.myshopify.com`;
-  return json6({
+  return json7({
     testShop,
     installUrl,
     apiKey: process.env.SHOPIFY_API_KEY || "NOT_SET",
@@ -1132,7 +1341,7 @@ var healthz_exports = {};
 __export(healthz_exports, {
   loader: () => loader6
 });
-import { json as json7 } from "@remix-run/node";
+import { json as json8 } from "@remix-run/node";
 async function loader6({ request }) {
   try {
     let shopCount = await prisma.shop.count(), cryptoOk = testCrypto(), health = {
@@ -1147,14 +1356,14 @@ async function loader6({ request }) {
       },
       version: process.env.npm_package_version || "unknown"
     };
-    return json7(health, {
+    return json8(health, {
       status: 200,
       headers: {
         "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     });
   } catch (error) {
-    return console.error("Health check failed:", error), json7({
+    return console.error("Health check failed:", error), json8({
       status: "unhealthy",
       timestamp: (/* @__PURE__ */ new Date()).toISOString(),
       error: error instanceof Error ? error.message : "Unknown error"
@@ -1173,7 +1382,7 @@ __export(index_exports, {
   default: () => Index,
   loader: () => loader7
 });
-import { json as json8 } from "@remix-run/node";
+import { json as json9 } from "@remix-run/node";
 import { useLoaderData as useLoaderData3, Link as Link2 } from "@remix-run/react";
 import { jsxDEV as jsxDEV5 } from "react/jsx-dev-runtime";
 async function loader7() {
@@ -1188,7 +1397,7 @@ async function loader7() {
         uninstalledAt: !0
       }
     });
-    return json8({
+    return json9({
       message: "TurnApp - Shopify App Admin Dashboard",
       timestamp: (/* @__PURE__ */ new Date()).toISOString(),
       dbStatus: "connected",
@@ -1196,7 +1405,7 @@ async function loader7() {
       recentShops
     });
   } catch {
-    return json8({
+    return json9({
       message: "TurnApp - Shopify App Admin Dashboard",
       timestamp: (/* @__PURE__ */ new Date()).toISOString(),
       dbStatus: "error",
@@ -1314,7 +1523,7 @@ __export(admin_exports, {
   default: () => AdminLayout,
   loader: () => loader8
 });
-import { json as json9 } from "@remix-run/node";
+import { json as json10 } from "@remix-run/node";
 import { useLoaderData as useLoaderData4, Outlet as Outlet2, useLocation, Link as Link3 } from "@remix-run/react";
 import {
   Frame,
@@ -1331,7 +1540,7 @@ import { jsxDEV as jsxDEV6 } from "react/jsx-dev-runtime";
 async function loader8({ request }) {
   let url = new URL(request.url), sessionContext = await getOptionalSession(request);
   if (sessionContext)
-    return json9({
+    return json10({
       shop: sessionContext.shop,
       host: url.searchParams.get("host"),
       appBridgeConfig: {
@@ -1343,7 +1552,7 @@ async function loader8({ request }) {
   let shop = url.searchParams.get("shop"), host = url.searchParams.get("host");
   if (!shop)
     throw new Response("Unauthorized - Missing session token or shop parameter", { status: 401 });
-  return json9({
+  return json10({
     shop,
     host,
     appBridgeConfig: {
@@ -1520,7 +1729,7 @@ function AdminLayout() {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-TBCJL747.js", imports: ["/build/_shared/chunk-XC6BC2BP.js", "/build/_shared/chunk-LW6LB2HF.js", "/build/_shared/chunk-ALN5UVCC.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-PMI65YMG.js", "/build/_shared/chunk-56LDNGDG.js", "/build/_shared/chunk-2Q7FBYOG.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-UYZEUWYC.js", imports: ["/build/_shared/chunk-ANTKSAN7.js"], hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-F4O4QEZY.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin": { id: "routes/admin", parentId: "root", path: "admin", index: void 0, caseSensitive: void 0, module: "/build/routes/admin-C3XB5OOM.js", imports: ["/build/_shared/chunk-EV32D4DT.js", "/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin.branding": { id: "routes/admin.branding", parentId: "routes/admin", path: "branding", index: void 0, caseSensitive: void 0, module: "/build/routes/admin.branding-2H2IKNQC.js", imports: ["/build/_shared/chunk-ANTKSAN7.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.config": { id: "routes/api.config", parentId: "root", path: "api/config", index: void 0, caseSensitive: void 0, module: "/build/routes/api.config-F6QT7IN6.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.settings": { id: "routes/api.settings", parentId: "root", path: "api/settings", index: void 0, caseSensitive: void 0, module: "/build/routes/api.settings-C6JUPEZG.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.callback": { id: "routes/auth.callback", parentId: "root", path: "auth/callback", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.callback-HTHTBQTT.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.install": { id: "routes/auth.install", parentId: "root", path: "auth/install", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.install-GWWDNMQD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/healthz": { id: "routes/healthz", parentId: "root", path: "healthz", index: void 0, caseSensitive: void 0, module: "/build/routes/healthz-47L4ZWTK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/test.oauth": { id: "routes/test.oauth", parentId: "root", path: "test/oauth", index: void 0, caseSensitive: void 0, module: "/build/routes/test.oauth-RBOJFKPL.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.app_uninstalled": { id: "routes/webhooks.app_uninstalled", parentId: "root", path: "webhooks/app_uninstalled", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.app_uninstalled-QBHIURQQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.products_update": { id: "routes/webhooks.products_update", parentId: "root", path: "webhooks/products_update", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.products_update-JGCI7S77.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "e1a0ea70", hmr: { runtime: "/build/_shared/chunk-ALN5UVCC.js", timestamp: 1755762765999 }, url: "/build/manifest-E1A0EA70.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-IMMRVYYP.js", imports: ["/build/_shared/chunk-XC6BC2BP.js", "/build/_shared/chunk-LW6LB2HF.js", "/build/_shared/chunk-ALN5UVCC.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-56LDNGDG.js", "/build/_shared/chunk-PMI65YMG.js", "/build/_shared/chunk-2Q7FBYOG.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-VQC54PAV.js", imports: ["/build/_shared/chunk-RRH55SMP.js"], hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-5T3DDPHO.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin": { id: "routes/admin", parentId: "root", path: "admin", index: void 0, caseSensitive: void 0, module: "/build/routes/admin-ZZMVBB2B.js", imports: ["/build/_shared/chunk-EV32D4DT.js", "/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin.branding": { id: "routes/admin.branding", parentId: "routes/admin", path: "branding", index: void 0, caseSensitive: void 0, module: "/build/routes/admin.branding-EN2SGFBL.js", imports: ["/build/_shared/chunk-RRH55SMP.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.config": { id: "routes/api.config", parentId: "root", path: "api/config", index: void 0, caseSensitive: void 0, module: "/build/routes/api.config-F6QT7IN6.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.settings": { id: "routes/api.settings", parentId: "root", path: "api/settings", index: void 0, caseSensitive: void 0, module: "/build/routes/api.settings-C6JUPEZG.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.upload": { id: "routes/api.upload", parentId: "root", path: "api/upload", index: void 0, caseSensitive: void 0, module: "/build/routes/api.upload-NKI3ERUQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.callback": { id: "routes/auth.callback", parentId: "root", path: "auth/callback", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.callback-HTHTBQTT.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.install": { id: "routes/auth.install", parentId: "root", path: "auth/install", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.install-GWWDNMQD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/healthz": { id: "routes/healthz", parentId: "root", path: "healthz", index: void 0, caseSensitive: void 0, module: "/build/routes/healthz-47L4ZWTK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/test.oauth": { id: "routes/test.oauth", parentId: "root", path: "test/oauth", index: void 0, caseSensitive: void 0, module: "/build/routes/test.oauth-2MXZLR7I.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.app_uninstalled": { id: "routes/webhooks.app_uninstalled", parentId: "root", path: "webhooks/app_uninstalled", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.app_uninstalled-QBHIURQQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.products_update": { id: "routes/webhooks.products_update", parentId: "root", path: "webhooks/products_update", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.products_update-JGCI7S77.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "ff943b25", hmr: { runtime: "/build/_shared/chunk-ALN5UVCC.js", timestamp: 1755765288647 }, url: "/build/manifest-FF943B25.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public/build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1, v3_throwAbortReason: !1, v3_routeConfig: !1, v3_singleFetch: !1, v3_lazyRouteDiscovery: !1, unstable_optimizeDeps: !1 }, publicPath = "/build/", entry = { module: entry_server_node_exports }, routes = {
@@ -1587,6 +1796,14 @@ var mode = "development", assetsBuildDirectory = "public/build", future = { v3_f
     index: void 0,
     caseSensitive: void 0,
     module: api_config_exports
+  },
+  "routes/api.upload": {
+    id: "routes/api.upload",
+    parentId: "root",
+    path: "api/upload",
+    index: void 0,
+    caseSensitive: void 0,
+    module: api_upload_exports
   },
   "routes/test.oauth": {
     id: "routes/test.oauth",

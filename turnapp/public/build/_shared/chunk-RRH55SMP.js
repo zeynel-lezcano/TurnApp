@@ -6301,8 +6301,8 @@ function classNames(...classes) {
 function variationName(name, value) {
   return `${name}${value.charAt(0).toUpperCase()}${value.slice(1)}`;
 }
-function sanitizeCustomProperties(styles64) {
-  const nonNullValues = Object.entries(styles64).filter(([_, value]) => value != null);
+function sanitizeCustomProperties(styles67) {
+  const nonNullValues = Object.entries(styles67).filter(([_, value]) => value != null);
   return nonNullValues.length ? Object.fromEntries(nonNullValues) : void 0;
 }
 function getResponsiveProps(componentName, componentProp, tokenSubgroup, responsiveProp) {
@@ -6400,28 +6400,93 @@ var Text = ({
   }), children);
 };
 
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Icon/Icon.js
+var import_react22 = __toESM(require_react());
+
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Icon/Icon.css.js
+var styles2 = {
+  "Icon": "Polaris-Icon",
+  "toneInherit": "Polaris-Icon--toneInherit",
+  "toneBase": "Polaris-Icon--toneBase",
+  "toneSubdued": "Polaris-Icon--toneSubdued",
+  "toneCaution": "Polaris-Icon--toneCaution",
+  "toneWarning": "Polaris-Icon--toneWarning",
+  "toneCritical": "Polaris-Icon--toneCritical",
+  "toneInteractive": "Polaris-Icon--toneInteractive",
+  "toneInfo": "Polaris-Icon--toneInfo",
+  "toneSuccess": "Polaris-Icon--toneSuccess",
+  "tonePrimary": "Polaris-Icon--tonePrimary",
+  "toneEmphasis": "Polaris-Icon--toneEmphasis",
+  "toneMagic": "Polaris-Icon--toneMagic",
+  "toneTextCaution": "Polaris-Icon--toneTextCaution",
+  "toneTextWarning": "Polaris-Icon--toneTextWarning",
+  "toneTextCritical": "Polaris-Icon--toneTextCritical",
+  "toneTextInfo": "Polaris-Icon--toneTextInfo",
+  "toneTextPrimary": "Polaris-Icon--toneTextPrimary",
+  "toneTextSuccess": "Polaris-Icon--toneTextSuccess",
+  "toneTextMagic": "Polaris-Icon--toneTextMagic",
+  "Svg": "Polaris-Icon__Svg",
+  "Img": "Polaris-Icon__Img",
+  "Placeholder": "Polaris-Icon__Placeholder"
+};
+
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Icon/Icon.js
+function Icon({
+  source,
+  tone,
+  accessibilityLabel
+}) {
+  let sourceType;
+  if (typeof source === "function") {
+    sourceType = "function";
+  } else if (source === "placeholder") {
+    sourceType = "placeholder";
+  } else {
+    sourceType = "external";
+  }
+  if (tone && sourceType === "external" && true) {
+    console.warn("Recoloring external SVGs is not supported. Set the intended color on your SVG instead.");
+  }
+  const className = classNames(styles2.Icon, tone && styles2[variationName("tone", tone)]);
+  const {
+    mdDown
+  } = useBreakpoints();
+  const SourceComponent = source;
+  const contentMarkup = {
+    function: /* @__PURE__ */ import_react22.default.createElement(SourceComponent, Object.assign({
+      className: styles2.Svg,
+      focusable: "false",
+      "aria-hidden": "true"
+      // On Mobile we're scaling the viewBox to 18x18 to make the icons bigger
+      // Also, we're setting the viewport origin to 1x1 to center the icon
+      // We use this syntax so we don't override the existing viewBox value if we don't need to.
+    }, mdDown ? {
+      viewBox: "1 1 18 18"
+    } : {})),
+    placeholder: /* @__PURE__ */ import_react22.default.createElement("div", {
+      className: styles2.Placeholder
+    }),
+    external: /* @__PURE__ */ import_react22.default.createElement("img", {
+      className: styles2.Img,
+      src: `data:image/svg+xml;utf8,${source}`,
+      alt: "",
+      "aria-hidden": "true"
+    })
+  };
+  return /* @__PURE__ */ import_react22.default.createElement("span", {
+    className
+  }, accessibilityLabel && /* @__PURE__ */ import_react22.default.createElement(Text, {
+    as: "span",
+    visuallyHidden: true
+  }, accessibilityLabel), contentMarkup[sourceType]);
+}
+
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Button/Button.js
-var import_react47 = __toESM(require_react());
+var import_react48 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/icons/AlertCircleIcon.svg.mjs
-var import_react22 = __toESM(require_react(), 1);
-var SvgAlertCircleIcon = function SvgAlertCircleIcon2(props) {
-  return /* @__PURE__ */ import_react22.default.createElement("svg", Object.assign({
-    viewBox: "0 0 20 20"
-  }, props), /* @__PURE__ */ import_react22.default.createElement("path", {
-    d: "M10 6a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5a.75.75 0 0 1 .75-.75Z"
-  }), /* @__PURE__ */ import_react22.default.createElement("path", {
-    d: "M11 13a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"
-  }), /* @__PURE__ */ import_react22.default.createElement("path", {
-    fillRule: "evenodd",
-    d: "M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Zm-1.5 0a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0Z"
-  }));
-};
-SvgAlertCircleIcon.displayName = "AlertCircleIcon";
-
-// node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/icons/AlertDiamondIcon.svg.mjs
 var import_react23 = __toESM(require_react(), 1);
-var SvgAlertDiamondIcon = function SvgAlertDiamondIcon2(props) {
+var SvgAlertCircleIcon = function SvgAlertCircleIcon2(props) {
   return /* @__PURE__ */ import_react23.default.createElement("svg", Object.assign({
     viewBox: "0 0 20 20"
   }, props), /* @__PURE__ */ import_react23.default.createElement("path", {
@@ -6430,21 +6495,37 @@ var SvgAlertDiamondIcon = function SvgAlertDiamondIcon2(props) {
     d: "M11 13a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"
   }), /* @__PURE__ */ import_react23.default.createElement("path", {
     fillRule: "evenodd",
+    d: "M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Zm-1.5 0a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0Z"
+  }));
+};
+SvgAlertCircleIcon.displayName = "AlertCircleIcon";
+
+// node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/icons/AlertDiamondIcon.svg.mjs
+var import_react24 = __toESM(require_react(), 1);
+var SvgAlertDiamondIcon = function SvgAlertDiamondIcon2(props) {
+  return /* @__PURE__ */ import_react24.default.createElement("svg", Object.assign({
+    viewBox: "0 0 20 20"
+  }, props), /* @__PURE__ */ import_react24.default.createElement("path", {
+    d: "M10 6a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5a.75.75 0 0 1 .75-.75Z"
+  }), /* @__PURE__ */ import_react24.default.createElement("path", {
+    d: "M11 13a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"
+  }), /* @__PURE__ */ import_react24.default.createElement("path", {
+    fillRule: "evenodd",
     d: "M11.237 3.177a1.75 1.75 0 0 0-2.474 0l-5.586 5.585a1.75 1.75 0 0 0 0 2.475l5.586 5.586a1.75 1.75 0 0 0 2.474 0l5.586-5.586a1.75 1.75 0 0 0 0-2.475l-5.586-5.585Zm-1.414 1.06a.25.25 0 0 1 .354 0l5.586 5.586a.25.25 0 0 1 0 .354l-5.586 5.585a.25.25 0 0 1-.354 0l-5.586-5.585a.25.25 0 0 1 0-.354l5.586-5.586Z"
   }));
 };
 SvgAlertDiamondIcon.displayName = "AlertDiamondIcon";
 
 // node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/icons/AlertTriangleIcon.svg.mjs
-var import_react24 = __toESM(require_react(), 1);
+var import_react25 = __toESM(require_react(), 1);
 var SvgAlertTriangleIcon = function SvgAlertTriangleIcon2(props) {
-  return /* @__PURE__ */ import_react24.default.createElement("svg", Object.assign({
+  return /* @__PURE__ */ import_react25.default.createElement("svg", Object.assign({
     viewBox: "0 0 20 20"
-  }, props), /* @__PURE__ */ import_react24.default.createElement("path", {
+  }, props), /* @__PURE__ */ import_react25.default.createElement("path", {
     d: "M10 6.75a.75.75 0 0 1 .75.75v3.5a.75.75 0 1 1-1.5 0v-3.5a.75.75 0 0 1 .75-.75Z"
-  }), /* @__PURE__ */ import_react24.default.createElement("path", {
+  }), /* @__PURE__ */ import_react25.default.createElement("path", {
     d: "M11 13.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"
-  }), /* @__PURE__ */ import_react24.default.createElement("path", {
+  }), /* @__PURE__ */ import_react25.default.createElement("path", {
     fillRule: "evenodd",
     d: "M10 3.5c-1.045 0-1.784.702-2.152 1.447a449.26 449.26 0 0 1-2.005 3.847l-.028.052a403.426 403.426 0 0 0-2.008 3.856c-.372.752-.478 1.75.093 2.614.57.863 1.542 1.184 2.464 1.184h7.272c.922 0 1.895-.32 2.464-1.184.57-.864.465-1.862.093-2.614-.21-.424-1.113-2.147-2.004-3.847l-.032-.061a429.497 429.497 0 0 1-2.005-3.847c-.368-.745-1.107-1.447-2.152-1.447Zm-.808 2.112c.404-.816 1.212-.816 1.616 0 .202.409 1.112 2.145 2.022 3.88a418.904 418.904 0 0 1 2.018 3.875c.404.817 0 1.633-1.212 1.633h-7.272c-1.212 0-1.617-.816-1.212-1.633.202-.408 1.113-2.147 2.023-3.883a421.932 421.932 0 0 0 2.017-3.872Z"
   }));
@@ -6452,11 +6533,11 @@ var SvgAlertTriangleIcon = function SvgAlertTriangleIcon2(props) {
 SvgAlertTriangleIcon.displayName = "AlertTriangleIcon";
 
 // node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/icons/ArrowLeftIcon.svg.mjs
-var import_react25 = __toESM(require_react(), 1);
+var import_react26 = __toESM(require_react(), 1);
 var SvgArrowLeftIcon = function SvgArrowLeftIcon2(props) {
-  return /* @__PURE__ */ import_react25.default.createElement("svg", Object.assign({
+  return /* @__PURE__ */ import_react26.default.createElement("svg", Object.assign({
     viewBox: "0 0 20 20"
-  }, props), /* @__PURE__ */ import_react25.default.createElement("path", {
+  }, props), /* @__PURE__ */ import_react26.default.createElement("path", {
     fillRule: "evenodd",
     d: "M16.5 10a.75.75 0 0 1-.75.75h-9.69l2.72 2.72a.75.75 0 0 1-1.06 1.06l-4-4a.75.75 0 0 1 0-1.06l4-4a.75.75 0 1 1 1.06 1.06l-2.72 2.72h9.69a.75.75 0 0 1 .75.75Z"
   }));
@@ -6464,11 +6545,11 @@ var SvgArrowLeftIcon = function SvgArrowLeftIcon2(props) {
 SvgArrowLeftIcon.displayName = "ArrowLeftIcon";
 
 // node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/icons/CheckIcon.svg.mjs
-var import_react26 = __toESM(require_react(), 1);
+var import_react27 = __toESM(require_react(), 1);
 var SvgCheckIcon = function SvgCheckIcon2(props) {
-  return /* @__PURE__ */ import_react26.default.createElement("svg", Object.assign({
+  return /* @__PURE__ */ import_react27.default.createElement("svg", Object.assign({
     viewBox: "0 0 20 20"
-  }, props), /* @__PURE__ */ import_react26.default.createElement("path", {
+  }, props), /* @__PURE__ */ import_react27.default.createElement("path", {
     fillRule: "evenodd",
     d: "M15.78 5.97a.75.75 0 0 1 0 1.06l-6.5 6.5a.75.75 0 0 1-1.06 0l-3.25-3.25a.75.75 0 1 1 1.06-1.06l2.72 2.72 5.97-5.97a.75.75 0 0 1 1.06 0Z"
   }));
@@ -6476,11 +6557,11 @@ var SvgCheckIcon = function SvgCheckIcon2(props) {
 SvgCheckIcon.displayName = "CheckIcon";
 
 // node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/icons/ChevronDownIcon.svg.mjs
-var import_react27 = __toESM(require_react(), 1);
+var import_react28 = __toESM(require_react(), 1);
 var SvgChevronDownIcon = function SvgChevronDownIcon2(props) {
-  return /* @__PURE__ */ import_react27.default.createElement("svg", Object.assign({
+  return /* @__PURE__ */ import_react28.default.createElement("svg", Object.assign({
     viewBox: "0 0 20 20"
-  }, props), /* @__PURE__ */ import_react27.default.createElement("path", {
+  }, props), /* @__PURE__ */ import_react28.default.createElement("path", {
     fillRule: "evenodd",
     d: "M5.72 8.47a.75.75 0 0 1 1.06 0l3.47 3.47 3.47-3.47a.75.75 0 1 1 1.06 1.06l-4 4a.75.75 0 0 1-1.06 0l-4-4a.75.75 0 0 1 0-1.06Z"
   }));
@@ -6488,11 +6569,11 @@ var SvgChevronDownIcon = function SvgChevronDownIcon2(props) {
 SvgChevronDownIcon.displayName = "ChevronDownIcon";
 
 // node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/icons/ChevronLeftIcon.svg.mjs
-var import_react28 = __toESM(require_react(), 1);
+var import_react29 = __toESM(require_react(), 1);
 var SvgChevronLeftIcon = function SvgChevronLeftIcon2(props) {
-  return /* @__PURE__ */ import_react28.default.createElement("svg", Object.assign({
+  return /* @__PURE__ */ import_react29.default.createElement("svg", Object.assign({
     viewBox: "0 0 20 20"
-  }, props), /* @__PURE__ */ import_react28.default.createElement("path", {
+  }, props), /* @__PURE__ */ import_react29.default.createElement("path", {
     fillRule: "evenodd",
     d: "M11.764 5.204a.75.75 0 0 1 .032 1.06l-3.516 3.736 3.516 3.736a.75.75 0 1 1-1.092 1.028l-4-4.25a.75.75 0 0 1 0-1.028l4-4.25a.75.75 0 0 1 1.06-.032Z"
   }));
@@ -6500,11 +6581,11 @@ var SvgChevronLeftIcon = function SvgChevronLeftIcon2(props) {
 SvgChevronLeftIcon.displayName = "ChevronLeftIcon";
 
 // node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/icons/ChevronRightIcon.svg.mjs
-var import_react29 = __toESM(require_react(), 1);
+var import_react30 = __toESM(require_react(), 1);
 var SvgChevronRightIcon = function SvgChevronRightIcon2(props) {
-  return /* @__PURE__ */ import_react29.default.createElement("svg", Object.assign({
+  return /* @__PURE__ */ import_react30.default.createElement("svg", Object.assign({
     viewBox: "0 0 20 20"
-  }, props), /* @__PURE__ */ import_react29.default.createElement("path", {
+  }, props), /* @__PURE__ */ import_react30.default.createElement("path", {
     fillRule: "evenodd",
     d: "M7.72 14.53a.75.75 0 0 1 0-1.06l3.47-3.47-3.47-3.47a.75.75 0 0 1 1.06-1.06l4 4a.75.75 0 0 1 0 1.06l-4 4a.75.75 0 0 1-1.06 0Z"
   }));
@@ -6512,11 +6593,11 @@ var SvgChevronRightIcon = function SvgChevronRightIcon2(props) {
 SvgChevronRightIcon.displayName = "ChevronRightIcon";
 
 // node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/icons/ChevronUpIcon.svg.mjs
-var import_react30 = __toESM(require_react(), 1);
+var import_react31 = __toESM(require_react(), 1);
 var SvgChevronUpIcon = function SvgChevronUpIcon2(props) {
-  return /* @__PURE__ */ import_react30.default.createElement("svg", Object.assign({
+  return /* @__PURE__ */ import_react31.default.createElement("svg", Object.assign({
     viewBox: "0 0 20 20"
-  }, props), /* @__PURE__ */ import_react30.default.createElement("path", {
+  }, props), /* @__PURE__ */ import_react31.default.createElement("path", {
     fillRule: "evenodd",
     d: "M14.53 12.28a.75.75 0 0 1-1.06 0l-3.47-3.47-3.47 3.47a.75.75 0 0 1-1.06-1.06l4-4a.75.75 0 0 1 1.06 0l4 4a.75.75 0 0 1 0 1.06Z"
   }));
@@ -6524,15 +6605,15 @@ var SvgChevronUpIcon = function SvgChevronUpIcon2(props) {
 SvgChevronUpIcon.displayName = "ChevronUpIcon";
 
 // node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/icons/InfoIcon.svg.mjs
-var import_react31 = __toESM(require_react(), 1);
+var import_react32 = __toESM(require_react(), 1);
 var SvgInfoIcon = function SvgInfoIcon2(props) {
-  return /* @__PURE__ */ import_react31.default.createElement("svg", Object.assign({
+  return /* @__PURE__ */ import_react32.default.createElement("svg", Object.assign({
     viewBox: "0 0 20 20"
-  }, props), /* @__PURE__ */ import_react31.default.createElement("path", {
+  }, props), /* @__PURE__ */ import_react32.default.createElement("path", {
     d: "M10 14a.75.75 0 0 1-.75-.75v-3.5a.75.75 0 0 1 1.5 0v3.5a.75.75 0 0 1-.75.75Z"
-  }), /* @__PURE__ */ import_react31.default.createElement("path", {
+  }), /* @__PURE__ */ import_react32.default.createElement("path", {
     d: "M9 7a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z"
-  }), /* @__PURE__ */ import_react31.default.createElement("path", {
+  }), /* @__PURE__ */ import_react32.default.createElement("path", {
     fillRule: "evenodd",
     d: "M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Zm-1.5 0a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0Z"
   }));
@@ -6540,32 +6621,32 @@ var SvgInfoIcon = function SvgInfoIcon2(props) {
 SvgInfoIcon.displayName = "InfoIcon";
 
 // node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/icons/MenuHorizontalIcon.svg.mjs
-var import_react32 = __toESM(require_react(), 1);
+var import_react33 = __toESM(require_react(), 1);
 var SvgMenuHorizontalIcon = function SvgMenuHorizontalIcon2(props) {
-  return /* @__PURE__ */ import_react32.default.createElement("svg", Object.assign({
+  return /* @__PURE__ */ import_react33.default.createElement("svg", Object.assign({
     viewBox: "0 0 20 20"
-  }, props), /* @__PURE__ */ import_react32.default.createElement("path", {
+  }, props), /* @__PURE__ */ import_react33.default.createElement("path", {
     d: "M6 10a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
-  }), /* @__PURE__ */ import_react32.default.createElement("path", {
+  }), /* @__PURE__ */ import_react33.default.createElement("path", {
     d: "M11.5 10a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
-  }), /* @__PURE__ */ import_react32.default.createElement("path", {
+  }), /* @__PURE__ */ import_react33.default.createElement("path", {
     d: "M17 10a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
   }));
 };
 SvgMenuHorizontalIcon.displayName = "MenuHorizontalIcon";
 
 // node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/icons/MenuIcon.svg.mjs
-var import_react33 = __toESM(require_react(), 1);
+var import_react34 = __toESM(require_react(), 1);
 var SvgMenuIcon = function SvgMenuIcon2(props) {
-  return /* @__PURE__ */ import_react33.default.createElement("svg", Object.assign({
+  return /* @__PURE__ */ import_react34.default.createElement("svg", Object.assign({
     viewBox: "0 0 20 20"
-  }, props), /* @__PURE__ */ import_react33.default.createElement("path", {
+  }, props), /* @__PURE__ */ import_react34.default.createElement("path", {
     fillRule: "evenodd",
     d: "M3 4.75a.75.75 0 0 1 .75-.75h12.5a.75.75 0 0 1 0 1.5h-12.5a.75.75 0 0 1-.75-.75Z"
-  }), /* @__PURE__ */ import_react33.default.createElement("path", {
+  }), /* @__PURE__ */ import_react34.default.createElement("path", {
     fillRule: "evenodd",
     d: "M3 10a.75.75 0 0 1 .75-.75h12.5a.75.75 0 0 1 0 1.5h-12.5a.75.75 0 0 1-.75-.75Z"
-  }), /* @__PURE__ */ import_react33.default.createElement("path", {
+  }), /* @__PURE__ */ import_react34.default.createElement("path", {
     fillRule: "evenodd",
     d: "M3 15.25a.75.75 0 0 1 .75-.75h12.5a.75.75 0 0 1 0 1.5h-12.5a.75.75 0 0 1-.75-.75Z"
   }));
@@ -6573,11 +6654,11 @@ var SvgMenuIcon = function SvgMenuIcon2(props) {
 SvgMenuIcon.displayName = "MenuIcon";
 
 // node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/icons/SearchIcon.svg.mjs
-var import_react34 = __toESM(require_react(), 1);
+var import_react35 = __toESM(require_react(), 1);
 var SvgSearchIcon = function SvgSearchIcon2(props) {
-  return /* @__PURE__ */ import_react34.default.createElement("svg", Object.assign({
+  return /* @__PURE__ */ import_react35.default.createElement("svg", Object.assign({
     viewBox: "0 0 20 20"
-  }, props), /* @__PURE__ */ import_react34.default.createElement("path", {
+  }, props), /* @__PURE__ */ import_react35.default.createElement("path", {
     fillRule: "evenodd",
     d: "M12.323 13.383a5.5 5.5 0 1 1 1.06-1.06l2.897 2.897a.75.75 0 1 1-1.06 1.06l-2.897-2.897Zm.677-4.383a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"
   }));
@@ -6585,26 +6666,39 @@ var SvgSearchIcon = function SvgSearchIcon2(props) {
 SvgSearchIcon.displayName = "SearchIcon";
 
 // node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/icons/SelectIcon.svg.mjs
-var import_react35 = __toESM(require_react(), 1);
+var import_react36 = __toESM(require_react(), 1);
 var SvgSelectIcon = function SvgSelectIcon2(props) {
-  return /* @__PURE__ */ import_react35.default.createElement("svg", Object.assign({
+  return /* @__PURE__ */ import_react36.default.createElement("svg", Object.assign({
     viewBox: "0 0 20 20"
-  }, props), /* @__PURE__ */ import_react35.default.createElement("path", {
+  }, props), /* @__PURE__ */ import_react36.default.createElement("path", {
     d: "M10.884 4.323a1.25 1.25 0 0 0-1.768 0l-2.646 2.647a.75.75 0 0 0 1.06 1.06l2.47-2.47 2.47 2.47a.75.75 0 1 0 1.06-1.06l-2.646-2.647Z"
-  }), /* @__PURE__ */ import_react35.default.createElement("path", {
+  }), /* @__PURE__ */ import_react36.default.createElement("path", {
     d: "m13.53 13.03-2.646 2.647a1.25 1.25 0 0 1-1.768 0l-2.646-2.647a.75.75 0 0 1 1.06-1.06l2.47 2.47 2.47-2.47a.75.75 0 0 1 1.06 1.06Z"
   }));
 };
 SvgSelectIcon.displayName = "SelectIcon";
 
-// node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/icons/XCircleIcon.svg.mjs
-var import_react36 = __toESM(require_react(), 1);
-var SvgXCircleIcon = function SvgXCircleIcon2(props) {
-  return /* @__PURE__ */ import_react36.default.createElement("svg", Object.assign({
+// node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/icons/UploadIcon.svg.mjs
+var import_react37 = __toESM(require_react(), 1);
+var SvgUploadIcon = function SvgUploadIcon2(props) {
+  return /* @__PURE__ */ import_react37.default.createElement("svg", Object.assign({
     viewBox: "0 0 20 20"
-  }, props), /* @__PURE__ */ import_react36.default.createElement("path", {
+  }, props), /* @__PURE__ */ import_react37.default.createElement("path", {
+    d: "M16.5 6.26a.75.75 0 0 1-1.5 0v-.51a.75.75 0 0 0-.75-.75h-8.5a.75.75 0 0 0-.75.75v.51a.75.75 0 0 1-1.5 0v-.51a2.25 2.25 0 0 1 2.25-2.25h8.5a2.25 2.25 0 0 1 2.25 2.25v.51Z"
+  }), /* @__PURE__ */ import_react37.default.createElement("path", {
+    d: "M10.75 16.01a.75.75 0 0 1-1.5 0v-6.69l-1.72 1.72a.75.75 0 1 1-1.06-1.06l3-3a.75.75 0 0 1 1.06 0l3 3a.75.75 0 1 1-1.06 1.06l-1.72-1.72v6.69Z"
+  }));
+};
+SvgUploadIcon.displayName = "UploadIcon";
+
+// node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/icons/XCircleIcon.svg.mjs
+var import_react38 = __toESM(require_react(), 1);
+var SvgXCircleIcon = function SvgXCircleIcon2(props) {
+  return /* @__PURE__ */ import_react38.default.createElement("svg", Object.assign({
+    viewBox: "0 0 20 20"
+  }, props), /* @__PURE__ */ import_react38.default.createElement("path", {
     d: "M13.03 6.97a.75.75 0 0 1 0 1.06l-1.97 1.97 1.97 1.97a.75.75 0 1 1-1.06 1.06l-1.97-1.97-1.97 1.97a.75.75 0 0 1-1.06-1.06l1.97-1.97-1.97-1.97a.75.75 0 0 1 1.06-1.06l1.97 1.97 1.97-1.97a.75.75 0 0 1 1.06 0Z"
-  }), /* @__PURE__ */ import_react36.default.createElement("path", {
+  }), /* @__PURE__ */ import_react38.default.createElement("path", {
     fillRule: "evenodd",
     d: "M10 17a7 7 0 1 0 0-14 7 7 0 0 0 0 14Zm0-1.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11Z"
   }));
@@ -6612,29 +6706,29 @@ var SvgXCircleIcon = function SvgXCircleIcon2(props) {
 SvgXCircleIcon.displayName = "XCircleIcon";
 
 // node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/icons/XIcon.svg.mjs
-var import_react37 = __toESM(require_react(), 1);
+var import_react39 = __toESM(require_react(), 1);
 var SvgXIcon = function SvgXIcon2(props) {
-  return /* @__PURE__ */ import_react37.default.createElement("svg", Object.assign({
+  return /* @__PURE__ */ import_react39.default.createElement("svg", Object.assign({
     viewBox: "0 0 20 20"
-  }, props), /* @__PURE__ */ import_react37.default.createElement("path", {
+  }, props), /* @__PURE__ */ import_react39.default.createElement("path", {
     d: "M12.72 13.78a.75.75 0 1 0 1.06-1.06l-2.72-2.72 2.72-2.72a.75.75 0 0 0-1.06-1.06l-2.72 2.72-2.72-2.72a.75.75 0 0 0-1.06 1.06l2.72 2.72-2.72 2.72a.75.75 0 1 0 1.06 1.06l2.72-2.72 2.72 2.72Z"
   }));
 };
 SvgXIcon.displayName = "XIcon";
 
 // node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/icons/XSmallIcon.svg.mjs
-var import_react38 = __toESM(require_react(), 1);
+var import_react40 = __toESM(require_react(), 1);
 var SvgXSmallIcon = function SvgXSmallIcon2(props) {
-  return /* @__PURE__ */ import_react38.default.createElement("svg", Object.assign({
+  return /* @__PURE__ */ import_react40.default.createElement("svg", Object.assign({
     viewBox: "0 0 20 20"
-  }, props), /* @__PURE__ */ import_react38.default.createElement("path", {
+  }, props), /* @__PURE__ */ import_react40.default.createElement("path", {
     d: "M12.72 13.78a.75.75 0 1 0 1.06-1.06l-2.72-2.72 2.72-2.72a.75.75 0 0 0-1.06-1.06l-2.72 2.72-2.72-2.72a.75.75 0 0 0-1.06 1.06l2.72 2.72-2.72 2.72a.75.75 0 1 0 1.06 1.06l2.72-2.72 2.72 2.72Z"
   }));
 };
 SvgXSmallIcon.displayName = "XSmallIcon";
 
 // node_modules/.pnpm/@shopify+polaris-icons@8.11.1_react@18.3.1/node_modules/@shopify/polaris-icons/dist/index.mjs
-var import_react39 = __toESM(require_react(), 1);
+var import_react41 = __toESM(require_react(), 1);
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/is-element-in-viewport.js
 function isElementInViewport(element) {
@@ -6760,7 +6854,7 @@ function matches(node, selector) {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Button/Button.css.js
-var styles2 = {
+var styles3 = {
   "Button": "Polaris-Button",
   "disabled": "Polaris-Button--disabled",
   "pressed": "Polaris-Button--pressed",
@@ -6792,89 +6886,8 @@ var styles2 = {
   "Spinner": "Polaris-Button__Spinner"
 };
 
-// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Icon/Icon.js
-var import_react40 = __toESM(require_react());
-
-// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Icon/Icon.css.js
-var styles3 = {
-  "Icon": "Polaris-Icon",
-  "toneInherit": "Polaris-Icon--toneInherit",
-  "toneBase": "Polaris-Icon--toneBase",
-  "toneSubdued": "Polaris-Icon--toneSubdued",
-  "toneCaution": "Polaris-Icon--toneCaution",
-  "toneWarning": "Polaris-Icon--toneWarning",
-  "toneCritical": "Polaris-Icon--toneCritical",
-  "toneInteractive": "Polaris-Icon--toneInteractive",
-  "toneInfo": "Polaris-Icon--toneInfo",
-  "toneSuccess": "Polaris-Icon--toneSuccess",
-  "tonePrimary": "Polaris-Icon--tonePrimary",
-  "toneEmphasis": "Polaris-Icon--toneEmphasis",
-  "toneMagic": "Polaris-Icon--toneMagic",
-  "toneTextCaution": "Polaris-Icon--toneTextCaution",
-  "toneTextWarning": "Polaris-Icon--toneTextWarning",
-  "toneTextCritical": "Polaris-Icon--toneTextCritical",
-  "toneTextInfo": "Polaris-Icon--toneTextInfo",
-  "toneTextPrimary": "Polaris-Icon--toneTextPrimary",
-  "toneTextSuccess": "Polaris-Icon--toneTextSuccess",
-  "toneTextMagic": "Polaris-Icon--toneTextMagic",
-  "Svg": "Polaris-Icon__Svg",
-  "Img": "Polaris-Icon__Img",
-  "Placeholder": "Polaris-Icon__Placeholder"
-};
-
-// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Icon/Icon.js
-function Icon({
-  source,
-  tone,
-  accessibilityLabel
-}) {
-  let sourceType;
-  if (typeof source === "function") {
-    sourceType = "function";
-  } else if (source === "placeholder") {
-    sourceType = "placeholder";
-  } else {
-    sourceType = "external";
-  }
-  if (tone && sourceType === "external" && true) {
-    console.warn("Recoloring external SVGs is not supported. Set the intended color on your SVG instead.");
-  }
-  const className = classNames(styles3.Icon, tone && styles3[variationName("tone", tone)]);
-  const {
-    mdDown
-  } = useBreakpoints();
-  const SourceComponent = source;
-  const contentMarkup = {
-    function: /* @__PURE__ */ import_react40.default.createElement(SourceComponent, Object.assign({
-      className: styles3.Svg,
-      focusable: "false",
-      "aria-hidden": "true"
-      // On Mobile we're scaling the viewBox to 18x18 to make the icons bigger
-      // Also, we're setting the viewport origin to 1x1 to center the icon
-      // We use this syntax so we don't override the existing viewBox value if we don't need to.
-    }, mdDown ? {
-      viewBox: "1 1 18 18"
-    } : {})),
-    placeholder: /* @__PURE__ */ import_react40.default.createElement("div", {
-      className: styles3.Placeholder
-    }),
-    external: /* @__PURE__ */ import_react40.default.createElement("img", {
-      className: styles3.Img,
-      src: `data:image/svg+xml;utf8,${source}`,
-      alt: "",
-      "aria-hidden": "true"
-    })
-  };
-  return /* @__PURE__ */ import_react40.default.createElement("span", {
-    className
-  }, accessibilityLabel && /* @__PURE__ */ import_react40.default.createElement(Text, {
-    as: "span",
-    visuallyHidden: true
-  }, accessibilityLabel), contentMarkup[sourceType]);
-}
-
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Spinner/Spinner.js
-var import_react41 = __toESM(require_react());
+var import_react42 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Spinner/Spinner.css.js
 var styles4 = {
@@ -6891,15 +6904,15 @@ function Spinner({
 }) {
   const isAfterInitialMount = useIsAfterInitialMount();
   const className = classNames(styles4.Spinner, size2 && styles4[variationName("size", size2)]);
-  const spinnerSVGMarkup = size2 === "large" ? /* @__PURE__ */ import_react41.default.createElement("svg", {
+  const spinnerSVGMarkup = size2 === "large" ? /* @__PURE__ */ import_react42.default.createElement("svg", {
     viewBox: "0 0 44 44",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react41.default.createElement("path", {
+  }, /* @__PURE__ */ import_react42.default.createElement("path", {
     d: "M15.542 1.487A21.507 21.507 0 00.5 22c0 11.874 9.626 21.5 21.5 21.5 9.847 0 18.364-6.675 20.809-16.072a1.5 1.5 0 00-2.904-.756C37.803 34.755 30.473 40.5 22 40.5 11.783 40.5 3.5 32.217 3.5 22c0-8.137 5.3-15.247 12.942-17.65a1.5 1.5 0 10-.9-2.863z"
-  })) : /* @__PURE__ */ import_react41.default.createElement("svg", {
+  })) : /* @__PURE__ */ import_react42.default.createElement("svg", {
     viewBox: "0 0 20 20",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react41.default.createElement("path", {
+  }, /* @__PURE__ */ import_react42.default.createElement("path", {
     d: "M7.229 1.173a9.25 9.25 0 1011.655 11.412 1.25 1.25 0 10-2.4-.698 6.75 6.75 0 11-8.506-8.329 1.25 1.25 0 10-.75-2.385z"
   }));
   const spanAttributes = {
@@ -6907,22 +6920,22 @@ function Spinner({
       role: "status"
     }
   };
-  const accessibilityLabelMarkup = (isAfterInitialMount || !hasFocusableParent) && /* @__PURE__ */ import_react41.default.createElement(Text, {
+  const accessibilityLabelMarkup = (isAfterInitialMount || !hasFocusableParent) && /* @__PURE__ */ import_react42.default.createElement(Text, {
     as: "span",
     visuallyHidden: true
   }, accessibilityLabel);
-  return /* @__PURE__ */ import_react41.default.createElement(import_react41.default.Fragment, null, /* @__PURE__ */ import_react41.default.createElement("span", {
+  return /* @__PURE__ */ import_react42.default.createElement(import_react42.default.Fragment, null, /* @__PURE__ */ import_react42.default.createElement("span", {
     className
-  }, spinnerSVGMarkup), /* @__PURE__ */ import_react41.default.createElement("span", spanAttributes, accessibilityLabelMarkup));
+  }, spinnerSVGMarkup), /* @__PURE__ */ import_react42.default.createElement("span", spanAttributes, accessibilityLabelMarkup));
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/UnstyledButton/UnstyledButton.js
-var import_react45 = __toESM(require_react());
+var import_react46 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/use-disable-interaction.js
-var import_react42 = __toESM(require_react());
+var import_react43 = __toESM(require_react());
 function useDisableClick(disabled, handleClick) {
-  const handleClickWrapper = (0, import_react42.useCallback)((event) => {
+  const handleClickWrapper = (0, import_react43.useCallback)((event) => {
     if (disabled) {
       event.preventDefault();
       event.stopPropagation();
@@ -6935,19 +6948,19 @@ function useDisableClick(disabled, handleClick) {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/UnstyledLink/UnstyledLink.js
-var import_react44 = __toESM(require_react());
+var import_react45 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/link/hooks.js
-var import_react43 = __toESM(require_react());
+var import_react44 = __toESM(require_react());
 function useLink() {
-  return (0, import_react43.useContext)(LinkContext);
+  return (0, import_react44.useContext)(LinkContext);
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/UnstyledLink/UnstyledLink.js
-var UnstyledLink = /* @__PURE__ */ (0, import_react44.memo)(/* @__PURE__ */ (0, import_react44.forwardRef)(function UnstyledLink2(props, _ref) {
+var UnstyledLink = /* @__PURE__ */ (0, import_react45.memo)(/* @__PURE__ */ (0, import_react45.forwardRef)(function UnstyledLink2(props, _ref) {
   const LinkComponent = useLink();
   if (LinkComponent) {
-    return /* @__PURE__ */ import_react44.default.createElement(LinkComponent, Object.assign({}, unstyled.props, props, {
+    return /* @__PURE__ */ import_react45.default.createElement(LinkComponent, Object.assign({}, unstyled.props, props, {
       ref: _ref
     }));
   }
@@ -6964,7 +6977,7 @@ var UnstyledLink = /* @__PURE__ */ (0, import_react44.memo)(/* @__PURE__ */ (0, 
     target = targetProp ?? void 0;
   }
   const rel = target === "_blank" ? "noopener noreferrer" : void 0;
-  return /* @__PURE__ */ import_react44.default.createElement("a", Object.assign({
+  return /* @__PURE__ */ import_react45.default.createElement("a", Object.assign({
     target
   }, rest, {
     href: url,
@@ -7024,15 +7037,15 @@ function UnstyledButton({
     buttonMarkup = disabled ? (
       // Render an `<a>` so toggling disabled/enabled state changes only the
       // `href` attribute instead of replacing the whole element.
-      /* @__PURE__ */ import_react45.default.createElement("a", commonProps, children)
-    ) : /* @__PURE__ */ import_react45.default.createElement(UnstyledLink, Object.assign({}, interactiveProps, {
+      /* @__PURE__ */ import_react46.default.createElement("a", commonProps, children)
+    ) : /* @__PURE__ */ import_react46.default.createElement(UnstyledLink, Object.assign({}, interactiveProps, {
       url,
       external,
       target,
       download
     }, rest), children);
   } else {
-    buttonMarkup = /* @__PURE__ */ import_react45.default.createElement("button", Object.assign({}, interactiveProps, {
+    buttonMarkup = /* @__PURE__ */ import_react46.default.createElement("button", Object.assign({}, interactiveProps, {
       "aria-disabled": disabled,
       type: submit ? "submit" : "button",
       "aria-busy": loading ? true : void 0,
@@ -7052,7 +7065,7 @@ function UnstyledButton({
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/i18n/hooks.js
-var import_react46 = __toESM(require_react());
+var import_react47 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/errors.js
 var MissingAppProviderError = class extends Error {
@@ -7064,7 +7077,7 @@ var MissingAppProviderError = class extends Error {
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/i18n/hooks.js
 function useI18n() {
-  const i18n = (0, import_react46.useContext)(I18nContext);
+  const i18n = (0, import_react47.useContext)(I18nContext);
   if (!i18n) {
     throw new MissingAppProviderError("No i18n was provided.");
   }
@@ -7113,17 +7126,17 @@ function Button({
   const {
     mdUp
   } = useBreakpoints();
-  const className = classNames(styles2.Button, styles2.pressable, styles2[variationName("variant", variant)], styles2[variationName("size", size2)], styles2[variationName("textAlign", textAlign)], fullWidth && styles2.fullWidth, disclosure && styles2.disclosure, icon && children && styles2.iconWithText, icon && children == null && styles2.iconOnly, isDisabled && styles2.disabled, loading && styles2.loading, pressed && !disabled && !url && styles2.pressed, removeUnderline && styles2.removeUnderline, tone && styles2[variationName("tone", tone)]);
-  const disclosureMarkup = disclosure ? /* @__PURE__ */ import_react47.default.createElement("span", {
-    className: loading ? styles2.hidden : styles2.Icon
-  }, /* @__PURE__ */ import_react47.default.createElement(Icon, {
+  const className = classNames(styles3.Button, styles3.pressable, styles3[variationName("variant", variant)], styles3[variationName("size", size2)], styles3[variationName("textAlign", textAlign)], fullWidth && styles3.fullWidth, disclosure && styles3.disclosure, icon && children && styles3.iconWithText, icon && children == null && styles3.iconOnly, isDisabled && styles3.disabled, loading && styles3.loading, pressed && !disabled && !url && styles3.pressed, removeUnderline && styles3.removeUnderline, tone && styles3[variationName("tone", tone)]);
+  const disclosureMarkup = disclosure ? /* @__PURE__ */ import_react48.default.createElement("span", {
+    className: loading ? styles3.hidden : styles3.Icon
+  }, /* @__PURE__ */ import_react48.default.createElement(Icon, {
     source: loading ? "placeholder" : getDisclosureIconSource(disclosure, SvgChevronUpIcon, SvgChevronDownIcon)
   })) : null;
-  const iconSource = isIconSource(icon) ? /* @__PURE__ */ import_react47.default.createElement(Icon, {
+  const iconSource = isIconSource(icon) ? /* @__PURE__ */ import_react48.default.createElement(Icon, {
     source: loading ? "placeholder" : icon
   }) : icon;
-  const iconMarkup = iconSource ? /* @__PURE__ */ import_react47.default.createElement("span", {
-    className: loading ? styles2.hidden : styles2.Icon
+  const iconMarkup = iconSource ? /* @__PURE__ */ import_react48.default.createElement("span", {
+    className: loading ? styles3.hidden : styles3.Icon
   }, iconSource) : null;
   const hasPlainText = ["plain", "monochromePlain"].includes(variant);
   let textFontWeight = "medium";
@@ -7136,15 +7149,15 @@ function Button({
   if (size2 === "large" || hasPlainText && size2 !== "micro") {
     textVariant = "bodyMd";
   }
-  const childMarkup = children ? /* @__PURE__ */ import_react47.default.createElement(Text, {
+  const childMarkup = children ? /* @__PURE__ */ import_react48.default.createElement(Text, {
     as: "span",
     variant: textVariant,
     fontWeight: textFontWeight,
     key: disabled ? "text-disabled" : "text"
   }, children) : null;
-  const spinnerSVGMarkup = loading ? /* @__PURE__ */ import_react47.default.createElement("span", {
-    className: styles2.Spinner
-  }, /* @__PURE__ */ import_react47.default.createElement(Spinner, {
+  const spinnerSVGMarkup = loading ? /* @__PURE__ */ import_react48.default.createElement("span", {
+    className: styles3.Spinner
+  }, /* @__PURE__ */ import_react48.default.createElement(Spinner, {
     size: "small",
     accessibilityLabel: i18n.translate("Polaris.Button.spinnerAccessibilityLabel")
   })) : null;
@@ -7181,7 +7194,7 @@ function Button({
     onKeyPress,
     onPointerDown
   };
-  const buttonMarkup = /* @__PURE__ */ import_react47.default.createElement(UnstyledButton, Object.assign({}, commonProps, linkProps, actionProps), spinnerSVGMarkup, iconMarkup, childMarkup, disclosureMarkup);
+  const buttonMarkup = /* @__PURE__ */ import_react48.default.createElement(UnstyledButton, Object.assign({}, commonProps, linkProps, actionProps), spinnerSVGMarkup, iconMarkup, childMarkup, disclosureMarkup);
   return buttonMarkup;
 }
 function isIconSource(x) {
@@ -7195,14 +7208,14 @@ function getDisclosureIconSource(disclosure, upIcon, downIcon) {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Card/Card.js
-var import_react51 = __toESM(require_react());
+var import_react52 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/within-content-context.js
-var import_react48 = __toESM(require_react());
-var WithinContentContext = /* @__PURE__ */ (0, import_react48.createContext)(false);
+var import_react49 = __toESM(require_react());
+var WithinContentContext = /* @__PURE__ */ (0, import_react49.createContext)(false);
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ShadowBevel/ShadowBevel.js
-var import_react49 = __toESM(require_react());
+var import_react50 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ShadowBevel/ShadowBevel.css.js
 var styles5 = {
@@ -7220,7 +7233,7 @@ function ShadowBevel(props) {
     zIndex: zIndex2 = "0"
   } = props;
   const Component2 = as;
-  return /* @__PURE__ */ import_react49.default.createElement(Component2, {
+  return /* @__PURE__ */ import_react50.default.createElement(Component2, {
     className: styles5.ShadowBevel,
     style: {
       "--pc-shadow-bevel-z-index": zIndex2,
@@ -7238,7 +7251,7 @@ function mapResponsiveProp(responsiveProp, callback) {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Box/Box.js
-var import_react50 = __toESM(require_react());
+var import_react51 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Box/Box.css.js
 var styles6 = {
@@ -7249,7 +7262,7 @@ var styles6 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Box/Box.js
-var Box = /* @__PURE__ */ (0, import_react50.forwardRef)(({
+var Box = /* @__PURE__ */ (0, import_react51.forwardRef)(({
   as = "div",
   background,
   borderColor,
@@ -7338,7 +7351,7 @@ var Box = /* @__PURE__ */ (0, import_react50.forwardRef)(({
     opacity
   };
   const className = classNames(styles6.Box, visuallyHidden && styles6.visuallyHidden, printHidden && styles6.printHidden, as === "ul" && styles6.listReset);
-  return /* @__PURE__ */ import_react50.default.createElement(as, {
+  return /* @__PURE__ */ import_react51.default.createElement(as, {
     className,
     id,
     ref,
@@ -7362,13 +7375,13 @@ var Card = ({
   const breakpoints2 = useBreakpoints();
   const defaultBorderRadius = "300";
   const hasBorderRadius = Boolean(breakpoints2[`${roundedAbove}Up`]);
-  return /* @__PURE__ */ import_react51.default.createElement(WithinContentContext.Provider, {
+  return /* @__PURE__ */ import_react52.default.createElement(WithinContentContext.Provider, {
     value: true
-  }, /* @__PURE__ */ import_react51.default.createElement(ShadowBevel, {
+  }, /* @__PURE__ */ import_react52.default.createElement(ShadowBevel, {
     boxShadow: "100",
     borderRadius: hasBorderRadius ? defaultBorderRadius : "0",
     zIndex: "32"
-  }, /* @__PURE__ */ import_react51.default.createElement(Box, {
+  }, /* @__PURE__ */ import_react52.default.createElement(Box, {
     background,
     padding,
     overflowX: "clip",
@@ -7378,7 +7391,7 @@ var Card = ({
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/InlineStack/InlineStack.js
-var import_react52 = __toESM(require_react());
+var import_react53 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/InlineStack/InlineStack.css.js
 var styles7 = {
@@ -7402,14 +7415,50 @@ var InlineStack = function InlineStack2({
     ...getResponsiveProps("inline-stack", "gap", "space", gap),
     ...getResponsiveValue("inline-stack", "flex-direction", direction)
   };
-  return /* @__PURE__ */ import_react52.default.createElement(Element2, {
+  return /* @__PURE__ */ import_react53.default.createElement(Element2, {
     className: styles7.InlineStack,
     style
   }, children);
 };
 
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/BlockStack/BlockStack.js
+var import_react54 = __toESM(require_react());
+
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/BlockStack/BlockStack.css.js
+var styles8 = {
+  "BlockStack": "Polaris-BlockStack",
+  "listReset": "Polaris-BlockStack--listReset",
+  "fieldsetReset": "Polaris-BlockStack--fieldsetReset"
+};
+
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/BlockStack/BlockStack.js
+var BlockStack = ({
+  as = "div",
+  children,
+  align,
+  inlineAlign,
+  gap,
+  id,
+  reverseOrder = false,
+  ...restProps
+}) => {
+  const className = classNames(styles8.BlockStack, (as === "ul" || as === "ol") && styles8.listReset, as === "fieldset" && styles8.fieldsetReset);
+  const style = {
+    "--pc-block-stack-align": align ? `${align}` : null,
+    "--pc-block-stack-inline-align": inlineAlign ? `${inlineAlign}` : null,
+    "--pc-block-stack-order": reverseOrder ? "column-reverse" : "column",
+    ...getResponsiveProps("block-stack", "gap", "space", gap)
+  };
+  return /* @__PURE__ */ import_react54.default.createElement(as, {
+    className,
+    id,
+    style: sanitizeCustomProperties(style),
+    ...restProps
+  }, children);
+};
+
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TextField/TextField.js
-var import_react63 = __toESM(require_react());
+var import_react65 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/types.js
 var Key;
@@ -7516,17 +7565,17 @@ var Key;
 })(Key || (Key = {}));
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/use-event-listener.js
-var import_react53 = __toESM(require_react());
+var import_react55 = __toESM(require_react());
 function useEventListener(eventName, handler, target, options) {
-  const handlerRef = (0, import_react53.useRef)(handler);
-  const optionsRef = (0, import_react53.useRef)(options);
+  const handlerRef = (0, import_react55.useRef)(handler);
+  const optionsRef = (0, import_react55.useRef)(options);
   useIsomorphicLayoutEffect(() => {
     handlerRef.current = handler;
   }, [handler]);
   useIsomorphicLayoutEffect(() => {
     optionsRef.current = options;
   }, [options]);
-  (0, import_react53.useEffect)(() => {
+  (0, import_react55.useEffect)(() => {
     if (!(typeof eventName === "string" && target !== null))
       return;
     let targetElement;
@@ -7549,7 +7598,7 @@ function useEventListener(eventName, handler, target, options) {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TextField/TextField.css.js
-var styles8 = {
+var styles9 = {
   "TextField": "Polaris-TextField",
   "ClearButton": "Polaris-TextField__ClearButton",
   "Loading": "Polaris-TextField__Loading",
@@ -7589,8 +7638,8 @@ var styles8 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TextField/components/Spinner/Spinner.js
-var import_react54 = __toESM(require_react());
-var Spinner2 = /* @__PURE__ */ import_react54.default.forwardRef(function Spinner3({
+var import_react56 = __toESM(require_react());
+var Spinner2 = /* @__PURE__ */ import_react56.default.forwardRef(function Spinner3({
   onChange,
   onClick,
   onMouseDown,
@@ -7607,43 +7656,43 @@ var Spinner2 = /* @__PURE__ */ import_react54.default.forwardRef(function Spinne
       onMouseDown?.(onChange2);
     };
   }
-  return /* @__PURE__ */ import_react54.default.createElement("div", {
-    className: styles8.Spinner,
+  return /* @__PURE__ */ import_react56.default.createElement("div", {
+    className: styles9.Spinner,
     onClick,
     "aria-hidden": true,
     ref
-  }, /* @__PURE__ */ import_react54.default.createElement("div", {
+  }, /* @__PURE__ */ import_react56.default.createElement("div", {
     role: "button",
-    className: styles8.Segment,
+    className: styles9.Segment,
     tabIndex: -1,
     onClick: handleStep(1),
     onMouseDown: handleMouseDown(handleStep(1)),
     onMouseUp,
     onBlur
-  }, /* @__PURE__ */ import_react54.default.createElement("div", {
-    className: styles8.SpinnerIcon
-  }, /* @__PURE__ */ import_react54.default.createElement(Icon, {
+  }, /* @__PURE__ */ import_react56.default.createElement("div", {
+    className: styles9.SpinnerIcon
+  }, /* @__PURE__ */ import_react56.default.createElement(Icon, {
     source: SvgChevronUpIcon
-  }))), /* @__PURE__ */ import_react54.default.createElement("div", {
+  }))), /* @__PURE__ */ import_react56.default.createElement("div", {
     role: "button",
-    className: styles8.Segment,
+    className: styles9.Segment,
     tabIndex: -1,
     onClick: handleStep(-1),
     onMouseDown: handleMouseDown(handleStep(-1)),
     onMouseUp,
     onBlur
-  }, /* @__PURE__ */ import_react54.default.createElement("div", {
-    className: styles8.SpinnerIcon
-  }, /* @__PURE__ */ import_react54.default.createElement(Icon, {
+  }, /* @__PURE__ */ import_react56.default.createElement("div", {
+    className: styles9.SpinnerIcon
+  }, /* @__PURE__ */ import_react56.default.createElement(Icon, {
     source: SvgChevronDownIcon
   }))));
 });
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Labelled/Labelled.js
-var import_react58 = __toESM(require_react());
+var import_react60 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Labelled/Labelled.css.js
-var styles9 = {
+var styles10 = {
   "hidden": "Polaris-Labelled--hidden",
   "LabelWrapper": "Polaris-Labelled__LabelWrapper",
   "disabled": "Polaris-Labelled--disabled",
@@ -7654,10 +7703,10 @@ var styles9 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/InlineError/InlineError.js
-var import_react55 = __toESM(require_react());
+var import_react57 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/InlineError/InlineError.css.js
-var styles10 = {
+var styles11 = {
   "InlineError": "Polaris-InlineError",
   "Icon": "Polaris-InlineError__Icon"
 };
@@ -7670,14 +7719,14 @@ function InlineError({
   if (!message) {
     return null;
   }
-  return /* @__PURE__ */ import_react55.default.createElement("div", {
+  return /* @__PURE__ */ import_react57.default.createElement("div", {
     id: errorTextID(fieldID),
-    className: styles10.InlineError
-  }, /* @__PURE__ */ import_react55.default.createElement("div", {
-    className: styles10.Icon
-  }, /* @__PURE__ */ import_react55.default.createElement(Icon, {
+    className: styles11.InlineError
+  }, /* @__PURE__ */ import_react57.default.createElement("div", {
+    className: styles11.Icon
+  }, /* @__PURE__ */ import_react57.default.createElement(Icon, {
     source: SvgAlertCircleIcon
-  })), /* @__PURE__ */ import_react55.default.createElement(Text, {
+  })), /* @__PURE__ */ import_react57.default.createElement(Text, {
     as: "span",
     variant: "bodyMd"
   }, message));
@@ -7687,10 +7736,10 @@ function errorTextID(id) {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Label/Label.js
-var import_react56 = __toESM(require_react());
+var import_react58 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Label/Label.css.js
-var styles11 = {
+var styles12 = {
   "Label": "Polaris-Label",
   "hidden": "Polaris-Label--hidden",
   "Text": "Polaris-Label__Text",
@@ -7707,21 +7756,21 @@ function Label({
   hidden,
   requiredIndicator
 }) {
-  const className = classNames(styles11.Label, hidden && styles11.hidden);
-  return /* @__PURE__ */ import_react56.default.createElement("div", {
+  const className = classNames(styles12.Label, hidden && styles12.hidden);
+  return /* @__PURE__ */ import_react58.default.createElement("div", {
     className
-  }, /* @__PURE__ */ import_react56.default.createElement("label", {
+  }, /* @__PURE__ */ import_react58.default.createElement("label", {
     id: labelID(id),
     htmlFor: id,
-    className: classNames(styles11.Text, requiredIndicator && styles11.RequiredIndicator)
-  }, /* @__PURE__ */ import_react56.default.createElement(Text, {
+    className: classNames(styles12.Text, requiredIndicator && styles12.RequiredIndicator)
+  }, /* @__PURE__ */ import_react58.default.createElement(Text, {
     as: "span",
     variant: "bodyMd"
   }, children)));
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Button/utils.js
-var import_react57 = __toESM(require_react());
+var import_react59 = __toESM(require_react());
 function buttonsFrom(actions, overrides = {}) {
   if (Array.isArray(actions)) {
     return actions.map((action, index) => buttonFrom(action, overrides, index));
@@ -7740,7 +7789,7 @@ function buttonFrom({
   const plainVariant = plain ? "plain" : void 0;
   const destructiveVariant = destructive ? "primary" : void 0;
   const tone = !overrides?.tone && destructive ? "critical" : overrides?.tone;
-  return /* @__PURE__ */ import_react57.default.createElement(Button, Object.assign({
+  return /* @__PURE__ */ import_react59.default.createElement(Button, Object.assign({
     key,
     onClick: onAction,
     tone,
@@ -7762,37 +7811,37 @@ function Labelled({
   readOnly,
   ...rest
 }) {
-  const className = classNames(labelHidden && styles9.hidden, disabled && styles9.disabled, readOnly && styles9.readOnly);
-  const actionMarkup = action ? /* @__PURE__ */ import_react58.default.createElement("div", {
-    className: styles9.Action
+  const className = classNames(labelHidden && styles10.hidden, disabled && styles10.disabled, readOnly && styles10.readOnly);
+  const actionMarkup = action ? /* @__PURE__ */ import_react60.default.createElement("div", {
+    className: styles10.Action
   }, buttonFrom(action, {
     variant: "plain"
   })) : null;
-  const helpTextMarkup = helpText ? /* @__PURE__ */ import_react58.default.createElement("div", {
-    className: styles9.HelpText,
+  const helpTextMarkup = helpText ? /* @__PURE__ */ import_react60.default.createElement("div", {
+    className: styles10.HelpText,
     id: helpTextID(id),
     "aria-disabled": disabled
-  }, /* @__PURE__ */ import_react58.default.createElement(Text, {
+  }, /* @__PURE__ */ import_react60.default.createElement(Text, {
     as: "span",
     tone: "subdued",
     variant: "bodyMd",
     breakWord: true
   }, helpText)) : null;
-  const errorMarkup = error && typeof error !== "boolean" && /* @__PURE__ */ import_react58.default.createElement("div", {
-    className: styles9.Error
-  }, /* @__PURE__ */ import_react58.default.createElement(InlineError, {
+  const errorMarkup = error && typeof error !== "boolean" && /* @__PURE__ */ import_react60.default.createElement("div", {
+    className: styles10.Error
+  }, /* @__PURE__ */ import_react60.default.createElement(InlineError, {
     message: error,
     fieldID: id
   }));
-  const labelMarkup = label ? /* @__PURE__ */ import_react58.default.createElement("div", {
-    className: styles9.LabelWrapper
-  }, /* @__PURE__ */ import_react58.default.createElement(Label, Object.assign({
+  const labelMarkup = label ? /* @__PURE__ */ import_react60.default.createElement("div", {
+    className: styles10.LabelWrapper
+  }, /* @__PURE__ */ import_react60.default.createElement(Label, Object.assign({
     id,
     requiredIndicator
   }, rest, {
     hidden: false
   }), label), actionMarkup) : null;
-  return /* @__PURE__ */ import_react58.default.createElement("div", {
+  return /* @__PURE__ */ import_react60.default.createElement("div", {
     className
   }, labelMarkup, children, errorMarkup, helpTextMarkup);
 }
@@ -7801,10 +7850,10 @@ function helpTextID(id) {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Connected/Connected.js
-var import_react61 = __toESM(require_react());
+var import_react63 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Connected/Connected.css.js
-var styles12 = {
+var styles13 = {
   "Connected": "Polaris-Connected",
   "Item": "Polaris-Connected__Item",
   "Item-primary": "Polaris-Connected__Item--primary",
@@ -7812,17 +7861,17 @@ var styles12 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Connected/components/Item/Item.js
-var import_react60 = __toESM(require_react());
+var import_react62 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/use-toggle.js
-var import_react59 = __toESM(require_react());
+var import_react61 = __toESM(require_react());
 function useToggle(initialState) {
-  const [value, setState] = (0, import_react59.useState)(initialState);
+  const [value, setState] = (0, import_react61.useState)(initialState);
   return {
     value,
-    toggle: (0, import_react59.useCallback)(() => setState((state) => !state), []),
-    setTrue: (0, import_react59.useCallback)(() => setState(true), []),
-    setFalse: (0, import_react59.useCallback)(() => setState(false), [])
+    toggle: (0, import_react61.useCallback)(() => setState((state) => !state), []),
+    setTrue: (0, import_react61.useCallback)(() => setState(true), []),
+    setFalse: (0, import_react61.useCallback)(() => setState(false), [])
   };
 }
 
@@ -7836,8 +7885,8 @@ function Item({
     setTrue: forceTrueFocused,
     setFalse: forceFalseFocused
   } = useToggle(false);
-  const className = classNames(styles12.Item, focused && styles12["Item-focused"], position === "primary" ? styles12["Item-primary"] : styles12["Item-connection"]);
-  return /* @__PURE__ */ import_react60.default.createElement("div", {
+  const className = classNames(styles13.Item, focused && styles13["Item-focused"], position === "primary" ? styles13["Item-primary"] : styles13["Item-connection"]);
+  return /* @__PURE__ */ import_react62.default.createElement("div", {
     onBlur: forceFalseFocused,
     onFocus: forceTrueFocused,
     className
@@ -7850,49 +7899,49 @@ function Connected({
   left,
   right
 }) {
-  const leftConnectionMarkup = left ? /* @__PURE__ */ import_react61.default.createElement(Item, {
+  const leftConnectionMarkup = left ? /* @__PURE__ */ import_react63.default.createElement(Item, {
     position: "left"
   }, left) : null;
-  const rightConnectionMarkup = right ? /* @__PURE__ */ import_react61.default.createElement(Item, {
+  const rightConnectionMarkup = right ? /* @__PURE__ */ import_react63.default.createElement(Item, {
     position: "right"
   }, right) : null;
-  return /* @__PURE__ */ import_react61.default.createElement("div", {
-    className: styles12.Connected
-  }, leftConnectionMarkup, /* @__PURE__ */ import_react61.default.createElement(Item, {
+  return /* @__PURE__ */ import_react63.default.createElement("div", {
+    className: styles13.Connected
+  }, leftConnectionMarkup, /* @__PURE__ */ import_react63.default.createElement(Item, {
     position: "primary"
   }, children), rightConnectionMarkup);
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TextField/components/Resizer/Resizer.js
-var import_react62 = __toESM(require_react());
+var import_react64 = __toESM(require_react());
 function Resizer({
   contents,
   currentHeight: currentHeightProp = null,
   minimumLines,
   onHeightChange
 }) {
-  const contentNode = (0, import_react62.useRef)(null);
-  const minimumLinesNode = (0, import_react62.useRef)(null);
-  const animationFrame = (0, import_react62.useRef)();
-  const currentHeight = (0, import_react62.useRef)(currentHeightProp);
+  const contentNode = (0, import_react64.useRef)(null);
+  const minimumLinesNode = (0, import_react64.useRef)(null);
+  const animationFrame = (0, import_react64.useRef)();
+  const currentHeight = (0, import_react64.useRef)(currentHeightProp);
   if (currentHeightProp !== currentHeight.current) {
     currentHeight.current = currentHeightProp;
   }
-  (0, import_react62.useEffect)(() => {
+  (0, import_react64.useEffect)(() => {
     return () => {
       if (animationFrame.current) {
         cancelAnimationFrame(animationFrame.current);
       }
     };
   }, []);
-  const minimumLinesMarkup = minimumLines ? /* @__PURE__ */ import_react62.default.createElement("div", {
+  const minimumLinesMarkup = minimumLines ? /* @__PURE__ */ import_react64.default.createElement("div", {
     ref: minimumLinesNode,
-    className: styles8.DummyInput,
+    className: styles9.DummyInput,
     dangerouslySetInnerHTML: {
       __html: getContentsForMinimumLines(minimumLines)
     }
   }) : null;
-  const handleHeightCheck = (0, import_react62.useCallback)(() => {
+  const handleHeightCheck = (0, import_react64.useCallback)(() => {
     if (animationFrame.current) {
       cancelAnimationFrame(animationFrame.current);
     }
@@ -7909,15 +7958,15 @@ function Resizer({
   useIsomorphicLayoutEffect(() => {
     handleHeightCheck();
   });
-  return /* @__PURE__ */ import_react62.default.createElement("div", {
+  return /* @__PURE__ */ import_react64.default.createElement("div", {
     "aria-hidden": true,
-    className: styles8.Resizer
-  }, /* @__PURE__ */ import_react62.default.createElement(EventListener, {
+    className: styles9.Resizer
+  }, /* @__PURE__ */ import_react64.default.createElement(EventListener, {
     event: "resize",
     handler: handleHeightCheck
-  }), /* @__PURE__ */ import_react62.default.createElement("div", {
+  }), /* @__PURE__ */ import_react64.default.createElement("div", {
     ref: contentNode,
-    className: styles8.DummyInput,
+    className: styles9.DummyInput,
     dangerouslySetInnerHTML: {
       __html: getFinalContents(contents)
     }
@@ -8003,30 +8052,30 @@ function TextField({
   loading
 }) {
   const i18n = useI18n();
-  const [height2, setHeight] = (0, import_react63.useState)(null);
-  const [focus, setFocus] = (0, import_react63.useState)(Boolean(focused));
+  const [height2, setHeight] = (0, import_react65.useState)(null);
+  const [focus, setFocus] = (0, import_react65.useState)(Boolean(focused));
   const isAfterInitial = useIsAfterInitialMount();
-  const uniqId = (0, import_react63.useId)();
+  const uniqId = (0, import_react65.useId)();
   const id = idProp ?? uniqId;
-  const textFieldRef = (0, import_react63.useRef)(null);
-  const inputRef = (0, import_react63.useRef)(null);
-  const textAreaRef = (0, import_react63.useRef)(null);
-  const prefixRef = (0, import_react63.useRef)(null);
-  const suffixRef = (0, import_react63.useRef)(null);
-  const loadingRef = (0, import_react63.useRef)(null);
-  const verticalContentRef = (0, import_react63.useRef)(null);
-  const buttonPressTimer = (0, import_react63.useRef)();
-  const spinnerRef = (0, import_react63.useRef)(null);
-  const getInputRef = (0, import_react63.useCallback)(() => {
+  const textFieldRef = (0, import_react65.useRef)(null);
+  const inputRef = (0, import_react65.useRef)(null);
+  const textAreaRef = (0, import_react65.useRef)(null);
+  const prefixRef = (0, import_react65.useRef)(null);
+  const suffixRef = (0, import_react65.useRef)(null);
+  const loadingRef = (0, import_react65.useRef)(null);
+  const verticalContentRef = (0, import_react65.useRef)(null);
+  const buttonPressTimer = (0, import_react65.useRef)();
+  const spinnerRef = (0, import_react65.useRef)(null);
+  const getInputRef = (0, import_react65.useCallback)(() => {
     return multiline ? textAreaRef.current : inputRef.current;
   }, [multiline]);
-  (0, import_react63.useEffect)(() => {
+  (0, import_react65.useEffect)(() => {
     const input2 = getInputRef();
     if (!input2 || focused === void 0)
       return;
     focused ? input2.focus() : input2.blur();
   }, [focused, verticalContent, getInputRef]);
-  (0, import_react63.useEffect)(() => {
+  (0, import_react65.useEffect)(() => {
     const input2 = inputRef.current;
     const isSupportedInputType = type === "text" || type === "tel" || type === "search" || type === "url" || type === "password";
     if (!input2 || !isSupportedInputType || !suggestion) {
@@ -8038,31 +8087,31 @@ function TextField({
   const normalizedStep = step != null ? step : 1;
   const normalizedMax = max != null ? max : Infinity;
   const normalizedMin = min != null ? min : -Infinity;
-  const className = classNames(styles8.TextField, Boolean(normalizedValue) && styles8.hasValue, disabled && styles8.disabled, readOnly && styles8.readOnly, error && styles8.error, tone && styles8[variationName("tone", tone)], multiline && styles8.multiline, focus && !disabled && styles8.focus, variant !== "inherit" && styles8[variant], size2 === "slim" && styles8.slim);
+  const className = classNames(styles9.TextField, Boolean(normalizedValue) && styles9.hasValue, disabled && styles9.disabled, readOnly && styles9.readOnly, error && styles9.error, tone && styles9[variationName("tone", tone)], multiline && styles9.multiline, focus && !disabled && styles9.focus, variant !== "inherit" && styles9[variant], size2 === "slim" && styles9.slim);
   const inputType = type === "currency" ? "text" : type;
   const isNumericType = type === "number" || type === "integer";
-  const iconPrefix = /* @__PURE__ */ import_react63.default.isValidElement(prefix) && prefix.type === Icon;
-  const prefixMarkup = prefix ? /* @__PURE__ */ import_react63.default.createElement("div", {
-    className: classNames(styles8.Prefix, iconPrefix && styles8.PrefixIcon),
+  const iconPrefix = /* @__PURE__ */ import_react65.default.isValidElement(prefix) && prefix.type === Icon;
+  const prefixMarkup = prefix ? /* @__PURE__ */ import_react65.default.createElement("div", {
+    className: classNames(styles9.Prefix, iconPrefix && styles9.PrefixIcon),
     id: `${id}-Prefix`,
     ref: prefixRef
-  }, /* @__PURE__ */ import_react63.default.createElement(Text, {
+  }, /* @__PURE__ */ import_react65.default.createElement(Text, {
     as: "span",
     variant: "bodyMd"
   }, prefix)) : null;
-  const suffixMarkup = suffix ? /* @__PURE__ */ import_react63.default.createElement("div", {
-    className: styles8.Suffix,
+  const suffixMarkup = suffix ? /* @__PURE__ */ import_react65.default.createElement("div", {
+    className: styles9.Suffix,
     id: `${id}-Suffix`,
     ref: suffixRef
-  }, /* @__PURE__ */ import_react63.default.createElement(Text, {
+  }, /* @__PURE__ */ import_react65.default.createElement(Text, {
     as: "span",
     variant: "bodyMd"
   }, suffix)) : null;
-  const loadingMarkup = loading ? /* @__PURE__ */ import_react63.default.createElement("div", {
-    className: styles8.Loading,
+  const loadingMarkup = loading ? /* @__PURE__ */ import_react65.default.createElement("div", {
+    className: styles9.Loading,
     id: `${id}-Loading`,
     ref: loadingRef
-  }, /* @__PURE__ */ import_react63.default.createElement(Spinner, {
+  }, /* @__PURE__ */ import_react65.default.createElement(Spinner, {
     size: "small"
   })) : null;
   let characterCountMarkup = null;
@@ -8074,34 +8123,34 @@ function TextField({
     }) : i18n.translate("Polaris.TextField.characterCount", {
       count: characterCount
     });
-    const characterCountClassName = classNames(styles8.CharacterCount, multiline && styles8.AlignFieldBottom);
+    const characterCountClassName = classNames(styles9.CharacterCount, multiline && styles9.AlignFieldBottom);
     const characterCountText = !maxLength ? characterCount : `${characterCount}/${maxLength}`;
-    characterCountMarkup = /* @__PURE__ */ import_react63.default.createElement("div", {
+    characterCountMarkup = /* @__PURE__ */ import_react65.default.createElement("div", {
       id: `${id}-CharacterCounter`,
       className: characterCountClassName,
       "aria-label": characterCountLabel,
       "aria-live": focus ? "polite" : "off",
       "aria-atomic": "true",
       onClick: handleClickChild
-    }, /* @__PURE__ */ import_react63.default.createElement(Text, {
+    }, /* @__PURE__ */ import_react65.default.createElement(Text, {
       as: "span",
       variant: "bodyMd"
     }, characterCountText));
   }
   const clearButtonVisible = normalizedValue !== "";
-  const clearButtonMarkup = clearButton && clearButtonVisible ? /* @__PURE__ */ import_react63.default.createElement("button", {
+  const clearButtonMarkup = clearButton && clearButtonVisible ? /* @__PURE__ */ import_react65.default.createElement("button", {
     type: "button",
-    className: styles8.ClearButton,
+    className: styles9.ClearButton,
     onClick: handleClearButtonPress,
     disabled
-  }, /* @__PURE__ */ import_react63.default.createElement(Text, {
+  }, /* @__PURE__ */ import_react65.default.createElement(Text, {
     as: "span",
     visuallyHidden: true
-  }, i18n.translate("Polaris.Common.clear")), /* @__PURE__ */ import_react63.default.createElement(Icon, {
+  }, i18n.translate("Polaris.Common.clear")), /* @__PURE__ */ import_react65.default.createElement(Icon, {
     source: SvgXCircleIcon,
     tone: "base"
   })) : null;
-  const handleNumberChange = (0, import_react63.useCallback)((steps, stepAmount = normalizedStep) => {
+  const handleNumberChange = (0, import_react65.useCallback)((steps, stepAmount = normalizedStep) => {
     if (onChange == null && onSpinnerChange == null) {
       return;
     }
@@ -8118,10 +8167,10 @@ function TextField({
       onChange(String(newValue.toFixed(decimalPlaces)), id);
     }
   }, [id, normalizedMax, normalizedMin, onChange, onSpinnerChange, normalizedStep, type, value]);
-  const handleSpinnerButtonRelease = (0, import_react63.useCallback)(() => {
+  const handleSpinnerButtonRelease = (0, import_react65.useCallback)(() => {
     clearTimeout(buttonPressTimer.current);
   }, []);
-  const handleSpinnerButtonPress = (0, import_react63.useCallback)((onChange2) => {
+  const handleSpinnerButtonPress = (0, import_react65.useCallback)((onChange2) => {
     const minInterval = 50;
     const decrementBy = 10;
     let interval = 200;
@@ -8136,7 +8185,7 @@ function TextField({
       once: true
     });
   }, [handleSpinnerButtonRelease]);
-  const spinnerMarkup = isNumericType && step !== 0 && !disabled && !readOnly ? /* @__PURE__ */ import_react63.default.createElement(Spinner2, {
+  const spinnerMarkup = isNumericType && step !== 0 && !disabled && !readOnly ? /* @__PURE__ */ import_react65.default.createElement(Spinner2, {
     onClick: handleClickChild,
     onChange: handleNumberChange,
     onMouseDown: handleSpinnerButtonPress,
@@ -8148,10 +8197,10 @@ function TextField({
     height: height2,
     maxHeight
   } : null;
-  const handleExpandingResize = (0, import_react63.useCallback)((height3) => {
+  const handleExpandingResize = (0, import_react65.useCallback)((height3) => {
     setHeight(height3);
   }, []);
-  const resizer = multiline && isAfterInitial ? /* @__PURE__ */ import_react63.default.createElement(Resizer, {
+  const resizer = multiline && isAfterInitial ? /* @__PURE__ */ import_react65.default.createElement(Resizer, {
     contents: normalizedValue || placeholder,
     currentHeight: height2,
     minimumLines: typeof multiline === "number" ? multiline : 1,
@@ -8178,7 +8227,7 @@ function TextField({
     labelledBy.push(`${id}-VerticalContent`);
   }
   labelledBy.unshift(labelID(id));
-  const inputClassName = classNames(styles8.Input, align && styles8[variationName("Input-align", align)], suffix && styles8["Input-suffixed"], clearButton && styles8["Input-hasClearButton"], monospaced && styles8.monospaced, suggestion && styles8.suggestion, autoSize && styles8["Input-autoSize"]);
+  const inputClassName = classNames(styles9.Input, align && styles9[variationName("Input-align", align)], suffix && styles9["Input-suffixed"], clearButton && styles9["Input-hasClearButton"], monospaced && styles9.monospaced, suggestion && styles9.suggestion, autoSize && styles9["Input-autoSize"]);
   const handleOnFocus = (event) => {
     setFocus(true);
     if (selectTextOnFocus && !suggestion) {
@@ -8195,7 +8244,7 @@ function TextField({
       event.stopPropagation();
     }
   }
-  const input = /* @__PURE__ */ (0, import_react63.createElement)(multiline ? "textarea" : "input", {
+  const input = /* @__PURE__ */ (0, import_react65.createElement)(multiline ? "textarea" : "input", {
     name,
     id,
     disabled,
@@ -8243,23 +8292,23 @@ function TextField({
     // Dashlane disable data attribute
     "data-form-type": autoComplete === "off" ? "other" : void 0
   });
-  const inputWithVerticalContentMarkup = verticalContent ? /* @__PURE__ */ import_react63.default.createElement("div", {
-    className: styles8.VerticalContent,
+  const inputWithVerticalContentMarkup = verticalContent ? /* @__PURE__ */ import_react65.default.createElement("div", {
+    className: styles9.VerticalContent,
     id: `${id}-VerticalContent`,
     ref: verticalContentRef,
     onClick: handleClickChild
   }, verticalContent, input) : null;
   const inputMarkup = verticalContent ? inputWithVerticalContentMarkup : input;
-  const backdropMarkup = /* @__PURE__ */ import_react63.default.createElement("div", {
-    className: classNames(styles8.Backdrop, connectedLeft && styles8["Backdrop-connectedLeft"], connectedRight && styles8["Backdrop-connectedRight"])
+  const backdropMarkup = /* @__PURE__ */ import_react65.default.createElement("div", {
+    className: classNames(styles9.Backdrop, connectedLeft && styles9["Backdrop-connectedLeft"], connectedRight && styles9["Backdrop-connectedRight"])
   });
-  const inputAndSuffixMarkup = autoSize ? /* @__PURE__ */ import_react63.default.createElement("div", {
-    className: styles8.InputAndSuffixWrapper
-  }, /* @__PURE__ */ import_react63.default.createElement("div", {
-    className: classNames(styles8.AutoSizeWrapper, suffix && styles8.AutoSizeWrapperWithSuffix),
+  const inputAndSuffixMarkup = autoSize ? /* @__PURE__ */ import_react65.default.createElement("div", {
+    className: styles9.InputAndSuffixWrapper
+  }, /* @__PURE__ */ import_react65.default.createElement("div", {
+    className: classNames(styles9.AutoSizeWrapper, suffix && styles9.AutoSizeWrapperWithSuffix),
     "data-auto-size-value": value || placeholder
-  }, inputMarkup), suffixMarkup) : /* @__PURE__ */ import_react63.default.createElement(import_react63.default.Fragment, null, inputMarkup, suffixMarkup);
-  return /* @__PURE__ */ import_react63.default.createElement(Labelled, {
+  }, inputMarkup), suffixMarkup) : /* @__PURE__ */ import_react65.default.createElement(import_react65.default.Fragment, null, inputMarkup, suffixMarkup);
+  return /* @__PURE__ */ import_react65.default.createElement(Labelled, {
     label,
     id,
     error,
@@ -8269,10 +8318,10 @@ function TextField({
     requiredIndicator,
     disabled,
     readOnly
-  }, /* @__PURE__ */ import_react63.default.createElement(Connected, {
+  }, /* @__PURE__ */ import_react65.default.createElement(Connected, {
     left: connectedLeft,
     right: connectedRight
-  }, /* @__PURE__ */ import_react63.default.createElement("div", {
+  }, /* @__PURE__ */ import_react65.default.createElement("div", {
     className,
     onClick: handleClick,
     ref: textFieldRef
@@ -8397,14 +8446,14 @@ function normalizeAriaMultiline(multiline) {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Banner/Banner.js
-var import_react70 = __toESM(require_react());
+var import_react71 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/banner-context.js
-var import_react64 = __toESM(require_react());
-var BannerContext = /* @__PURE__ */ (0, import_react64.createContext)(false);
+var import_react66 = __toESM(require_react());
+var BannerContext = /* @__PURE__ */ (0, import_react66.createContext)(false);
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Banner/Banner.css.js
-var styles13 = {
+var styles14 = {
   "Banner": "Polaris-Banner",
   "keyFocused": "Polaris-Banner--keyFocused",
   "withinContentContainer": "Polaris-Banner--withinContentContainer",
@@ -8422,7 +8471,7 @@ var styles13 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Banner/utilities.js
-var import_react65 = __toESM(require_react());
+var import_react67 = __toESM(require_react());
 var bannerAttributes = {
   success: {
     withinPage: {
@@ -8478,9 +8527,9 @@ var bannerAttributes = {
   }
 };
 function useBannerFocus(bannerRef) {
-  const wrapperRef = (0, import_react65.useRef)(null);
-  const [shouldShowFocus, setShouldShowFocus] = (0, import_react65.useState)(false);
-  (0, import_react65.useImperativeHandle)(bannerRef, () => ({
+  const wrapperRef = (0, import_react67.useRef)(null);
+  const [shouldShowFocus, setShouldShowFocus] = (0, import_react67.useState)(false);
+  (0, import_react67.useImperativeHandle)(bannerRef, () => ({
     focus: () => {
       wrapperRef.current?.focus();
       setShouldShowFocus(true);
@@ -8506,19 +8555,19 @@ function useBannerFocus(bannerRef) {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ButtonGroup/ButtonGroup.js
-var import_react68 = __toESM(require_react());
+var import_react70 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/components.js
-var import_react66 = __toESM(require_react());
+var import_react68 = __toESM(require_react());
 function wrapWithComponent(element, Component2, props) {
   if (element == null) {
     return null;
   }
-  return isElementOfType(element, Component2) ? element : /* @__PURE__ */ import_react66.default.createElement(Component2, props, element);
+  return isElementOfType(element, Component2) ? element : /* @__PURE__ */ import_react68.default.createElement(Component2, props, element);
 }
 var isComponent = true ? hotReloadComponentCheck : (AComponent, AnotherComponent) => AComponent === AnotherComponent;
 function isElementOfType(element, Component2) {
-  if (element == null || !/* @__PURE__ */ (0, import_react66.isValidElement)(element) || typeof element.type === "string") {
+  if (element == null || !/* @__PURE__ */ (0, import_react68.isValidElement)(element) || typeof element.type === "string") {
     return false;
   }
   const {
@@ -8530,7 +8579,7 @@ function isElementOfType(element, Component2) {
   return Components.some((AComponent) => typeof type !== "string" && isComponent(AComponent, type));
 }
 function elementChildren(children, predicate = () => true) {
-  return import_react66.Children.toArray(children).filter((child) => /* @__PURE__ */ (0, import_react66.isValidElement)(child) && predicate(child));
+  return import_react68.Children.toArray(children).filter((child) => /* @__PURE__ */ (0, import_react68.isValidElement)(child) && predicate(child));
 }
 function ConditionalWrapper({
   condition,
@@ -8552,7 +8601,7 @@ function hotReloadComponentCheck(AComponent, AnotherComponent) {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ButtonGroup/ButtonGroup.css.js
-var styles14 = {
+var styles15 = {
   "ButtonGroup": "Polaris-ButtonGroup",
   "Item": "Polaris-ButtonGroup__Item",
   "Item-plain": "Polaris-ButtonGroup__Item--plain",
@@ -8566,7 +8615,7 @@ var styles14 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ButtonGroup/components/Item/Item.js
-var import_react67 = __toESM(require_react());
+var import_react69 = __toESM(require_react());
 function Item2({
   button
 }) {
@@ -8575,8 +8624,8 @@ function Item2({
     setTrue: forceTrueFocused,
     setFalse: forceFalseFocused
   } = useToggle(false);
-  const className = classNames(styles14.Item, focused && styles14["Item-focused"], button.props.variant === "plain" && styles14["Item-plain"]);
-  return /* @__PURE__ */ import_react67.default.createElement("div", {
+  const className = classNames(styles15.Item, focused && styles15["Item-focused"], button.props.variant === "plain" && styles15["Item-plain"]);
+  return /* @__PURE__ */ import_react69.default.createElement("div", {
     className,
     onFocus: forceTrueFocused,
     onBlur: forceFalseFocused
@@ -8592,12 +8641,12 @@ function ButtonGroup({
   connectedTop,
   noWrap
 }) {
-  const className = classNames(styles14.ButtonGroup, gap && styles14[gap], variant && styles14[variationName("variant", variant)], fullWidth && styles14.fullWidth, noWrap && styles14.noWrap);
-  const contents = elementChildren(children).map((child, index) => /* @__PURE__ */ import_react68.default.createElement(Item2, {
+  const className = classNames(styles15.ButtonGroup, gap && styles15[gap], variant && styles15[variationName("variant", variant)], fullWidth && styles15.fullWidth, noWrap && styles15.noWrap);
+  const contents = elementChildren(children).map((child, index) => /* @__PURE__ */ import_react70.default.createElement(Item2, {
     button: child,
     key: index
   }));
-  return /* @__PURE__ */ import_react68.default.createElement("div", {
+  return /* @__PURE__ */ import_react70.default.createElement("div", {
     className,
     "data-buttongroup-variant": variant,
     "data-buttongroup-connected-top": connectedTop,
@@ -8606,49 +8655,13 @@ function ButtonGroup({
   }, contents);
 }
 
-// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/BlockStack/BlockStack.js
-var import_react69 = __toESM(require_react());
-
-// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/BlockStack/BlockStack.css.js
-var styles15 = {
-  "BlockStack": "Polaris-BlockStack",
-  "listReset": "Polaris-BlockStack--listReset",
-  "fieldsetReset": "Polaris-BlockStack--fieldsetReset"
-};
-
-// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/BlockStack/BlockStack.js
-var BlockStack = ({
-  as = "div",
-  children,
-  align,
-  inlineAlign,
-  gap,
-  id,
-  reverseOrder = false,
-  ...restProps
-}) => {
-  const className = classNames(styles15.BlockStack, (as === "ul" || as === "ol") && styles15.listReset, as === "fieldset" && styles15.fieldsetReset);
-  const style = {
-    "--pc-block-stack-align": align ? `${align}` : null,
-    "--pc-block-stack-inline-align": inlineAlign ? `${inlineAlign}` : null,
-    "--pc-block-stack-order": reverseOrder ? "column-reverse" : "column",
-    ...getResponsiveProps("block-stack", "gap", "space", gap)
-  };
-  return /* @__PURE__ */ import_react69.default.createElement(as, {
-    className,
-    id,
-    style: sanitizeCustomProperties(style),
-    ...restProps
-  }, children);
-};
-
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Banner/Banner.js
-var Banner = /* @__PURE__ */ (0, import_react70.forwardRef)(function Banner2(props, bannerRef) {
+var Banner = /* @__PURE__ */ (0, import_react71.forwardRef)(function Banner2(props, bannerRef) {
   const {
     tone,
     stopAnnouncements
   } = props;
-  const withinContentContainer = (0, import_react70.useContext)(WithinContentContext);
+  const withinContentContainer = (0, import_react71.useContext)(WithinContentContext);
   const {
     wrapperRef,
     handleKeyUp,
@@ -8656,10 +8669,10 @@ var Banner = /* @__PURE__ */ (0, import_react70.forwardRef)(function Banner2(pro
     handleMouseUp,
     shouldShowFocus
   } = useBannerFocus(bannerRef);
-  const className = classNames(styles13.Banner, shouldShowFocus && styles13.keyFocused, withinContentContainer ? styles13.withinContentContainer : styles13.withinPage);
-  return /* @__PURE__ */ import_react70.default.createElement(BannerContext.Provider, {
+  const className = classNames(styles14.Banner, shouldShowFocus && styles14.keyFocused, withinContentContainer ? styles14.withinContentContainer : styles14.withinPage);
+  return /* @__PURE__ */ import_react71.default.createElement(BannerContext.Provider, {
     value: true
-  }, /* @__PURE__ */ import_react70.default.createElement("div", {
+  }, /* @__PURE__ */ import_react71.default.createElement("div", {
     className,
     tabIndex: 0,
     ref: wrapperRef,
@@ -8668,7 +8681,7 @@ var Banner = /* @__PURE__ */ (0, import_react70.forwardRef)(function Banner2(pro
     onMouseUp: handleMouseUp,
     onKeyUp: handleKeyUp,
     onBlur: handleBlur
-  }, /* @__PURE__ */ import_react70.default.createElement(BannerLayout, props)));
+  }, /* @__PURE__ */ import_react71.default.createElement(BannerLayout, props)));
 });
 function BannerLayout({
   tone = "info",
@@ -8681,50 +8694,50 @@ function BannerLayout({
   children
 }) {
   const i18n = useI18n();
-  const withinContentContainer = (0, import_react70.useContext)(WithinContentContext);
+  const withinContentContainer = (0, import_react71.useContext)(WithinContentContext);
   const isInlineIconBanner = !title && !withinContentContainer;
   const bannerTone = Object.keys(bannerAttributes).includes(tone) ? tone : "info";
   const bannerColors = bannerAttributes[bannerTone][withinContentContainer ? "withinContentContainer" : "withinPage"];
   const sharedBannerProps = {
     backgroundColor: bannerColors.background,
     textColor: bannerColors.text,
-    bannerTitle: title ? /* @__PURE__ */ import_react70.default.createElement(Text, {
+    bannerTitle: title ? /* @__PURE__ */ import_react71.default.createElement(Text, {
       as: "h2",
       variant: "headingSm",
       breakWord: true
     }, title) : null,
-    bannerIcon: hideIcon ? null : /* @__PURE__ */ import_react70.default.createElement("span", {
-      className: styles13[bannerColors.icon]
-    }, /* @__PURE__ */ import_react70.default.createElement(Icon, {
+    bannerIcon: hideIcon ? null : /* @__PURE__ */ import_react71.default.createElement("span", {
+      className: styles14[bannerColors.icon]
+    }, /* @__PURE__ */ import_react71.default.createElement(Icon, {
       source: icon ?? bannerAttributes[bannerTone].icon
     })),
-    actionButtons: action || secondaryAction ? /* @__PURE__ */ import_react70.default.createElement(ButtonGroup, null, action && /* @__PURE__ */ import_react70.default.createElement(Button, Object.assign({
+    actionButtons: action || secondaryAction ? /* @__PURE__ */ import_react71.default.createElement(ButtonGroup, null, action && /* @__PURE__ */ import_react71.default.createElement(Button, Object.assign({
       onClick: action.onAction
-    }, action), action.content), secondaryAction && /* @__PURE__ */ import_react70.default.createElement(Button, Object.assign({
+    }, action), action.content), secondaryAction && /* @__PURE__ */ import_react71.default.createElement(Button, Object.assign({
       onClick: secondaryAction.onAction
     }, secondaryAction), secondaryAction.content)) : null,
-    dismissButton: onDismiss ? /* @__PURE__ */ import_react70.default.createElement(Button, {
+    dismissButton: onDismiss ? /* @__PURE__ */ import_react71.default.createElement(Button, {
       variant: "tertiary",
-      icon: /* @__PURE__ */ import_react70.default.createElement("span", {
-        className: styles13[isInlineIconBanner ? "icon-secondary" : bannerColors.icon]
-      }, /* @__PURE__ */ import_react70.default.createElement(Icon, {
+      icon: /* @__PURE__ */ import_react71.default.createElement("span", {
+        className: styles14[isInlineIconBanner ? "icon-secondary" : bannerColors.icon]
+      }, /* @__PURE__ */ import_react71.default.createElement(Icon, {
         source: SvgXIcon
       })),
       onClick: onDismiss,
       accessibilityLabel: i18n.translate("Polaris.Banner.dismissButton")
     }) : null
   };
-  const childrenMarkup = children ? /* @__PURE__ */ import_react70.default.createElement(Text, {
+  const childrenMarkup = children ? /* @__PURE__ */ import_react71.default.createElement(Text, {
     as: "span",
     variant: "bodyMd"
   }, children) : null;
   if (withinContentContainer) {
-    return /* @__PURE__ */ import_react70.default.createElement(WithinContentContainerBanner, sharedBannerProps, childrenMarkup);
+    return /* @__PURE__ */ import_react71.default.createElement(WithinContentContainerBanner, sharedBannerProps, childrenMarkup);
   }
   if (isInlineIconBanner) {
-    return /* @__PURE__ */ import_react70.default.createElement(InlineIconBanner, sharedBannerProps, childrenMarkup);
+    return /* @__PURE__ */ import_react71.default.createElement(InlineIconBanner, sharedBannerProps, childrenMarkup);
   }
-  return /* @__PURE__ */ import_react70.default.createElement(DefaultBanner, sharedBannerProps, childrenMarkup);
+  return /* @__PURE__ */ import_react71.default.createElement(DefaultBanner, sharedBannerProps, childrenMarkup);
 }
 function DefaultBanner({
   backgroundColor,
@@ -8739,11 +8752,11 @@ function DefaultBanner({
     smUp
   } = useBreakpoints();
   const hasContent = children || actionButtons;
-  return /* @__PURE__ */ import_react70.default.createElement(Box, {
+  return /* @__PURE__ */ import_react71.default.createElement(Box, {
     width: "100%"
-  }, /* @__PURE__ */ import_react70.default.createElement(BlockStack, {
+  }, /* @__PURE__ */ import_react71.default.createElement(BlockStack, {
     align: "space-between"
-  }, /* @__PURE__ */ import_react70.default.createElement(Box, {
+  }, /* @__PURE__ */ import_react71.default.createElement(Box, {
     background: backgroundColor,
     color: textColor,
     borderStartStartRadius: smUp ? "300" : void 0,
@@ -8751,23 +8764,23 @@ function DefaultBanner({
     borderEndStartRadius: !hasContent && smUp ? "300" : void 0,
     borderEndEndRadius: !hasContent && smUp ? "300" : void 0,
     padding: "300"
-  }, /* @__PURE__ */ import_react70.default.createElement(InlineStack, {
+  }, /* @__PURE__ */ import_react71.default.createElement(InlineStack, {
     align: "space-between",
     blockAlign: "center",
     gap: "200",
     wrap: false
-  }, /* @__PURE__ */ import_react70.default.createElement(InlineStack, {
+  }, /* @__PURE__ */ import_react71.default.createElement(InlineStack, {
     gap: "100",
     wrap: false
-  }, bannerIcon, bannerTitle), dismissButton)), hasContent && /* @__PURE__ */ import_react70.default.createElement(Box, {
+  }, bannerIcon, bannerTitle), dismissButton)), hasContent && /* @__PURE__ */ import_react71.default.createElement(Box, {
     padding: {
       xs: "300",
       md: "400"
     },
     paddingBlockStart: "300"
-  }, /* @__PURE__ */ import_react70.default.createElement(BlockStack, {
+  }, /* @__PURE__ */ import_react71.default.createElement(BlockStack, {
     gap: "200"
-  }, /* @__PURE__ */ import_react70.default.createElement("div", null, children), actionButtons))));
+  }, /* @__PURE__ */ import_react71.default.createElement("div", null, children), actionButtons))));
 }
 function InlineIconBanner({
   backgroundColor,
@@ -8776,47 +8789,47 @@ function InlineIconBanner({
   dismissButton,
   children
 }) {
-  const [blockAlign, setBlockAlign] = (0, import_react70.useState)("center");
-  const contentNode = (0, import_react70.useRef)(null);
-  const iconNode = (0, import_react70.useRef)(null);
-  const dismissIconNode = (0, import_react70.useRef)(null);
-  const handleResize = (0, import_react70.useCallback)(() => {
+  const [blockAlign, setBlockAlign] = (0, import_react71.useState)("center");
+  const contentNode = (0, import_react71.useRef)(null);
+  const iconNode = (0, import_react71.useRef)(null);
+  const dismissIconNode = (0, import_react71.useRef)(null);
+  const handleResize = (0, import_react71.useCallback)(() => {
     const contentHeight = contentNode.current?.offsetHeight;
     const iconBoxHeight = iconNode.current?.offsetHeight || dismissIconNode.current?.offsetHeight;
     if (!contentHeight || !iconBoxHeight)
       return;
     contentHeight > iconBoxHeight ? setBlockAlign("start") : setBlockAlign("center");
   }, []);
-  (0, import_react70.useEffect)(() => handleResize(), [handleResize]);
+  (0, import_react71.useEffect)(() => handleResize(), [handleResize]);
   useEventListener("resize", handleResize);
-  return /* @__PURE__ */ import_react70.default.createElement(Box, {
+  return /* @__PURE__ */ import_react71.default.createElement(Box, {
     width: "100%",
     padding: "300",
     borderRadius: "300"
-  }, /* @__PURE__ */ import_react70.default.createElement(InlineStack, {
+  }, /* @__PURE__ */ import_react71.default.createElement(InlineStack, {
     align: "space-between",
     blockAlign,
     wrap: false
-  }, /* @__PURE__ */ import_react70.default.createElement(Box, {
+  }, /* @__PURE__ */ import_react71.default.createElement(Box, {
     width: "100%"
-  }, /* @__PURE__ */ import_react70.default.createElement(InlineStack, {
+  }, /* @__PURE__ */ import_react71.default.createElement(InlineStack, {
     gap: "200",
     wrap: false,
     blockAlign
-  }, bannerIcon ? /* @__PURE__ */ import_react70.default.createElement("div", {
+  }, bannerIcon ? /* @__PURE__ */ import_react71.default.createElement("div", {
     ref: iconNode
-  }, /* @__PURE__ */ import_react70.default.createElement(Box, {
+  }, /* @__PURE__ */ import_react71.default.createElement(Box, {
     background: backgroundColor,
     borderRadius: "200",
     padding: "100"
-  }, bannerIcon)) : null, /* @__PURE__ */ import_react70.default.createElement(Box, {
+  }, bannerIcon)) : null, /* @__PURE__ */ import_react71.default.createElement(Box, {
     ref: contentNode,
     width: "100%"
-  }, /* @__PURE__ */ import_react70.default.createElement(BlockStack, {
+  }, /* @__PURE__ */ import_react71.default.createElement(BlockStack, {
     gap: "200"
-  }, /* @__PURE__ */ import_react70.default.createElement("div", null, children), actionButtons)))), /* @__PURE__ */ import_react70.default.createElement("div", {
+  }, /* @__PURE__ */ import_react71.default.createElement("div", null, children), actionButtons)))), /* @__PURE__ */ import_react71.default.createElement("div", {
     ref: dismissIconNode,
-    className: styles13.DismissIcon
+    className: styles14.DismissIcon
   }, dismissButton)));
 }
 function WithinContentContainerBanner({
@@ -8828,31 +8841,31 @@ function WithinContentContainerBanner({
   dismissButton,
   children
 }) {
-  return /* @__PURE__ */ import_react70.default.createElement(Box, {
+  return /* @__PURE__ */ import_react71.default.createElement(Box, {
     width: "100%",
     background: backgroundColor,
     padding: "200",
     borderRadius: "200",
     color: textColor
-  }, /* @__PURE__ */ import_react70.default.createElement(InlineStack, {
+  }, /* @__PURE__ */ import_react71.default.createElement(InlineStack, {
     align: "space-between",
     blockAlign: "start",
     wrap: false,
     gap: "200"
-  }, /* @__PURE__ */ import_react70.default.createElement(InlineStack, {
+  }, /* @__PURE__ */ import_react71.default.createElement(InlineStack, {
     gap: "150",
     wrap: false
-  }, bannerIcon, /* @__PURE__ */ import_react70.default.createElement(Box, {
+  }, bannerIcon, /* @__PURE__ */ import_react71.default.createElement(Box, {
     width: "100%"
-  }, /* @__PURE__ */ import_react70.default.createElement(BlockStack, {
+  }, /* @__PURE__ */ import_react71.default.createElement(BlockStack, {
     gap: "200"
-  }, /* @__PURE__ */ import_react70.default.createElement(BlockStack, {
+  }, /* @__PURE__ */ import_react71.default.createElement(BlockStack, {
     gap: "050"
-  }, bannerTitle, /* @__PURE__ */ import_react70.default.createElement("div", null, children)), actionButtons))), dismissButton));
+  }, bannerTitle, /* @__PURE__ */ import_react71.default.createElement("div", null, children)), actionButtons))), dismissButton));
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Divider/Divider.js
-var import_react71 = __toESM(require_react());
+var import_react72 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Divider/Divider.css.js
 var styles16 = {
@@ -8865,7 +8878,7 @@ var Divider = ({
   borderWidth = "025"
 }) => {
   const borderColorValue = borderColor === "transparent" ? borderColor : `var(--p-color-${borderColor})`;
-  return /* @__PURE__ */ import_react71.default.createElement("hr", {
+  return /* @__PURE__ */ import_react72.default.createElement("hr", {
     className: styles16.Divider,
     style: {
       borderBlockStart: `var(--p-border-width-${borderWidth}) solid ${borderColorValue}`
@@ -8873,17 +8886,411 @@ var Divider = ({
   });
 };
 
-// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/FormLayout/FormLayout.js
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/DropZone/DropZone.js
+var import_react76 = __toESM(require_react());
+
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/capitalize.js
+function capitalize2(word = "") {
+  const wordLower = word.toLowerCase();
+  return wordLower.charAt(0).toUpperCase() + wordLower.slice(1);
+}
+
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/use-component-did-mount.js
+var import_react73 = __toESM(require_react());
+function useComponentDidMount(callback) {
+  const isAfterInitialMount = useIsAfterInitialMount();
+  const hasInvokedLifeCycle = (0, import_react73.useRef)(false);
+  if (isAfterInitialMount && !hasInvokedLifeCycle.current) {
+    hasInvokedLifeCycle.current = true;
+    return callback();
+  }
+}
+
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/DropZone/context.js
 var import_react74 = __toESM(require_react());
 
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/DropZone/utils/index.js
+var dragEvents = ["dragover", "dragenter", "drop"];
+function fileAccepted(file, accept) {
+  return file.type === "application/x-moz-file" || accepts(file, accept);
+}
+function getDataTransferFiles(event) {
+  if (isDragEvent(event) && event.dataTransfer) {
+    const dt = event.dataTransfer;
+    if (dt.files && dt.files.length) {
+      return Array.from(dt.files);
+    } else if (dt.items && dt.items.length) {
+      return Array.from(dt.items);
+    }
+  } else if (isChangeEvent(event) && event.target.files) {
+    return Array.from(event.target.files);
+  }
+  return [];
+}
+function accepts(file, acceptedFiles) {
+  if (file && acceptedFiles) {
+    const fileName = file.name || "";
+    const mimeType = file.type || "";
+    const baseMimeType = mimeType.replace(/\/.*$/, "");
+    const acceptedFilesArray = Array.isArray(acceptedFiles) ? acceptedFiles : acceptedFiles.split(",");
+    return acceptedFilesArray.some((type) => {
+      const validType = type.trim();
+      if (validType.startsWith(".")) {
+        return fileName.toLowerCase().endsWith(validType.toLowerCase());
+      } else if (validType.endsWith("/*")) {
+        return baseMimeType === validType.replace(/\/.*$/, "");
+      }
+      return mimeType === validType;
+    });
+  }
+  return true;
+}
+function isDragEvent(event) {
+  return dragEvents.indexOf(event.type) > 0;
+}
+function isChangeEvent(event) {
+  return Object.prototype.hasOwnProperty.call(event, "target");
+}
+var defaultAllowMultiple = true;
+function createAllowMultipleKey(allowMultiple) {
+  return allowMultiple ? "allowMultiple" : "single";
+}
+
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/DropZone/context.js
+var DropZoneContext = /* @__PURE__ */ (0, import_react74.createContext)({
+  disabled: false,
+  focused: false,
+  size: "extraLarge",
+  type: "file",
+  measuring: false,
+  allowMultiple: defaultAllowMultiple
+});
+
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/DropZone/DropZone.css.js
+var styles17 = {
+  "DropZone": "Polaris-DropZone",
+  "focused": "Polaris-DropZone--focused",
+  "noOutline": "Polaris-DropZone--noOutline",
+  "hasOutline": "Polaris-DropZone--hasOutline",
+  "isDisabled": "Polaris-DropZone--isDisabled",
+  "isDragging": "Polaris-DropZone--isDragging",
+  "sizeLarge": "Polaris-DropZone--sizeLarge",
+  "sizeMedium": "Polaris-DropZone--sizeMedium",
+  "sizeSmall": "Polaris-DropZone--sizeSmall",
+  "measuring": "Polaris-DropZone--measuring",
+  "Container": "Polaris-DropZone__Container",
+  "Overlay": "Polaris-DropZone__Overlay",
+  "hasError": "Polaris-DropZone--hasError"
+};
+
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/DropZone/components/FileUpload/FileUpload.js
+var import_react75 = __toESM(require_react());
+
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/DropZone/components/FileUpload/FileUpload.css.js
+var styles18 = {
+  "FileUpload": "Polaris-DropZone-FileUpload",
+  "large": "Polaris-DropZone-FileUpload--large",
+  "small": "Polaris-DropZone-FileUpload--small",
+  "ActionTitle": "Polaris-DropZone-FileUpload__ActionTitle",
+  "ActionTitle-disabled": "Polaris-DropZone-FileUpload__ActionTitle--disabled",
+  "ActionTitle-focused": "Polaris-DropZone-FileUpload__ActionTitle--focused",
+  "UploadIcon": "Polaris-DropZone-FileUpload__UploadIcon",
+  "disabled": "Polaris-DropZone-FileUpload--disabled"
+};
+
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/DropZone/components/FileUpload/FileUpload.js
+function FileUpload(props) {
+  const i18n = useI18n();
+  const {
+    size: size2,
+    measuring,
+    type,
+    disabled,
+    allowMultiple
+  } = (0, import_react75.useContext)(DropZoneContext);
+  const typeSuffix = capitalize2(type);
+  const allowMultipleKey = createAllowMultipleKey(allowMultiple);
+  const {
+    actionTitle = i18n.translate(`Polaris.DropZone.${allowMultipleKey}.actionTitle${typeSuffix}`),
+    actionHint
+  } = props;
+  const actionMarkup = /* @__PURE__ */ import_react75.default.createElement(Button, {
+    disabled
+  }, actionTitle);
+  const fileUploadClassName = classNames(styles18.FileUpload, measuring && styles18.measuring, size2 === "large" && styles18.large, size2 === "small" && styles18.small);
+  const actionHintMarkup = actionHint && /* @__PURE__ */ import_react75.default.createElement(Text, {
+    variant: "bodySm",
+    as: "p",
+    tone: "subdued"
+  }, actionHint);
+  let viewMarkup;
+  switch (size2) {
+    case "large":
+    case "medium":
+      viewMarkup = /* @__PURE__ */ import_react75.default.createElement(BlockStack, {
+        inlineAlign: "center",
+        gap: "200"
+      }, actionMarkup, actionHintMarkup);
+      break;
+    case "small":
+      viewMarkup = /* @__PURE__ */ import_react75.default.createElement("div", {
+        className: classNames(styles18.UploadIcon, disabled && styles18.disabled)
+      }, /* @__PURE__ */ import_react75.default.createElement(Icon, {
+        source: SvgUploadIcon
+      }));
+      break;
+  }
+  return /* @__PURE__ */ import_react75.default.createElement("div", {
+    className: fileUploadClassName
+  }, viewMarkup);
+}
+
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/DropZone/DropZone.js
+var DropZone = function DropZone2({
+  dropOnPage,
+  label,
+  labelAction,
+  labelHidden,
+  children,
+  disabled = false,
+  outline = true,
+  accept,
+  active,
+  overlay: overlay2 = true,
+  allowMultiple = defaultAllowMultiple,
+  overlayText,
+  errorOverlayText,
+  id: idProp,
+  type = "file",
+  onClick,
+  error,
+  openFileDialog,
+  variableHeight,
+  onFileDialogClose,
+  customValidator,
+  onDrop,
+  onDropAccepted,
+  onDropRejected,
+  onDragEnter,
+  onDragOver,
+  onDragLeave
+}) {
+  const node = (0, import_react76.useRef)(null);
+  const inputRef = (0, import_react76.useRef)(null);
+  const dragTargets = (0, import_react76.useRef)([]);
+  const adjustSize = (0, import_react76.useCallback)(debounce(() => {
+    if (!node.current) {
+      return;
+    }
+    if (variableHeight) {
+      setMeasuring(false);
+      return;
+    }
+    let size3 = "large";
+    const width2 = node.current.getBoundingClientRect().width;
+    if (width2 < 100) {
+      size3 = "small";
+    } else if (width2 < 160) {
+      size3 = "medium";
+    }
+    setSize(size3);
+    measuring && setMeasuring(false);
+  }, 50, {
+    trailing: true
+  }), []);
+  const [dragging, setDragging] = (0, import_react76.useState)(false);
+  const [internalError, setInternalError] = (0, import_react76.useState)(false);
+  const {
+    value: focused,
+    setTrue: handleFocus,
+    setFalse: handleBlur
+  } = useToggle(false);
+  const [size2, setSize] = (0, import_react76.useState)("large");
+  const [measuring, setMeasuring] = (0, import_react76.useState)(true);
+  const i18n = useI18n();
+  const getValidatedFiles = (0, import_react76.useCallback)((files) => {
+    const acceptedFiles = [];
+    const rejectedFiles = [];
+    Array.from(files).forEach((file) => {
+      !fileAccepted(file, accept) || customValidator && !customValidator(file) ? rejectedFiles.push(file) : acceptedFiles.push(file);
+    });
+    if (!allowMultiple) {
+      acceptedFiles.splice(1, acceptedFiles.length);
+      rejectedFiles.push(...acceptedFiles.slice(1));
+    }
+    return {
+      files,
+      acceptedFiles,
+      rejectedFiles
+    };
+  }, [accept, allowMultiple, customValidator]);
+  const handleDrop = (0, import_react76.useCallback)((event) => {
+    stopEvent(event);
+    if (disabled)
+      return;
+    const fileList = getDataTransferFiles(event);
+    const {
+      files,
+      acceptedFiles,
+      rejectedFiles
+    } = getValidatedFiles(fileList);
+    dragTargets.current = [];
+    setDragging(false);
+    setInternalError(rejectedFiles.length > 0);
+    onDrop && onDrop(files, acceptedFiles, rejectedFiles);
+    onDropAccepted && acceptedFiles.length && onDropAccepted(acceptedFiles);
+    onDropRejected && rejectedFiles.length && onDropRejected(rejectedFiles);
+    if (!(event.target && "value" in event.target))
+      return;
+    event.target.value = "";
+  }, [disabled, getValidatedFiles, onDrop, onDropAccepted, onDropRejected]);
+  const handleDragEnter = (0, import_react76.useCallback)((event) => {
+    stopEvent(event);
+    if (disabled)
+      return;
+    const fileList = getDataTransferFiles(event);
+    if (event.target && !dragTargets.current.includes(event.target)) {
+      dragTargets.current.push(event.target);
+    }
+    if (dragging)
+      return;
+    const {
+      rejectedFiles
+    } = getValidatedFiles(fileList);
+    setDragging(true);
+    setInternalError(rejectedFiles.length > 0);
+    onDragEnter && onDragEnter();
+  }, [disabled, dragging, getValidatedFiles, onDragEnter]);
+  const handleDragOver = (0, import_react76.useCallback)((event) => {
+    stopEvent(event);
+    if (disabled)
+      return;
+    onDragOver && onDragOver();
+  }, [disabled, onDragOver]);
+  const handleDragLeave = (0, import_react76.useCallback)((event) => {
+    event.preventDefault();
+    if (disabled)
+      return;
+    dragTargets.current = dragTargets.current.filter((el) => {
+      const compareNode = dropOnPage && !isServer ? document : node.current;
+      return el !== event.target && compareNode && compareNode.contains(el);
+    });
+    if (dragTargets.current.length > 0)
+      return;
+    setDragging(false);
+    setInternalError(false);
+    onDragLeave && onDragLeave();
+  }, [dropOnPage, disabled, onDragLeave]);
+  const dropNode = dropOnPage && !isServer ? document : node.current;
+  useEventListener("drop", handleDrop, dropNode);
+  useEventListener("dragover", handleDragOver, dropNode);
+  useEventListener("dragenter", handleDragEnter, dropNode);
+  useEventListener("dragleave", handleDragLeave, dropNode);
+  useEventListener("resize", adjustSize, isServer ? null : window);
+  useComponentDidMount(() => {
+    adjustSize();
+  });
+  const uniqId = (0, import_react76.useId)();
+  const id = idProp ?? uniqId;
+  const typeSuffix = capitalize2(type);
+  const allowMultipleKey = createAllowMultipleKey(allowMultiple);
+  const overlayTextWithDefault = overlayText === void 0 ? i18n.translate(`Polaris.DropZone.${allowMultipleKey}.overlayText${typeSuffix}`) : overlayText;
+  const errorOverlayTextWithDefault = errorOverlayText === void 0 ? i18n.translate(`Polaris.DropZone.errorOverlayText${typeSuffix}`) : errorOverlayText;
+  const labelValue = label || i18n.translate(`Polaris.DropZone.${allowMultipleKey}.label${typeSuffix}`);
+  const labelHiddenValue = label ? labelHidden : true;
+  const classes = classNames(styles17.DropZone, outline && styles17.hasOutline, !outline && styles17.noOutline, focused && styles17.focused, (active || dragging) && styles17.isDragging, disabled && styles17.isDisabled, (internalError || error) && styles17.hasError, !variableHeight && styles17[variationName("size", size2)], measuring && styles17.measuring);
+  const dragOverlay = (active || dragging) && !internalError && !error && overlay2 && overlayMarkup(SvgUploadIcon, overlayTextWithDefault);
+  const dragErrorOverlay = dragging && (internalError || error) && overlayMarkup(SvgAlertCircleIcon, errorOverlayTextWithDefault, "critical");
+  const context = (0, import_react76.useMemo)(() => ({
+    disabled,
+    focused,
+    size: size2,
+    type: type || "file",
+    measuring,
+    allowMultiple
+  }), [disabled, focused, measuring, size2, type, allowMultiple]);
+  const open = (0, import_react76.useCallback)(() => {
+    if (!inputRef.current)
+      return;
+    inputRef.current.click();
+  }, [inputRef]);
+  const triggerFileDialog = (0, import_react76.useCallback)(() => {
+    open();
+    onFileDialogClose?.();
+  }, [open, onFileDialogClose]);
+  function overlayMarkup(icon, text2, color2) {
+    return /* @__PURE__ */ import_react76.default.createElement("div", {
+      className: styles17.Overlay
+    }, /* @__PURE__ */ import_react76.default.createElement(BlockStack, {
+      gap: "200",
+      inlineAlign: "center"
+    }, size2 === "small" && /* @__PURE__ */ import_react76.default.createElement(Icon, {
+      source: icon,
+      tone: color2
+    }), (size2 === "medium" || size2 === "large") && /* @__PURE__ */ import_react76.default.createElement(Text, {
+      variant: "bodySm",
+      as: "p",
+      fontWeight: "bold"
+    }, text2)));
+  }
+  function handleClick(event) {
+    if (disabled)
+      return;
+    return onClick ? onClick(event) : open();
+  }
+  (0, import_react76.useEffect)(() => {
+    if (openFileDialog)
+      triggerFileDialog();
+  }, [openFileDialog, triggerFileDialog]);
+  return /* @__PURE__ */ import_react76.default.createElement(DropZoneContext.Provider, {
+    value: context
+  }, /* @__PURE__ */ import_react76.default.createElement(Labelled, {
+    id,
+    label: labelValue,
+    action: labelAction,
+    labelHidden: labelHiddenValue
+  }, /* @__PURE__ */ import_react76.default.createElement("div", {
+    ref: node,
+    className: classes,
+    "aria-disabled": disabled,
+    onClick: handleClick,
+    onDragStart: stopEvent
+  }, dragOverlay, dragErrorOverlay, /* @__PURE__ */ import_react76.default.createElement(Text, {
+    variant: "bodySm",
+    as: "span",
+    visuallyHidden: true
+  }, /* @__PURE__ */ import_react76.default.createElement("input", {
+    id,
+    accept,
+    disabled,
+    multiple: allowMultiple,
+    onChange: handleDrop,
+    onFocus: handleFocus,
+    onBlur: handleBlur,
+    type: "file",
+    ref: inputRef,
+    autoComplete: "off"
+  })), /* @__PURE__ */ import_react76.default.createElement("div", {
+    className: styles17.Container
+  }, children))));
+};
+function stopEvent(event) {
+  event.preventDefault();
+  event.stopPropagation();
+}
+DropZone.FileUpload = FileUpload;
+
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/FormLayout/FormLayout.js
+var import_react79 = __toESM(require_react());
+
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/FormLayout/components/Group/Group.js
-var import_react73 = __toESM(require_react());
+var import_react78 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/FormLayout/components/Item/Item.js
-var import_react72 = __toESM(require_react());
+var import_react77 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/FormLayout/FormLayout.css.js
-var styles17 = {
+var styles19 = {
   "Item": "Polaris-FormLayout__Item",
   "grouped": "Polaris-FormLayout--grouped",
   "condensed": "Polaris-FormLayout--condensed"
@@ -8894,8 +9301,8 @@ function Item3({
   children,
   condensed = false
 }) {
-  const className = classNames(styles17.Item, condensed ? styles17.condensed : styles17.grouped);
-  return children ? /* @__PURE__ */ import_react72.default.createElement("div", {
+  const className = classNames(styles19.Item, condensed ? styles19.condensed : styles19.grouped);
+  return children ? /* @__PURE__ */ import_react77.default.createElement("div", {
     className
   }, children) : null;
 }
@@ -8907,45 +9314,45 @@ function Group({
   title,
   helpText
 }) {
-  const id = (0, import_react73.useId)();
+  const id = (0, import_react78.useId)();
   let helpTextElement = null;
   let helpTextId;
   let titleElement = null;
   let titleId;
   if (helpText) {
     helpTextId = `${id}HelpText`;
-    helpTextElement = /* @__PURE__ */ import_react73.default.createElement(Box, {
+    helpTextElement = /* @__PURE__ */ import_react78.default.createElement(Box, {
       id: helpTextId,
       color: "text-secondary"
     }, helpText);
   }
   if (title) {
     titleId = `${id}Title`;
-    titleElement = /* @__PURE__ */ import_react73.default.createElement(Text, {
+    titleElement = /* @__PURE__ */ import_react78.default.createElement(Text, {
       id: titleId,
       as: "p"
     }, title);
   }
-  const itemsMarkup = import_react73.Children.map(children, (child) => wrapWithComponent(child, Item3, {
+  const itemsMarkup = import_react78.Children.map(children, (child) => wrapWithComponent(child, Item3, {
     condensed
   }));
-  return /* @__PURE__ */ import_react73.default.createElement(BlockStack, {
+  return /* @__PURE__ */ import_react78.default.createElement(BlockStack, {
     role: "group",
     gap: "200",
     "aria-labelledby": titleId,
     "aria-describedby": helpTextId
-  }, titleElement, /* @__PURE__ */ import_react73.default.createElement(InlineStack, {
+  }, titleElement, /* @__PURE__ */ import_react78.default.createElement(InlineStack, {
     gap: "300"
   }, itemsMarkup), helpTextElement);
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/FormLayout/FormLayout.js
-var FormLayout = /* @__PURE__ */ (0, import_react74.memo)(function FormLayout2({
+var FormLayout = /* @__PURE__ */ (0, import_react79.memo)(function FormLayout2({
   children
 }) {
-  return /* @__PURE__ */ import_react74.default.createElement(BlockStack, {
+  return /* @__PURE__ */ import_react79.default.createElement(BlockStack, {
     gap: "400"
-  }, import_react74.Children.map(children, wrapChildren));
+  }, import_react79.Children.map(children, wrapChildren));
 });
 FormLayout.Group = Group;
 function wrapChildren(child, index) {
@@ -8959,7 +9366,7 @@ function wrapChildren(child, index) {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Frame/Frame.js
-var import_react118 = __toESM(require_react());
+var import_react122 = __toESM(require_react());
 
 // node_modules/.pnpm/@babel+runtime@7.28.3/node_modules/@babel/runtime/helpers/esm/extends.js
 function _extends() {
@@ -9035,11 +9442,11 @@ function removeClass(element, className) {
 }
 
 // node_modules/.pnpm/react-transition-group@4.4.5_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/react-transition-group/esm/CSSTransition.js
-var import_react77 = __toESM(require_react());
+var import_react82 = __toESM(require_react());
 
 // node_modules/.pnpm/react-transition-group@4.4.5_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/react-transition-group/esm/Transition.js
 var import_prop_types2 = __toESM(require_prop_types());
-var import_react76 = __toESM(require_react());
+var import_react81 = __toESM(require_react());
 var import_react_dom = __toESM(require_react_dom());
 
 // node_modules/.pnpm/react-transition-group@4.4.5_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/react-transition-group/esm/config.js
@@ -9068,8 +9475,8 @@ var classNamesShape = true ? import_prop_types.default.oneOfType([import_prop_ty
 })]) : null;
 
 // node_modules/.pnpm/react-transition-group@4.4.5_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/react-transition-group/esm/TransitionGroupContext.js
-var import_react75 = __toESM(require_react());
-var TransitionGroupContext_default = import_react75.default.createContext(null);
+var import_react80 = __toESM(require_react());
+var TransitionGroupContext_default = import_react80.default.createContext(null);
 
 // node_modules/.pnpm/react-transition-group@4.4.5_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/react-transition-group/esm/utils/reflow.js
 var forceReflow = function forceReflow2(node) {
@@ -9285,13 +9692,13 @@ var Transition = /* @__PURE__ */ function(_React$Component) {
     var _this$props = this.props, children = _this$props.children, _in = _this$props.in, _mountOnEnter = _this$props.mountOnEnter, _unmountOnExit = _this$props.unmountOnExit, _appear = _this$props.appear, _enter = _this$props.enter, _exit = _this$props.exit, _timeout = _this$props.timeout, _addEndListener = _this$props.addEndListener, _onEnter = _this$props.onEnter, _onEntering = _this$props.onEntering, _onEntered = _this$props.onEntered, _onExit = _this$props.onExit, _onExiting = _this$props.onExiting, _onExited = _this$props.onExited, _nodeRef = _this$props.nodeRef, childProps = _objectWithoutPropertiesLoose(_this$props, ["children", "in", "mountOnEnter", "unmountOnExit", "appear", "enter", "exit", "timeout", "addEndListener", "onEnter", "onEntering", "onEntered", "onExit", "onExiting", "onExited", "nodeRef"]);
     return (
       // allows for nested Transitions
-      /* @__PURE__ */ import_react76.default.createElement(TransitionGroupContext_default.Provider, {
+      /* @__PURE__ */ import_react81.default.createElement(TransitionGroupContext_default.Provider, {
         value: null
-      }, typeof children === "function" ? children(status, childProps) : import_react76.default.cloneElement(import_react76.default.Children.only(children), childProps))
+      }, typeof children === "function" ? children(status, childProps) : import_react81.default.cloneElement(import_react81.default.Children.only(children), childProps))
     );
   };
   return Transition2;
-}(import_react76.default.Component);
+}(import_react81.default.Component);
 Transition.contextType = TransitionGroupContext_default;
 Transition.propTypes = true ? {
   /**
@@ -9609,7 +10016,7 @@ var CSSTransition = /* @__PURE__ */ function(_React$Component) {
   };
   _proto.render = function render() {
     var _this$props = this.props, _ = _this$props.classNames, props = _objectWithoutPropertiesLoose(_this$props, ["classNames"]);
-    return /* @__PURE__ */ import_react77.default.createElement(Transition_default, _extends({}, props, {
+    return /* @__PURE__ */ import_react82.default.createElement(Transition_default, _extends({}, props, {
       onEnter: this.onEnter,
       onEntered: this.onEntered,
       onEntering: this.onEntering,
@@ -9619,7 +10026,7 @@ var CSSTransition = /* @__PURE__ */ function(_React$Component) {
     }));
   };
   return CSSTransition2;
-}(import_react77.default.Component);
+}(import_react82.default.Component);
 CSSTransition.defaultProps = {
   classNames: ""
 };
@@ -9758,17 +10165,17 @@ function _assertThisInitialized(e) {
 
 // node_modules/.pnpm/react-transition-group@4.4.5_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/react-transition-group/esm/TransitionGroup.js
 var import_prop_types4 = __toESM(require_prop_types());
-var import_react79 = __toESM(require_react());
+var import_react84 = __toESM(require_react());
 
 // node_modules/.pnpm/react-transition-group@4.4.5_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/react-transition-group/esm/utils/ChildMapping.js
-var import_react78 = __toESM(require_react());
+var import_react83 = __toESM(require_react());
 function getChildMapping(children, mapFn) {
   var mapper = function mapper2(child) {
-    return mapFn && (0, import_react78.isValidElement)(child) ? mapFn(child) : child;
+    return mapFn && (0, import_react83.isValidElement)(child) ? mapFn(child) : child;
   };
   var result = /* @__PURE__ */ Object.create(null);
   if (children)
-    import_react78.Children.map(children, function(c) {
+    import_react83.Children.map(children, function(c) {
       return c;
     }).forEach(function(child) {
       result[child.key] = mapper(child);
@@ -9814,7 +10221,7 @@ function getProp(child, prop, props) {
 }
 function getInitialChildMapping(props, onExited) {
   return getChildMapping(props.children, function(child) {
-    return (0, import_react78.cloneElement)(child, {
+    return (0, import_react83.cloneElement)(child, {
       onExited: onExited.bind(null, child),
       in: true,
       appear: getProp(child, "appear", props),
@@ -9828,25 +10235,25 @@ function getNextChildMapping(nextProps, prevChildMapping, onExited) {
   var children = mergeChildMappings(prevChildMapping, nextChildMapping);
   Object.keys(children).forEach(function(key) {
     var child = children[key];
-    if (!(0, import_react78.isValidElement)(child))
+    if (!(0, import_react83.isValidElement)(child))
       return;
     var hasPrev = key in prevChildMapping;
     var hasNext = key in nextChildMapping;
     var prevChild = prevChildMapping[key];
-    var isLeaving = (0, import_react78.isValidElement)(prevChild) && !prevChild.props.in;
+    var isLeaving = (0, import_react83.isValidElement)(prevChild) && !prevChild.props.in;
     if (hasNext && (!hasPrev || isLeaving)) {
-      children[key] = (0, import_react78.cloneElement)(child, {
+      children[key] = (0, import_react83.cloneElement)(child, {
         onExited: onExited.bind(null, child),
         in: true,
         exit: getProp(child, "exit", nextProps),
         enter: getProp(child, "enter", nextProps)
       });
     } else if (!hasNext && hasPrev && !isLeaving) {
-      children[key] = (0, import_react78.cloneElement)(child, {
+      children[key] = (0, import_react83.cloneElement)(child, {
         in: false
       });
-    } else if (hasNext && hasPrev && (0, import_react78.isValidElement)(prevChild)) {
-      children[key] = (0, import_react78.cloneElement)(child, {
+    } else if (hasNext && hasPrev && (0, import_react83.isValidElement)(prevChild)) {
+      children[key] = (0, import_react83.cloneElement)(child, {
         onExited: onExited.bind(null, child),
         in: prevChild.props.in,
         exit: getProp(child, "exit", nextProps),
@@ -9928,16 +10335,16 @@ var TransitionGroup = /* @__PURE__ */ function(_React$Component) {
     delete props.enter;
     delete props.exit;
     if (Component2 === null) {
-      return /* @__PURE__ */ import_react79.default.createElement(TransitionGroupContext_default.Provider, {
+      return /* @__PURE__ */ import_react84.default.createElement(TransitionGroupContext_default.Provider, {
         value: contextValue
       }, children);
     }
-    return /* @__PURE__ */ import_react79.default.createElement(TransitionGroupContext_default.Provider, {
+    return /* @__PURE__ */ import_react84.default.createElement(TransitionGroupContext_default.Provider, {
       value: contextValue
-    }, /* @__PURE__ */ import_react79.default.createElement(Component2, props, children));
+    }, /* @__PURE__ */ import_react84.default.createElement(Component2, props, children));
   };
   return TransitionGroup2;
-}(import_react79.default.Component);
+}(import_react84.default.Component);
 TransitionGroup.propTypes = true ? {
   /**
    * `<TransitionGroup>` renders a `<div>` by default. You can change this
@@ -10003,7 +10410,7 @@ function setRootProperty(name, value, node) {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Frame/Frame.css.js
-var styles18 = {
+var styles20 = {
   "Frame": "Polaris-Frame",
   "Navigation": "Polaris-Frame__Navigation",
   "hasTopBar": "Polaris-Frame--hasTopBar",
@@ -10027,9 +10434,9 @@ var styles18 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/media-query/hooks.js
-var import_react80 = __toESM(require_react());
+var import_react85 = __toESM(require_react());
 function useMediaQuery() {
-  const mediaQuery = (0, import_react80.useContext)(MediaQueryContext);
+  const mediaQuery = (0, import_react85.useContext)(MediaQueryContext);
   if (!mediaQuery) {
     throw new Error("No mediaQuery was provided. Your application must be wrapped in an <AppProvider> component. See https://polaris.shopify.com/components/app-provider for implementation instructions.");
   }
@@ -10037,13 +10444,13 @@ function useMediaQuery() {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Frame/components/Loading/Loading.js
-var import_react82 = __toESM(require_react());
+var import_react87 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/use-is-mounted-ref.js
-var import_react81 = __toESM(require_react());
+var import_react86 = __toESM(require_react());
 function useIsMountedRef() {
-  const isMounted = (0, import_react81.useRef)(false);
-  (0, import_react81.useEffect)(() => {
+  const isMounted = (0, import_react86.useRef)(false);
+  (0, import_react86.useEffect)(() => {
     isMounted.current = true;
     return () => {
       isMounted.current = false;
@@ -10053,7 +10460,7 @@ function useIsMountedRef() {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Frame/components/Loading/Loading.css.js
-var styles19 = {
+var styles21 = {
   "Loading": "Polaris-Frame-Loading",
   "Level": "Polaris-Frame-Loading__Level"
 };
@@ -10063,9 +10470,9 @@ var STUCK_THRESHOLD = 99;
 function Loading() {
   const i18n = useI18n();
   const isMountedRef = useIsMountedRef();
-  const [progress, setProgress] = (0, import_react82.useState)(0);
-  const [animating, setAnimating] = (0, import_react82.useState)(false);
-  (0, import_react82.useEffect)(() => {
+  const [progress, setProgress] = (0, import_react87.useState)(0);
+  const [animating, setAnimating] = (0, import_react87.useState)(false);
+  (0, import_react87.useEffect)(() => {
     if (progress >= STUCK_THRESHOLD || animating) {
       return;
     }
@@ -10080,25 +10487,25 @@ function Loading() {
   const customStyles = {
     transform: `scaleX(${Math.floor(progress) / 100})`
   };
-  return /* @__PURE__ */ import_react82.default.createElement("div", {
-    className: styles19.Loading,
+  return /* @__PURE__ */ import_react87.default.createElement("div", {
+    className: styles21.Loading,
     "aria-valuenow": progress,
     "aria-valuemin": 0,
     "aria-valuemax": 100,
     role: "progressbar",
     "aria-label": i18n.translate("Polaris.Loading.label")
-  }, /* @__PURE__ */ import_react82.default.createElement("div", {
-    className: styles19.Level,
+  }, /* @__PURE__ */ import_react87.default.createElement("div", {
+    className: styles21.Level,
     style: customStyles,
     onTransitionEnd: () => setAnimating(false)
   }));
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Frame/components/CSSAnimation/CSSAnimation.js
-var import_react83 = __toESM(require_react());
+var import_react88 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Frame/components/CSSAnimation/CSSAnimation.css.js
-var styles20 = {
+var styles22 = {
   "startFade": "Polaris-Frame-CSSAnimation--startFade",
   "endFade": "Polaris-Frame-CSSAnimation--endFade"
 };
@@ -10117,26 +10524,26 @@ function CSSAnimation({
   type,
   children
 }) {
-  const [transitionStatus, setTransitionStatus] = (0, import_react83.useState)(inProp ? TransitionStatus.Entering : TransitionStatus.Exited);
-  const isMounted = (0, import_react83.useRef)(false);
-  const node = (0, import_react83.useRef)(null);
-  (0, import_react83.useEffect)(() => {
+  const [transitionStatus, setTransitionStatus] = (0, import_react88.useState)(inProp ? TransitionStatus.Entering : TransitionStatus.Exited);
+  const isMounted = (0, import_react88.useRef)(false);
+  const node = (0, import_react88.useRef)(null);
+  (0, import_react88.useEffect)(() => {
     if (!isMounted.current)
       return;
     transitionStatus === TransitionStatus.Entering && changeTransitionStatus(TransitionStatus.Entered);
   }, [transitionStatus]);
-  (0, import_react83.useEffect)(() => {
+  (0, import_react88.useEffect)(() => {
     if (!isMounted.current)
       return;
     inProp && changeTransitionStatus(TransitionStatus.Entering);
     !inProp && changeTransitionStatus(TransitionStatus.Exiting);
   }, [inProp]);
-  (0, import_react83.useEffect)(() => {
+  (0, import_react88.useEffect)(() => {
     isMounted.current = true;
   }, []);
-  const wrapperClassName = classNames(className, styles20[variationName("start", type)], inProp && styles20[variationName("end", type)]);
+  const wrapperClassName = classNames(className, styles22[variationName("start", type)], inProp && styles22[variationName("end", type)]);
   const content = transitionStatus === TransitionStatus.Exited && !inProp ? null : children;
-  return /* @__PURE__ */ import_react83.default.createElement("div", {
+  return /* @__PURE__ */ import_react88.default.createElement("div", {
     className: wrapperClassName,
     ref: node,
     onTransitionEnd: handleTransitionEnd
@@ -10152,7 +10559,7 @@ function CSSAnimation({
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Frame/components/ContextualSaveBar/ContextualSaveBar.js
-var import_react112 = __toESM(require_react());
+var import_react116 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/pluck-deep.js
 function pluckDeep(obj, key) {
@@ -10181,7 +10588,7 @@ function getWidth(value = {}, defaultWidth = 0, key = "width") {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Frame/components/ContextualSaveBar/ContextualSaveBar.css.js
-var styles21 = {
+var styles23 = {
   "ContextualSaveBar": "Polaris-Frame-ContextualSaveBar",
   "LogoContainer": "Polaris-Frame-ContextualSaveBar__LogoContainer",
   "ContextControl": "Polaris-Frame-ContextualSaveBar__ContextControl",
@@ -10193,23 +10600,23 @@ var styles21 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Frame/components/ContextualSaveBar/components/DiscardConfirmationModal/DiscardConfirmationModal.js
-var import_react107 = __toESM(require_react());
+var import_react111 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Modal/Modal.js
-var import_react106 = __toESM(require_react());
+var import_react110 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Modal/Modal.css.js
-var styles22 = {
+var styles24 = {
   "Body": "Polaris-Modal__Body",
   "NoScrollBody": "Polaris-Modal__NoScrollBody",
   "IFrame": "Polaris-Modal__IFrame"
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Modal/components/Section/Section.js
-var import_react84 = __toESM(require_react());
+var import_react89 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Modal/components/Section/Section.css.js
-var styles23 = {
+var styles25 = {
   "Section": "Polaris-Modal-Section",
   "titleHidden": "Polaris-Modal-Section--titleHidden"
 };
@@ -10221,10 +10628,10 @@ function Section({
   subdued = false,
   titleHidden = false
 }) {
-  const className = classNames(styles23.Section, titleHidden && styles23.titleHidden);
-  return /* @__PURE__ */ import_react84.default.createElement("div", {
+  const className = classNames(styles25.Section, titleHidden && styles25.titleHidden);
+  return /* @__PURE__ */ import_react89.default.createElement("div", {
     className
-  }, /* @__PURE__ */ import_react84.default.createElement(Box, Object.assign({
+  }, /* @__PURE__ */ import_react89.default.createElement(Box, Object.assign({
     as: "section",
     padding: flush ? "0" : "400"
   }, titleHidden && {
@@ -10235,10 +10642,10 @@ function Section({
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Modal/components/Dialog/Dialog.js
-var import_react90 = __toESM(require_react());
+var import_react95 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Modal/components/Dialog/Dialog.css.js
-var styles24 = {
+var styles26 = {
   "Container": "Polaris-Modal-Dialog__Container",
   "Dialog": "Polaris-Modal-Dialog",
   "Modal": "Polaris-Modal-Dialog__Modal",
@@ -10254,19 +10661,19 @@ var styles24 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/frame/context.js
-var import_react85 = __toESM(require_react());
-var FrameContext = /* @__PURE__ */ (0, import_react85.createContext)(void 0);
+var import_react90 = __toESM(require_react());
+var FrameContext = /* @__PURE__ */ (0, import_react90.createContext)(void 0);
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TrapFocus/TrapFocus.js
-var import_react89 = __toESM(require_react());
+var import_react94 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/focus-manager/hooks.js
-var import_react86 = __toESM(require_react());
+var import_react91 = __toESM(require_react());
 function useFocusManager({
   trapping
 }) {
-  const focusManager = (0, import_react86.useContext)(FocusManagerContext);
-  const id = (0, import_react86.useId)();
+  const focusManager = (0, import_react91.useContext)(FocusManagerContext);
+  const id = (0, import_react91.useId)();
   if (!focusManager) {
     throw new MissingAppProviderError("No FocusManager was provided.");
   }
@@ -10276,10 +10683,10 @@ function useFocusManager({
     remove: removeFocusItem
   } = focusManager;
   const canSafelyFocus = trapFocusList[0] === id;
-  const value = (0, import_react86.useMemo)(() => ({
+  const value = (0, import_react91.useMemo)(() => ({
     canSafelyFocus
   }), [canSafelyFocus]);
-  (0, import_react86.useEffect)(() => {
+  (0, import_react91.useEffect)(() => {
     if (!trapping)
       return;
     addFocusItem(id);
@@ -10291,13 +10698,13 @@ function useFocusManager({
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Focus/Focus.js
-var import_react87 = __toESM(require_react());
-var Focus = /* @__PURE__ */ (0, import_react87.memo)(function Focus2({
+var import_react92 = __toESM(require_react());
+var Focus = /* @__PURE__ */ (0, import_react92.memo)(function Focus2({
   children,
   disabled,
   root
 }) {
-  (0, import_react87.useEffect)(() => {
+  (0, import_react92.useEffect)(() => {
     if (disabled || !root) {
       return;
     }
@@ -10307,14 +10714,14 @@ var Focus = /* @__PURE__ */ (0, import_react87.memo)(function Focus2({
     }
     focusFirstFocusableNode(node, false);
   }, [disabled, root]);
-  return /* @__PURE__ */ import_react87.default.createElement(import_react87.default.Fragment, null, children);
+  return /* @__PURE__ */ import_react92.default.createElement(import_react92.default.Fragment, null, children);
 });
 function isRef(ref) {
   return ref.current !== void 0;
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/KeypressListener/KeypressListener.js
-var import_react88 = __toESM(require_react());
+var import_react93 = __toESM(require_react());
 function KeypressListener({
   keyCode,
   handler,
@@ -10322,7 +10729,7 @@ function KeypressListener({
   options,
   useCapture
 }) {
-  const tracked = (0, import_react88.useRef)({
+  const tracked = (0, import_react93.useRef)({
     handler,
     keyCode
   });
@@ -10332,7 +10739,7 @@ function KeypressListener({
       keyCode
     };
   }, [handler, keyCode]);
-  const handleKeyEvent = (0, import_react88.useCallback)((event) => {
+  const handleKeyEvent = (0, import_react93.useCallback)((event) => {
     const {
       handler: handler2,
       keyCode: keyCode2
@@ -10341,7 +10748,7 @@ function KeypressListener({
       handler2(event);
     }
   }, []);
-  (0, import_react88.useEffect)(() => {
+  (0, import_react93.useEffect)(() => {
     document.addEventListener(keyEvent, handleKeyEvent, useCapture || options);
     return () => {
       document.removeEventListener(keyEvent, handleKeyEvent, useCapture || options);
@@ -10360,9 +10767,9 @@ function TrapFocus({
   } = useFocusManager({
     trapping
   });
-  const focusTrapWrapper = (0, import_react89.useRef)(null);
-  const [disableFocus, setDisableFocus] = (0, import_react89.useState)(true);
-  (0, import_react89.useEffect)(() => {
+  const focusTrapWrapper = (0, import_react94.useRef)(null);
+  const [disableFocus, setDisableFocus] = (0, import_react94.useState)(true);
+  (0, import_react94.useEffect)(() => {
     const disable = canSafelyFocus && !(focusTrapWrapper.current && focusTrapWrapper.current.contains(document.activeElement)) ? !trapping : true;
     setDisableFocus(disable);
   }, [canSafelyFocus, trapping]);
@@ -10390,15 +10797,15 @@ function TrapFocus({
       focusLastKeyboardFocusableNode(focusTrapWrapper.current);
     }
   };
-  return /* @__PURE__ */ import_react89.default.createElement(Focus, {
+  return /* @__PURE__ */ import_react94.default.createElement(Focus, {
     disabled: disableFocus,
     root: focusTrapWrapper.current
-  }, /* @__PURE__ */ import_react89.default.createElement("div", {
+  }, /* @__PURE__ */ import_react94.default.createElement("div", {
     ref: focusTrapWrapper
-  }, /* @__PURE__ */ import_react89.default.createElement(EventListener, {
+  }, /* @__PURE__ */ import_react94.default.createElement(EventListener, {
     event: "focusin",
     handler: handleFocusIn
-  }), /* @__PURE__ */ import_react89.default.createElement(KeypressListener, {
+  }), /* @__PURE__ */ import_react94.default.createElement(KeypressListener, {
     keyCode: Key.Tab,
     keyEvent: "keydown",
     handler: handleTab
@@ -10420,15 +10827,15 @@ function Dialog({
   ...props
 }) {
   const theme = useTheme();
-  const containerNode = (0, import_react90.useRef)(null);
-  const frameContext = (0, import_react90.useContext)(FrameContext);
+  const containerNode = (0, import_react95.useRef)(null);
+  const frameContext = (0, import_react95.useContext)(FrameContext);
   let toastMessages;
   if (frameContext) {
     toastMessages = frameContext.toastMessages;
   }
-  const classes = classNames(styles24.Modal, size2 && styles24[variationName("size", size2)], limitHeight && styles24.limitHeight);
+  const classes = classNames(styles26.Modal, size2 && styles26[variationName("size", size2)], limitHeight && styles26.limitHeight);
   const TransitionChild = instant ? Transition_default : FadeUp;
-  (0, import_react90.useEffect)(() => {
+  (0, import_react95.useEffect)(() => {
     containerNode.current && !containerNode.current.contains(document.activeElement) && focusFirstFocusableNode(containerNode.current);
   }, []);
   const handleKeyDown = () => {
@@ -10442,71 +10849,71 @@ function Dialog({
     }
     onClose();
   };
-  const ariaLiveAnnouncements = /* @__PURE__ */ import_react90.default.createElement("div", {
+  const ariaLiveAnnouncements = /* @__PURE__ */ import_react95.default.createElement("div", {
     "aria-live": "assertive"
-  }, toastMessages ? toastMessages.map((toastMessage) => /* @__PURE__ */ import_react90.default.createElement(Text, {
+  }, toastMessages ? toastMessages.map((toastMessage) => /* @__PURE__ */ import_react95.default.createElement(Text, {
     visuallyHidden: true,
     as: "p",
     key: toastMessage.id
   }, toastMessage.content)) : null);
-  return /* @__PURE__ */ import_react90.default.createElement(TransitionChild, Object.assign({}, props, {
+  return /* @__PURE__ */ import_react95.default.createElement(TransitionChild, Object.assign({}, props, {
     nodeRef: containerNode,
     mountOnEnter: true,
     unmountOnExit: true,
     timeout: parseInt(theme.motion["motion-duration-200"], 10),
     onEntered,
     onExited
-  }), /* @__PURE__ */ import_react90.default.createElement("div", {
-    className: styles24.Container,
+  }), /* @__PURE__ */ import_react95.default.createElement("div", {
+    className: styles26.Container,
     "data-polaris-layer": true,
     "data-polaris-overlay": true,
     ref: containerNode
-  }, /* @__PURE__ */ import_react90.default.createElement(TrapFocus, null, /* @__PURE__ */ import_react90.default.createElement("div", {
+  }, /* @__PURE__ */ import_react95.default.createElement(TrapFocus, null, /* @__PURE__ */ import_react95.default.createElement("div", {
     role: "dialog",
     "aria-modal": true,
     "aria-label": labelledBy,
     "aria-labelledby": labelledBy,
     tabIndex: -1,
-    className: styles24.Dialog
-  }, /* @__PURE__ */ import_react90.default.createElement("div", {
+    className: styles26.Dialog
+  }, /* @__PURE__ */ import_react95.default.createElement("div", {
     className: classes
-  }, /* @__PURE__ */ import_react90.default.createElement(KeypressListener, {
+  }, /* @__PURE__ */ import_react95.default.createElement(KeypressListener, {
     keyCode: Key.Escape,
     keyEvent: "keydown",
     handler: handleKeyDown
-  }), /* @__PURE__ */ import_react90.default.createElement(KeypressListener, {
+  }), /* @__PURE__ */ import_react95.default.createElement(KeypressListener, {
     keyCode: Key.Escape,
     handler: handleKeyUp
   }), children), ariaLiveAnnouncements))));
 }
 var fadeUpClasses = {
-  appear: classNames(styles24.animateFadeUp, styles24.entering),
-  appearActive: classNames(styles24.animateFadeUp, styles24.entered),
-  enter: classNames(styles24.animateFadeUp, styles24.entering),
-  enterActive: classNames(styles24.animateFadeUp, styles24.entered),
-  exit: classNames(styles24.animateFadeUp, styles24.exiting),
-  exitActive: classNames(styles24.animateFadeUp, styles24.exited)
+  appear: classNames(styles26.animateFadeUp, styles26.entering),
+  appearActive: classNames(styles26.animateFadeUp, styles26.entered),
+  enter: classNames(styles26.animateFadeUp, styles26.entering),
+  enterActive: classNames(styles26.animateFadeUp, styles26.entered),
+  exit: classNames(styles26.animateFadeUp, styles26.exiting),
+  exitActive: classNames(styles26.animateFadeUp, styles26.exited)
 };
 function FadeUp({
   children,
   ...props
 }) {
-  return /* @__PURE__ */ import_react90.default.createElement(CSSTransition_default, Object.assign({}, props, {
+  return /* @__PURE__ */ import_react95.default.createElement(CSSTransition_default, Object.assign({}, props, {
     classNames: fadeUpClasses
   }), children);
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Modal/components/Header/Header.js
-var import_react93 = __toESM(require_react());
+var import_react98 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Modal/components/CloseButton/CloseButton.js
-var import_react91 = __toESM(require_react());
+var import_react96 = __toESM(require_react());
 function CloseButton({
   pressed,
   onClick
 }) {
   const i18n = useI18n();
-  return /* @__PURE__ */ import_react91.default.createElement(Button, {
+  return /* @__PURE__ */ import_react96.default.createElement(Button, {
     variant: "tertiary",
     pressed,
     icon: SvgXIcon,
@@ -10516,10 +10923,10 @@ function CloseButton({
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/InlineGrid/InlineGrid.js
-var import_react92 = __toESM(require_react());
+var import_react97 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/InlineGrid/InlineGrid.css.js
-var styles25 = {
+var styles27 = {
   "InlineGrid": "Polaris-InlineGrid"
 };
 
@@ -10535,8 +10942,8 @@ function InlineGrid({
     ...getResponsiveProps("inline-grid", "gap", "space", gap),
     "--pc-inline-grid-align-items": alignItems
   };
-  return /* @__PURE__ */ import_react92.default.createElement("div", {
-    className: styles25.InlineGrid,
+  return /* @__PURE__ */ import_react97.default.createElement("div", {
+    className: styles27.InlineGrid,
     style: sanitizeCustomProperties(style)
   }, children);
 }
@@ -10577,16 +10984,16 @@ function Header({
   const headerPaddingInline = "400";
   const headerPaddingBlock = "400";
   if (titleHidden || !children) {
-    return /* @__PURE__ */ import_react93.default.createElement(Box, {
+    return /* @__PURE__ */ import_react98.default.createElement(Box, {
       position: "absolute",
       insetInlineEnd: headerPaddingInline,
       insetBlockStart: headerPaddingBlock,
       zIndex: "1"
-    }, /* @__PURE__ */ import_react93.default.createElement(CloseButton, {
+    }, /* @__PURE__ */ import_react98.default.createElement(CloseButton, {
       onClick: onClose
     }));
   }
-  return /* @__PURE__ */ import_react93.default.createElement(Box, {
+  return /* @__PURE__ */ import_react98.default.createElement(Box, {
     paddingBlockStart: "400",
     paddingBlockEnd: "400",
     paddingInlineStart: headerPaddingInline,
@@ -10594,42 +11001,42 @@ function Header({
     borderBlockEndWidth: "025",
     borderColor: "border",
     background: "bg-surface-tertiary"
-  }, /* @__PURE__ */ import_react93.default.createElement(InlineGrid, {
+  }, /* @__PURE__ */ import_react98.default.createElement(InlineGrid, {
     columns: {
       xs: "1fr auto"
     },
     gap: "400"
-  }, /* @__PURE__ */ import_react93.default.createElement(InlineStack, {
+  }, /* @__PURE__ */ import_react98.default.createElement(InlineStack, {
     gap: "400",
     blockAlign: "center"
-  }, /* @__PURE__ */ import_react93.default.createElement(Text, {
+  }, /* @__PURE__ */ import_react98.default.createElement(Text, {
     id,
     as: "h2",
     variant: "headingMd",
     breakWord: true
-  }, children)), /* @__PURE__ */ import_react93.default.createElement(CloseButton, {
+  }, children)), /* @__PURE__ */ import_react98.default.createElement(CloseButton, {
     pressed: closing,
     onClick: onClose
   })));
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Backdrop/Backdrop.js
-var import_react96 = __toESM(require_react());
+var import_react101 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Backdrop/Backdrop.css.js
-var styles26 = {
+var styles28 = {
   "Backdrop": "Polaris-Backdrop",
   "transparent": "Polaris-Backdrop--transparent",
   "belowNavigation": "Polaris-Backdrop--belowNavigation"
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ScrollLock/ScrollLock.js
-var import_react95 = __toESM(require_react());
+var import_react100 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/scroll-lock-manager/hooks.js
-var import_react94 = __toESM(require_react());
+var import_react99 = __toESM(require_react());
 function useScrollLockManager() {
-  const scrollLockManager = (0, import_react94.useContext)(ScrollLockManagerContext);
+  const scrollLockManager = (0, import_react99.useContext)(ScrollLockManagerContext);
   if (!scrollLockManager) {
     throw new MissingAppProviderError("No ScrollLockManager was provided.");
   }
@@ -10639,7 +11046,7 @@ function useScrollLockManager() {
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ScrollLock/ScrollLock.js
 function ScrollLock(_) {
   const scrollLockManager = useScrollLockManager();
-  (0, import_react95.useEffect)(() => {
+  (0, import_react100.useEffect)(() => {
     scrollLockManager.registerScrollLock();
     return () => {
       scrollLockManager.unregisterScrollLock();
@@ -10657,7 +11064,7 @@ function Backdrop(props) {
     transparent,
     setClosing
   } = props;
-  const className = classNames(styles26.Backdrop, belowNavigation && styles26.belowNavigation, transparent && styles26.transparent);
+  const className = classNames(styles28.Backdrop, belowNavigation && styles28.belowNavigation, transparent && styles28.transparent);
   const handleMouseDown = () => {
     if (setClosing) {
       setClosing(true);
@@ -10671,7 +11078,7 @@ function Backdrop(props) {
       onClick();
     }
   };
-  return /* @__PURE__ */ import_react96.default.createElement(import_react96.default.Fragment, null, /* @__PURE__ */ import_react96.default.createElement(ScrollLock, null), /* @__PURE__ */ import_react96.default.createElement("div", {
+  return /* @__PURE__ */ import_react101.default.createElement(import_react101.default.Fragment, null, /* @__PURE__ */ import_react101.default.createElement(ScrollLock, null), /* @__PURE__ */ import_react101.default.createElement("div", {
     className,
     onClick: handleClick,
     onTouchStart,
@@ -10680,7 +11087,7 @@ function Backdrop(props) {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Modal/components/Footer/Footer.js
-var import_react97 = __toESM(require_react());
+var import_react102 = __toESM(require_react());
 function Footer({
   primaryAction,
   secondaryActions,
@@ -10690,55 +11097,44 @@ function Footer({
     variant: "primary"
   }) || null;
   const secondaryActionButtons = secondaryActions && buttonsFrom(secondaryActions) || null;
-  const actions = primaryActionButton || secondaryActionButtons ? /* @__PURE__ */ import_react97.default.createElement(InlineStack, {
+  const actions = primaryActionButton || secondaryActionButtons ? /* @__PURE__ */ import_react102.default.createElement(InlineStack, {
     gap: "200"
   }, secondaryActionButtons, primaryActionButton) : null;
-  return /* @__PURE__ */ import_react97.default.createElement(InlineStack, {
+  return /* @__PURE__ */ import_react102.default.createElement(InlineStack, {
     gap: "400",
     blockAlign: "center"
-  }, /* @__PURE__ */ import_react97.default.createElement(Box, {
+  }, /* @__PURE__ */ import_react102.default.createElement(Box, {
     borderColor: "border",
     borderBlockStartWidth: "025",
     padding: "400",
     width: "100%"
-  }, /* @__PURE__ */ import_react97.default.createElement(InlineStack, {
+  }, /* @__PURE__ */ import_react102.default.createElement(InlineStack, {
     gap: "400",
     blockAlign: "center",
     align: "space-between"
-  }, /* @__PURE__ */ import_react97.default.createElement(Box, null, children), actions)));
+  }, /* @__PURE__ */ import_react102.default.createElement(Box, null, children), actions)));
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Scrollable/Scrollable.js
-var import_react102 = __toESM(require_react());
+var import_react106 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/use-lazy-ref.js
-var import_react98 = __toESM(require_react());
+var import_react103 = __toESM(require_react());
 var UNIQUE_IDENTIFIER = Symbol("unique_identifier");
 function useLazyRef(initialValue) {
-  const lazyRef = (0, import_react98.useRef)(UNIQUE_IDENTIFIER);
+  const lazyRef = (0, import_react103.useRef)(UNIQUE_IDENTIFIER);
   if (lazyRef.current === UNIQUE_IDENTIFIER) {
     lazyRef.current = initialValue();
   }
   return lazyRef;
 }
 
-// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/use-component-did-mount.js
-var import_react99 = __toESM(require_react());
-function useComponentDidMount(callback) {
-  const isAfterInitialMount = useIsAfterInitialMount();
-  const hasInvokedLifeCycle = (0, import_react99.useRef)(false);
-  if (isAfterInitialMount && !hasInvokedLifeCycle.current) {
-    hasInvokedLifeCycle.current = true;
-    return callback();
-  }
-}
-
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Scrollable/context.js
-var import_react100 = __toESM(require_react());
-var ScrollableContext = /* @__PURE__ */ (0, import_react100.createContext)(void 0);
+var import_react104 = __toESM(require_react());
+var ScrollableContext = /* @__PURE__ */ (0, import_react104.createContext)(void 0);
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Scrollable/Scrollable.css.js
-var styles27 = {
+var styles29 = {
   "Scrollable": "Polaris-Scrollable",
   "hasTopShadow": "Polaris-Scrollable--hasTopShadow",
   "hasBottomShadow": "Polaris-Scrollable--hasBottomShadow",
@@ -10752,18 +11148,18 @@ var styles27 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Scrollable/components/ScrollTo/ScrollTo.js
-var import_react101 = __toESM(require_react());
+var import_react105 = __toESM(require_react());
 function ScrollTo() {
-  const anchorNode = (0, import_react101.useRef)(null);
-  const scrollToPosition = (0, import_react101.useContext)(ScrollableContext);
-  (0, import_react101.useEffect)(() => {
+  const anchorNode = (0, import_react105.useRef)(null);
+  const scrollToPosition = (0, import_react105.useContext)(ScrollableContext);
+  (0, import_react105.useEffect)(() => {
     if (!scrollToPosition || !anchorNode.current) {
       return;
     }
     scrollToPosition(anchorNode.current.offsetTop);
   }, [scrollToPosition]);
-  const id = (0, import_react101.useId)();
-  return /* @__PURE__ */ import_react101.default.createElement("a", {
+  const id = (0, import_react105.useId)();
+  return /* @__PURE__ */ import_react105.default.createElement("a", {
     id,
     ref: anchorNode
   });
@@ -10772,7 +11168,7 @@ function ScrollTo() {
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Scrollable/Scrollable.js
 var MAX_SCROLL_HINT_DISTANCE = 100;
 var LOW_RES_BUFFER = 2;
-var ScrollableComponent = /* @__PURE__ */ (0, import_react102.forwardRef)(({
+var ScrollableComponent = /* @__PURE__ */ (0, import_react106.forwardRef)(({
   children,
   className,
   horizontal = true,
@@ -10785,11 +11181,11 @@ var ScrollableComponent = /* @__PURE__ */ (0, import_react102.forwardRef)(({
   onScrolledToBottom,
   ...rest
 }, forwardedRef) => {
-  const [topShadow, setTopShadow] = (0, import_react102.useState)(false);
-  const [bottomShadow, setBottomShadow] = (0, import_react102.useState)(false);
+  const [topShadow, setTopShadow] = (0, import_react106.useState)(false);
+  const [bottomShadow, setBottomShadow] = (0, import_react106.useState)(false);
   const stickyManager = useLazyRef(() => new StickyManager());
-  const scrollArea = (0, import_react102.useRef)(null);
-  const scrollTo = (0, import_react102.useCallback)((scrollY, options = {}) => {
+  const scrollArea = (0, import_react106.useRef)(null);
+  const scrollTo = (0, import_react106.useCallback)((scrollY, options = {}) => {
     const optionsBehavior = options.behavior || "smooth";
     const behavior = prefersReducedMotion() ? "auto" : optionsBehavior;
     scrollArea.current?.scrollTo({
@@ -10797,11 +11193,11 @@ var ScrollableComponent = /* @__PURE__ */ (0, import_react102.forwardRef)(({
       behavior
     });
   }, []);
-  const defaultRef = (0, import_react102.useRef)();
-  (0, import_react102.useImperativeHandle)(forwardedRef || defaultRef, () => ({
+  const defaultRef = (0, import_react106.useRef)();
+  (0, import_react106.useImperativeHandle)(forwardedRef || defaultRef, () => ({
     scrollTo
   }));
-  const handleScroll = (0, import_react102.useCallback)(() => {
+  const handleScroll = (0, import_react106.useCallback)(() => {
     const currentScrollArea = scrollArea.current;
     if (!currentScrollArea) {
       return;
@@ -10828,7 +11224,7 @@ var ScrollableComponent = /* @__PURE__ */ (0, import_react102.forwardRef)(({
       requestAnimationFrame(() => performScrollHint(scrollArea.current));
     }
   });
-  (0, import_react102.useEffect)(() => {
+  (0, import_react106.useEffect)(() => {
     const currentScrollArea = scrollArea.current;
     if (!currentScrollArea) {
       return;
@@ -10844,12 +11240,12 @@ var ScrollableComponent = /* @__PURE__ */ (0, import_react102.forwardRef)(({
       globalThis.removeEventListener("resize", handleResize);
     };
   }, [stickyManager, handleScroll]);
-  const finalClassName = classNames(className, styles27.Scrollable, vertical && styles27.vertical, horizontal && styles27.horizontal, shadow2 && topShadow && styles27.hasTopShadow, shadow2 && bottomShadow && styles27.hasBottomShadow, scrollbarWidth && styles27[variationName("scrollbarWidth", scrollbarWidth)], scrollbarGutter && styles27[variationName("scrollbarGutter", scrollbarGutter.replace(" ", ""))]);
-  return /* @__PURE__ */ import_react102.default.createElement(ScrollableContext.Provider, {
+  const finalClassName = classNames(className, styles29.Scrollable, vertical && styles29.vertical, horizontal && styles29.horizontal, shadow2 && topShadow && styles29.hasTopShadow, shadow2 && bottomShadow && styles29.hasBottomShadow, scrollbarWidth && styles29[variationName("scrollbarWidth", scrollbarWidth)], scrollbarGutter && styles29[variationName("scrollbarGutter", scrollbarGutter.replace(" ", ""))]);
+  return /* @__PURE__ */ import_react106.default.createElement(ScrollableContext.Provider, {
     value: scrollTo
-  }, /* @__PURE__ */ import_react102.default.createElement(StickyManagerContext.Provider, {
+  }, /* @__PURE__ */ import_react106.default.createElement(StickyManagerContext.Provider, {
     value: stickyManager.current
-  }, /* @__PURE__ */ import_react102.default.createElement("div", Object.assign({
+  }, /* @__PURE__ */ import_react106.default.createElement("div", Object.assign({
     className: finalClassName
   }, scrollable.props, rest, {
     ref: scrollArea,
@@ -10896,13 +11292,13 @@ Scrollable.ScrollTo = ScrollTo;
 Scrollable.forNode = forNode;
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Portal/Portal.js
-var import_react105 = __toESM(require_react());
+var import_react109 = __toESM(require_react());
 var import_react_dom2 = __toESM(require_react_dom());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/portals/hooks.js
-var import_react103 = __toESM(require_react());
+var import_react107 = __toESM(require_react());
 function usePortalsManager() {
-  const portalsManager = (0, import_react103.useContext)(PortalsManagerContext);
+  const portalsManager = (0, import_react107.useContext)(PortalsManagerContext);
   if (!portalsManager) {
     throw new Error("No portals manager was provided. Your application must be wrapped in an <AppProvider> component. See https://polaris.shopify.com/components/app-provider for implementation instructions.");
   }
@@ -10910,10 +11306,10 @@ function usePortalsManager() {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ThemeProvider/ThemeProvider.js
-var import_react104 = __toESM(require_react());
+var import_react108 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ThemeProvider/ThemeProvider.css.js
-var styles28 = {
+var styles30 = {
   "themeContainer": "Polaris-ThemeProvider--themeContainer"
 };
 
@@ -10927,13 +11323,13 @@ function ThemeProvider(props) {
     className,
     theme: themeName = themeNameDefault
   } = props;
-  return /* @__PURE__ */ import_react104.default.createElement(ThemeNameContext.Provider, {
+  return /* @__PURE__ */ import_react108.default.createElement(ThemeNameContext.Provider, {
     value: themeName
-  }, /* @__PURE__ */ import_react104.default.createElement(ThemeContext.Provider, {
+  }, /* @__PURE__ */ import_react108.default.createElement(ThemeContext.Provider, {
     value: getTheme(themeName)
-  }, /* @__PURE__ */ import_react104.default.createElement(ThemeContainer, {
+  }, /* @__PURE__ */ import_react108.default.createElement(ThemeContainer, {
     "data-portal-id": props["data-portal-id"],
-    className: classNames(createThemeClassName(themeName), styles28.themeContainer, className)
+    className: classNames(createThemeClassName(themeName), styles30.themeContainer, className)
   }, children)));
 }
 
@@ -10947,12 +11343,12 @@ function Portal({
   const {
     container
   } = usePortalsManager();
-  const uniqueId = (0, import_react105.useId)();
+  const uniqueId = (0, import_react109.useId)();
   const portalId = idPrefix !== "" ? `${idPrefix}-${uniqueId}` : uniqueId;
-  (0, import_react105.useEffect)(() => {
+  (0, import_react109.useEffect)(() => {
     onPortalCreated();
   }, [onPortalCreated]);
-  return container ? /* @__PURE__ */ (0, import_react_dom2.createPortal)(/* @__PURE__ */ import_react105.default.createElement(ThemeProvider, {
+  return container ? /* @__PURE__ */ (0, import_react_dom2.createPortal)(/* @__PURE__ */ import_react109.default.createElement(ThemeProvider, {
     theme: isThemeNameLocal(themeName) ? themeName : themeNameDefault,
     "data-portal-id": portalId
   }, children), container) : null;
@@ -10986,27 +11382,27 @@ var Modal = function Modal2({
   onTransitionEnd,
   noScroll
 }) {
-  const [iframeHeight, setIframeHeight] = (0, import_react106.useState)(IFRAME_LOADING_HEIGHT);
-  const [closing, setClosing] = (0, import_react106.useState)(false);
-  const headerId = (0, import_react106.useId)();
-  const activatorRef = (0, import_react106.useRef)(null);
+  const [iframeHeight, setIframeHeight] = (0, import_react110.useState)(IFRAME_LOADING_HEIGHT);
+  const [closing, setClosing] = (0, import_react110.useState)(false);
+  const headerId = (0, import_react110.useId)();
+  const activatorRef = (0, import_react110.useRef)(null);
   const i18n = useI18n();
   const iframeTitle = i18n.translate("Polaris.Modal.iFrameTitle");
   let dialog;
   let backdrop;
-  const handleEntered = (0, import_react106.useCallback)(() => {
+  const handleEntered = (0, import_react110.useCallback)(() => {
     if (onTransitionEnd) {
       onTransitionEnd();
     }
   }, [onTransitionEnd]);
-  const handleExited = (0, import_react106.useCallback)(() => {
+  const handleExited = (0, import_react110.useCallback)(() => {
     setIframeHeight(IFRAME_LOADING_HEIGHT);
     const activatorElement = activator && isRef2(activator) ? activator && activator.current : activatorRef.current;
     if (activatorElement) {
       requestAnimationFrame(() => focusFirstFocusableNode(activatorElement));
     }
   }, [activator]);
-  const handleIFrameLoad = (0, import_react106.useCallback)((evt) => {
+  const handleIFrameLoad = (0, import_react110.useCallback)((evt) => {
     const iframe = evt.target;
     if (iframe && iframe.contentWindow) {
       try {
@@ -11020,42 +11416,42 @@ var Modal = function Modal2({
     }
   }, [onIFrameLoad]);
   if (open) {
-    const footerMarkup = !footer && !primaryAction && !secondaryActions ? null : /* @__PURE__ */ import_react106.default.createElement(Footer, {
+    const footerMarkup = !footer && !primaryAction && !secondaryActions ? null : /* @__PURE__ */ import_react110.default.createElement(Footer, {
       primaryAction,
       secondaryActions
     }, footer);
     const content = sectioned ? wrapWithComponent(children, Section, {
       titleHidden
     }) : children;
-    const body = loading ? /* @__PURE__ */ import_react106.default.createElement(Box, {
+    const body = loading ? /* @__PURE__ */ import_react110.default.createElement(Box, {
       padding: "400"
-    }, /* @__PURE__ */ import_react106.default.createElement(InlineStack, {
+    }, /* @__PURE__ */ import_react110.default.createElement(InlineStack, {
       gap: "400",
       align: "center",
       blockAlign: "center"
-    }, /* @__PURE__ */ import_react106.default.createElement(Spinner, null))) : content;
-    const scrollContainerMarkup = noScroll ? /* @__PURE__ */ import_react106.default.createElement("div", {
-      className: styles22.NoScrollBody
-    }, /* @__PURE__ */ import_react106.default.createElement(Box, {
+    }, /* @__PURE__ */ import_react110.default.createElement(Spinner, null))) : content;
+    const scrollContainerMarkup = noScroll ? /* @__PURE__ */ import_react110.default.createElement("div", {
+      className: styles24.NoScrollBody
+    }, /* @__PURE__ */ import_react110.default.createElement(Box, {
       width: "100%",
       overflowX: "hidden",
       overflowY: "hidden"
-    }, body)) : /* @__PURE__ */ import_react106.default.createElement(Scrollable, {
+    }, body)) : /* @__PURE__ */ import_react110.default.createElement(Scrollable, {
       shadow: true,
-      className: styles22.Body,
+      className: styles24.Body,
       onScrolledToBottom
     }, body);
-    const bodyMarkup = src ? /* @__PURE__ */ import_react106.default.createElement("iframe", {
+    const bodyMarkup = src ? /* @__PURE__ */ import_react110.default.createElement("iframe", {
       name: iFrameName,
       title: iframeTitle,
       src,
-      className: styles22.IFrame,
+      className: styles24.IFrame,
       onLoad: handleIFrameLoad,
       style: {
         height: `${iframeHeight}px`
       }
     }) : scrollContainerMarkup;
-    dialog = /* @__PURE__ */ import_react106.default.createElement(Dialog, {
+    dialog = /* @__PURE__ */ import_react110.default.createElement(Dialog, {
       instant,
       labelledBy: headerId,
       onClose,
@@ -11064,27 +11460,27 @@ var Modal = function Modal2({
       size: size2,
       limitHeight,
       setClosing
-    }, /* @__PURE__ */ import_react106.default.createElement(Header, {
+    }, /* @__PURE__ */ import_react110.default.createElement(Header, {
       titleHidden,
       id: headerId,
       closing,
       onClose
     }, title), bodyMarkup, footerMarkup);
-    backdrop = /* @__PURE__ */ import_react106.default.createElement(Backdrop, {
+    backdrop = /* @__PURE__ */ import_react110.default.createElement(Backdrop, {
       setClosing,
       onClick: onClose
     });
   }
   const animated = !instant;
-  const activatorMarkup = activator && !isRef2(activator) ? /* @__PURE__ */ import_react106.default.createElement(Box, {
+  const activatorMarkup = activator && !isRef2(activator) ? /* @__PURE__ */ import_react110.default.createElement(Box, {
     ref: activatorRef,
     as: activatorWrapper
   }, activator) : null;
-  return /* @__PURE__ */ import_react106.default.createElement(WithinContentContext.Provider, {
+  return /* @__PURE__ */ import_react110.default.createElement(WithinContentContext.Provider, {
     value: true
-  }, activatorMarkup, /* @__PURE__ */ import_react106.default.createElement(Portal, {
+  }, activatorMarkup, /* @__PURE__ */ import_react110.default.createElement(Portal, {
     idPrefix: "modal"
-  }, /* @__PURE__ */ import_react106.default.createElement(TransitionGroup_default, {
+  }, /* @__PURE__ */ import_react110.default.createElement(TransitionGroup_default, {
     appear: animated,
     enter: animated,
     exit: animated
@@ -11102,7 +11498,7 @@ function DiscardConfirmationModal({
   onCancel
 }) {
   const i18n = useI18n();
-  return /* @__PURE__ */ import_react107.default.createElement(Modal, {
+  return /* @__PURE__ */ import_react111.default.createElement(Modal, {
     title: i18n.translate("Polaris.DiscardConfirmationModal.title"),
     open,
     onClose: onCancel,
@@ -11120,9 +11516,9 @@ function DiscardConfirmationModal({
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/frame/hooks.js
-var import_react108 = __toESM(require_react());
+var import_react112 = __toESM(require_react());
 function useFrame() {
-  const frame = (0, import_react108.useContext)(FrameContext);
+  const frame = (0, import_react112.useContext)(FrameContext);
   if (!frame) {
     throw new Error("No Frame context was provided. Your component must be wrapped in a <Frame> component. See https://polaris.shopify.com/components/internal-only/frame for implementation instructions.");
   }
@@ -11130,7 +11526,7 @@ function useFrame() {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Image/Image.js
-var import_react109 = __toESM(require_react());
+var import_react113 = __toESM(require_react());
 function Image({
   alt,
   sourceSet,
@@ -11144,11 +11540,11 @@ function Image({
     source: subSource,
     descriptor
   }) => `${subSource} ${descriptor}`).join(",") : null;
-  const handleLoad = (0, import_react109.useCallback)(() => {
+  const handleLoad = (0, import_react113.useCallback)(() => {
     if (onLoad)
       onLoad();
   }, [onLoad]);
-  return /* @__PURE__ */ import_react109.default.createElement("img", Object.assign({
+  return /* @__PURE__ */ import_react113.default.createElement("img", Object.assign({
     alt,
     src: source,
     crossOrigin,
@@ -11160,10 +11556,10 @@ function Image({
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/LegacyStack/LegacyStack.js
-var import_react111 = __toESM(require_react());
+var import_react115 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/LegacyStack/LegacyStack.css.js
-var styles29 = {
+var styles31 = {
   "LegacyStack": "Polaris-LegacyStack",
   "Item": "Polaris-LegacyStack__Item",
   "noWrap": "Polaris-LegacyStack--noWrap",
@@ -11189,19 +11585,19 @@ var styles29 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/LegacyStack/components/Item/Item.js
-var import_react110 = __toESM(require_react());
+var import_react114 = __toESM(require_react());
 function Item4({
   children,
   fill
 }) {
-  const className = classNames(styles29.Item, fill && styles29["Item-fill"]);
-  return /* @__PURE__ */ import_react110.default.createElement("div", {
+  const className = classNames(styles31.Item, fill && styles31["Item-fill"]);
+  return /* @__PURE__ */ import_react114.default.createElement("div", {
     className
   }, children);
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/LegacyStack/LegacyStack.js
-var LegacyStack = /* @__PURE__ */ (0, import_react111.memo)(function Stack({
+var LegacyStack = /* @__PURE__ */ (0, import_react115.memo)(function Stack({
   children,
   vertical,
   spacing,
@@ -11209,14 +11605,14 @@ var LegacyStack = /* @__PURE__ */ (0, import_react111.memo)(function Stack({
   alignment,
   wrap
 }) {
-  const className = classNames(styles29.LegacyStack, vertical && styles29.vertical, spacing && styles29[variationName("spacing", spacing)], distribution && styles29[variationName("distribution", distribution)], alignment && styles29[variationName("alignment", alignment)], wrap === false && styles29.noWrap);
+  const className = classNames(styles31.LegacyStack, vertical && styles31.vertical, spacing && styles31[variationName("spacing", spacing)], distribution && styles31[variationName("distribution", distribution)], alignment && styles31[variationName("alignment", alignment)], wrap === false && styles31.noWrap);
   const itemMarkup = elementChildren(children).map((child, index) => {
     const props = {
       key: index
     };
     return wrapWithComponent(child, Item4, props);
   });
-  return /* @__PURE__ */ import_react111.default.createElement("div", {
+  return /* @__PURE__ */ import_react115.default.createElement("div", {
     className
   }, itemMarkup);
 });
@@ -11241,7 +11637,7 @@ function ContextualSaveBar({
     toggle: toggleDiscardConfirmationModal,
     setFalse: closeDiscardConfirmationModal
   } = useToggle(false);
-  const handleDiscardAction = (0, import_react112.useCallback)(() => {
+  const handleDiscardAction = (0, import_react116.useCallback)(() => {
     if (discardAction && discardAction.onAction) {
       discardAction.onAction();
     }
@@ -11254,12 +11650,12 @@ function ContextualSaveBar({
   } else if (discardAction) {
     discardActionHandler = discardAction.onAction;
   }
-  const discardConfirmationModalMarkup = discardAction && discardAction.onAction && discardAction.discardConfirmationModal && /* @__PURE__ */ import_react112.default.createElement(DiscardConfirmationModal, {
+  const discardConfirmationModalMarkup = discardAction && discardAction.onAction && discardAction.discardConfirmationModal && /* @__PURE__ */ import_react116.default.createElement(DiscardConfirmationModal, {
     open: discardConfirmationModalVisible,
     onCancel: toggleDiscardConfirmationModal,
     onDiscard: handleDiscardAction
   });
-  const discardActionMarkup = discardAction && /* @__PURE__ */ import_react112.default.createElement(Button, {
+  const discardActionMarkup = discardAction && /* @__PURE__ */ import_react116.default.createElement(Button, {
     variant: "tertiary",
     size: "large",
     url: discardAction.url,
@@ -11269,7 +11665,7 @@ function ContextualSaveBar({
     accessibilityLabel: discardAction.content
   }, discardActionContent);
   const saveActionContent = saveAction && saveAction.content ? saveAction.content : i18n.translate("Polaris.ContextualSaveBar.save");
-  const saveActionMarkup = saveAction && /* @__PURE__ */ import_react112.default.createElement(Button, {
+  const saveActionMarkup = saveAction && /* @__PURE__ */ import_react116.default.createElement(Button, {
     variant: "primary",
     tone: "success",
     size: "large",
@@ -11280,55 +11676,55 @@ function ContextualSaveBar({
     accessibilityLabel: saveAction.content
   }, saveActionContent);
   const width2 = getWidth(logo, 104);
-  const imageMarkup = logo && /* @__PURE__ */ import_react112.default.createElement(Image, {
+  const imageMarkup = logo && /* @__PURE__ */ import_react116.default.createElement(Image, {
     style: {
       width: width2
     },
     source: logo.contextualSaveBarSource || "",
     alt: ""
   });
-  const logoMarkup = alignContentFlush || contextControl ? null : /* @__PURE__ */ import_react112.default.createElement("div", {
-    className: styles21.LogoContainer,
+  const logoMarkup = alignContentFlush || contextControl ? null : /* @__PURE__ */ import_react116.default.createElement("div", {
+    className: styles23.LogoContainer,
     style: {
       width: width2
     }
   }, imageMarkup);
-  const contextControlMarkup = contextControl ? /* @__PURE__ */ import_react112.default.createElement("div", {
-    className: styles21.ContextControl
+  const contextControlMarkup = contextControl ? /* @__PURE__ */ import_react116.default.createElement("div", {
+    className: styles23.ContextControl
   }, contextControl) : null;
-  const contentsClassName = classNames(styles21.Contents, fullWidth && styles21.fullWidth);
-  return /* @__PURE__ */ import_react112.default.createElement(import_react112.default.Fragment, null, /* @__PURE__ */ import_react112.default.createElement("div", {
-    className: styles21.ContextualSaveBar
-  }, contextControlMarkup, logoMarkup, /* @__PURE__ */ import_react112.default.createElement("div", {
+  const contentsClassName = classNames(styles23.Contents, fullWidth && styles23.fullWidth);
+  return /* @__PURE__ */ import_react116.default.createElement(import_react116.default.Fragment, null, /* @__PURE__ */ import_react116.default.createElement("div", {
+    className: styles23.ContextualSaveBar
+  }, contextControlMarkup, logoMarkup, /* @__PURE__ */ import_react116.default.createElement("div", {
     className: contentsClassName
-  }, /* @__PURE__ */ import_react112.default.createElement("div", {
-    className: styles21.MessageContainer
-  }, /* @__PURE__ */ import_react112.default.createElement(Icon, {
+  }, /* @__PURE__ */ import_react116.default.createElement("div", {
+    className: styles23.MessageContainer
+  }, /* @__PURE__ */ import_react116.default.createElement(Icon, {
     source: SvgAlertTriangleIcon
-  }), message && /* @__PURE__ */ import_react112.default.createElement(Text, {
+  }), message && /* @__PURE__ */ import_react116.default.createElement(Text, {
     as: "h2",
     variant: "headingMd",
     tone: "text-inverse",
     truncate: true
-  }, message)), /* @__PURE__ */ import_react112.default.createElement("div", {
-    className: styles21.ActionContainer
-  }, /* @__PURE__ */ import_react112.default.createElement(LegacyStack, {
+  }, message)), /* @__PURE__ */ import_react116.default.createElement("div", {
+    className: styles23.ActionContainer
+  }, /* @__PURE__ */ import_react116.default.createElement(LegacyStack, {
     spacing: "tight",
     wrap: false
   }, secondaryMenu, discardActionMarkup, saveActionMarkup)))), discardConfirmationModalMarkup);
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Frame/components/ToastManager/ToastManager.js
-var import_react117 = __toESM(require_react());
+var import_react121 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/use-deep-effect.js
-var import_react114 = __toESM(require_react());
+var import_react118 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/use-deep-compare-ref.js
-var import_react113 = __toESM(require_react());
+var import_react117 = __toESM(require_react());
 var import_react_fast_compare = __toESM(require_react_fast_compare());
 function useDeepCompareRef(dependencies, comparator = import_react_fast_compare.default) {
-  const dependencyList = (0, import_react113.useRef)(dependencies);
+  const dependencyList = (0, import_react117.useRef)(dependencies);
   if (!comparator(dependencyList.current, dependencies)) {
     dependencyList.current = dependencies;
   }
@@ -11337,17 +11733,17 @@ function useDeepCompareRef(dependencies, comparator = import_react_fast_compare.
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/use-deep-effect.js
 function useDeepEffect(callback, dependencies, customCompare) {
-  (0, import_react114.useEffect)(callback, useDeepCompareRef(dependencies, customCompare));
+  (0, import_react118.useEffect)(callback, useDeepCompareRef(dependencies, customCompare));
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/use-deep-callback.js
-var import_react115 = __toESM(require_react());
+var import_react119 = __toESM(require_react());
 function useDeepCallback(callback, dependencies, customCompare) {
-  return (0, import_react115.useCallback)(callback, useDeepCompareRef(dependencies, customCompare));
+  return (0, import_react119.useCallback)(callback, useDeepCompareRef(dependencies, customCompare));
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Frame/components/ToastManager/ToastManager.css.js
-var styles30 = {
+var styles32 = {
   "ToastManager": "Polaris-Frame-ToastManager",
   "ToastWrapper": "Polaris-Frame-ToastManager__ToastWrapper",
   "ToastWrapper-enter": "Polaris-Frame-ToastManager__ToastWrapper--enter",
@@ -11357,10 +11753,10 @@ var styles30 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Frame/components/Toast/Toast.js
-var import_react116 = __toESM(require_react());
+var import_react120 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Frame/components/Toast/Toast.css.js
-var styles31 = {
+var styles33 = {
   "Toast": "Polaris-Frame-Toast",
   "Action": "Polaris-Frame-Toast__Action",
   "error": "Polaris-Frame-Toast--error",
@@ -11386,10 +11782,10 @@ function Toast({
 }) {
   const defaultDurationWithoutAction = duration || DEFAULT_TOAST_DURATION;
   const defaultDuration = action && !duration ? DEFAULT_TOAST_DURATION_WITH_ACTION : defaultDurationWithoutAction;
-  const durationRemaining = (0, import_react116.useRef)(defaultDuration);
-  const timeoutStart = (0, import_react116.useRef)(null);
-  const timer = (0, import_react116.useRef)(null);
-  (0, import_react116.useEffect)(() => {
+  const durationRemaining = (0, import_react120.useRef)(defaultDuration);
+  const timeoutStart = (0, import_react120.useRef)(null);
+  const timer = (0, import_react120.useRef)(null);
+  (0, import_react120.useEffect)(() => {
     function resume() {
       timeoutStart.current = Date.now();
       timer.current = setTimeout(() => {
@@ -11416,22 +11812,22 @@ function Toast({
       }
     };
   }, [isHovered, onDismiss]);
-  (0, import_react116.useEffect)(() => {
+  (0, import_react120.useEffect)(() => {
     if (action && duration && duration < DEFAULT_TOAST_DURATION_WITH_ACTION) {
       console.log("Toast with action should persist for at least 10,000 milliseconds to give the merchant enough time to act on it.");
     }
   }, [action, duration]);
-  const dismissMarkup = /* @__PURE__ */ import_react116.default.createElement("button", {
+  const dismissMarkup = /* @__PURE__ */ import_react120.default.createElement("button", {
     type: "button",
-    className: styles31.CloseButton,
+    className: styles33.CloseButton,
     onClick: onDismiss
-  }, /* @__PURE__ */ import_react116.default.createElement(Icon, {
+  }, /* @__PURE__ */ import_react120.default.createElement(Icon, {
     source: SvgXSmallIcon,
     tone: "inherit"
   }));
-  const actionMarkup = action ? /* @__PURE__ */ import_react116.default.createElement("div", {
-    className: styles31.Action
-  }, /* @__PURE__ */ import_react116.default.createElement(Button, {
+  const actionMarkup = action ? /* @__PURE__ */ import_react120.default.createElement("div", {
+    className: styles33.Action
+  }, /* @__PURE__ */ import_react120.default.createElement(Button, {
     variant: "monochromePlain",
     removeUnderline: true,
     size: "slim",
@@ -11439,34 +11835,34 @@ function Toast({
   }, action.content)) : null;
   let leadingIconMarkup = null;
   if (error) {
-    leadingIconMarkup = /* @__PURE__ */ import_react116.default.createElement("div", {
-      className: styles31.LeadingIcon
-    }, /* @__PURE__ */ import_react116.default.createElement(Icon, {
+    leadingIconMarkup = /* @__PURE__ */ import_react120.default.createElement("div", {
+      className: styles33.LeadingIcon
+    }, /* @__PURE__ */ import_react120.default.createElement(Icon, {
       source: SvgAlertCircleIcon,
       tone: "inherit"
     }));
   } else if (icon) {
-    leadingIconMarkup = /* @__PURE__ */ import_react116.default.createElement("div", {
-      className: styles31.LeadingIcon
-    }, /* @__PURE__ */ import_react116.default.createElement(Icon, {
+    leadingIconMarkup = /* @__PURE__ */ import_react120.default.createElement("div", {
+      className: styles33.LeadingIcon
+    }, /* @__PURE__ */ import_react120.default.createElement(Icon, {
       source: icon,
       tone: "inherit"
     }));
   }
-  const className = classNames(styles31.Toast, error && styles31.error, tone && styles31[variationName("tone", tone)]);
+  const className = classNames(styles33.Toast, error && styles33.error, tone && styles33[variationName("tone", tone)]);
   if (!action && onClick) {
-    return /* @__PURE__ */ import_react116.default.createElement("button", {
+    return /* @__PURE__ */ import_react120.default.createElement("button", {
       "aria-live": "assertive",
-      className: classNames(className, styles31.WithActionOnComponent),
+      className: classNames(className, styles33.WithActionOnComponent),
       type: "button",
       onClick
-    }, /* @__PURE__ */ import_react116.default.createElement(KeypressListener, {
+    }, /* @__PURE__ */ import_react120.default.createElement(KeypressListener, {
       keyCode: Key.Escape,
       handler: onDismiss
-    }), leadingIconMarkup, /* @__PURE__ */ import_react116.default.createElement(InlineStack, {
+    }), leadingIconMarkup, /* @__PURE__ */ import_react120.default.createElement(InlineStack, {
       gap: "400",
       blockAlign: "center"
-    }, /* @__PURE__ */ import_react116.default.createElement(Text, Object.assign({
+    }, /* @__PURE__ */ import_react120.default.createElement(Text, Object.assign({
       as: "span",
       variant: "bodyMd",
       fontWeight: "medium"
@@ -11474,16 +11870,16 @@ function Toast({
       tone: "magic"
     }), content)));
   }
-  return /* @__PURE__ */ import_react116.default.createElement("div", {
+  return /* @__PURE__ */ import_react120.default.createElement("div", {
     className,
     "aria-live": "assertive"
-  }, /* @__PURE__ */ import_react116.default.createElement(KeypressListener, {
+  }, /* @__PURE__ */ import_react120.default.createElement(KeypressListener, {
     keyCode: Key.Escape,
     handler: onDismiss
-  }), leadingIconMarkup, /* @__PURE__ */ import_react116.default.createElement(InlineStack, {
+  }), leadingIconMarkup, /* @__PURE__ */ import_react120.default.createElement(InlineStack, {
     gap: "400",
     blockAlign: "center"
-  }, /* @__PURE__ */ import_react116.default.createElement(Text, Object.assign({
+  }, /* @__PURE__ */ import_react120.default.createElement(Text, Object.assign({
     as: "span",
     variant: "bodyMd",
     fontWeight: "medium"
@@ -11499,14 +11895,14 @@ function generateAdditionalVerticalMovement(index) {
   const getAmountToRemove = (idx) => (idx - 1) * idx / 2;
   return index * ADDITIONAL_TOAST_BASE_MOVEMENT - getAmountToRemove(index);
 }
-var ToastManager = /* @__PURE__ */ (0, import_react117.memo)(function ToastManager2({
+var ToastManager = /* @__PURE__ */ (0, import_react121.memo)(function ToastManager2({
   toastMessages
 }) {
   const toastNodes = [];
-  const [shouldExpand, setShouldExpand] = (0, import_react117.useState)(false);
-  const isFullyExpanded = (0, import_react117.useRef)(false);
-  const fullyExpandedTimeout = (0, import_react117.useRef)(null);
-  const firstToast = (0, import_react117.useRef)(null);
+  const [shouldExpand, setShouldExpand] = (0, import_react121.useState)(false);
+  const isFullyExpanded = (0, import_react121.useRef)(false);
+  const fullyExpandedTimeout = (0, import_react121.useRef)(null);
+  const firstToast = (0, import_react121.useRef)(null);
   const updateToasts = useDeepCallback(() => {
     const zeroIndexTotalMessages = toastMessages.length - 1;
     toastMessages.forEach((_, index) => {
@@ -11542,7 +11938,7 @@ var ToastManager = /* @__PURE__ */ (0, import_react117.memo)(function ToastManag
   }, [toastMessages, shouldExpand]);
   const toastsMarkup = toastMessages.map((toast, index) => {
     const reverseOrderIndex = toastMessages.length - index - 1;
-    const toastNode = /* @__PURE__ */ (0, import_react117.createRef)();
+    const toastNode = /* @__PURE__ */ (0, import_react121.createRef)();
     toastNodes[index] = toastNode;
     function handleMouseEnter() {
       setShouldExpand(true);
@@ -11552,7 +11948,7 @@ var ToastManager = /* @__PURE__ */ (0, import_react117.memo)(function ToastManag
         setShouldExpand(false);
       }
     }
-    return /* @__PURE__ */ import_react117.default.createElement(CSSTransition_default, {
+    return /* @__PURE__ */ import_react121.default.createElement(CSSTransition_default, {
       nodeRef: toastNodes[index],
       key: toast.id,
       timeout: {
@@ -11560,22 +11956,22 @@ var ToastManager = /* @__PURE__ */ (0, import_react117.memo)(function ToastManag
         exit: 200
       },
       classNames: toastClasses
-    }, /* @__PURE__ */ import_react117.default.createElement("div", {
+    }, /* @__PURE__ */ import_react121.default.createElement("div", {
       ref: toastNode,
       onMouseEnter: reverseOrderIndex > 0 ? handleMouseEnter : handleMouseEnterFirstToast
-    }, /* @__PURE__ */ import_react117.default.createElement("div", {
+    }, /* @__PURE__ */ import_react121.default.createElement("div", {
       ref: (node) => reverseOrderIndex === 0 ? firstToast.current = node : null
-    }, /* @__PURE__ */ import_react117.default.createElement(Toast, Object.assign({}, toast, {
+    }, /* @__PURE__ */ import_react121.default.createElement(Toast, Object.assign({}, toast, {
       isHovered: shouldExpand
     })))));
   });
-  return /* @__PURE__ */ import_react117.default.createElement(Portal, {
+  return /* @__PURE__ */ import_react121.default.createElement(Portal, {
     idPrefix: "toast"
-  }, /* @__PURE__ */ import_react117.default.createElement(EventListener, {
+  }, /* @__PURE__ */ import_react121.default.createElement(EventListener, {
     event: "resize",
     handler: updateToasts
-  }), /* @__PURE__ */ import_react117.default.createElement("div", {
-    className: styles30.ToastManager,
+  }), /* @__PURE__ */ import_react121.default.createElement("div", {
+    className: styles32.ToastManager,
     "aria-live": "assertive",
     onMouseEnter: function(event) {
       const target = event.target;
@@ -11585,14 +11981,14 @@ var ToastManager = /* @__PURE__ */ (0, import_react117.memo)(function ToastManag
     onMouseLeave: function() {
       setShouldExpand(false);
     }
-  }, /* @__PURE__ */ import_react117.default.createElement(TransitionGroup_default, {
+  }, /* @__PURE__ */ import_react121.default.createElement(TransitionGroup_default, {
     component: null
   }, toastsMarkup)));
 });
 var toastClasses = {
-  enter: classNames(styles30.ToastWrapper, styles30["ToastWrapper-enter"]),
-  enterDone: classNames(styles30.ToastWrapper, styles30["ToastWrapper-enter-done"]),
-  exit: classNames(styles30.ToastWrapper, styles30["ToastWrapper-exit"])
+  enter: classNames(styles32.ToastWrapper, styles32["ToastWrapper-enter"]),
+  enterDone: classNames(styles32.ToastWrapper, styles32["ToastWrapper-enter-done"]),
+  exit: classNames(styles32.ToastWrapper, styles32["ToastWrapper-exit"])
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Frame/Frame.js
@@ -11600,7 +11996,7 @@ var APP_FRAME_MAIN = "AppFrameMain";
 var APP_FRAME_NAV = "AppFrameNav";
 var APP_FRAME_TOP_BAR = "AppFrameTopBar";
 var APP_FRAME_LOADING_BAR = "AppFrameLoadingBar";
-var FrameInner = class extends import_react118.PureComponent {
+var FrameInner = class extends import_react122.PureComponent {
   constructor(...args) {
     super(...args);
     this.state = {
@@ -11612,7 +12008,7 @@ var FrameInner = class extends import_react118.PureComponent {
     };
     this.contextualSaveBar = null;
     this.globalRibbonContainer = null;
-    this.navigationNode = /* @__PURE__ */ (0, import_react118.createRef)();
+    this.navigationNode = /* @__PURE__ */ (0, import_react122.createRef)();
     this.setGlobalRibbonHeight = () => {
       const {
         globalRibbonContainer
@@ -11781,7 +12177,7 @@ var FrameInner = class extends import_react118.PureComponent {
         isNavigationCollapsed
       }
     } = this.props;
-    const navClassName = classNames(styles18.Navigation, showMobileNavigation && styles18["Navigation-visible"]);
+    const navClassName = classNames(styles20.Navigation, showMobileNavigation && styles20["Navigation-visible"]);
     const mobileNavHidden = isNavigationCollapsed && !showMobileNavigation;
     const mobileNavShowing = isNavigationCollapsed && showMobileNavigation;
     const tabIndex = mobileNavShowing ? 0 : -1;
@@ -11791,16 +12187,16 @@ var FrameInner = class extends import_react118.PureComponent {
         role: "dialog"
       }
     };
-    const navigationMarkup = navigation ? /* @__PURE__ */ import_react118.default.createElement(UseTheme, null, (theme) => /* @__PURE__ */ import_react118.default.createElement(TrapFocus, {
+    const navigationMarkup = navigation ? /* @__PURE__ */ import_react122.default.createElement(UseTheme, null, (theme) => /* @__PURE__ */ import_react122.default.createElement(TrapFocus, {
       trapping: mobileNavShowing
-    }, /* @__PURE__ */ import_react118.default.createElement(CSSTransition_default, {
+    }, /* @__PURE__ */ import_react122.default.createElement(CSSTransition_default, {
       nodeRef: this.navigationNode,
       appear: isNavigationCollapsed,
       exit: isNavigationCollapsed,
       in: showMobileNavigation,
       timeout: parseInt(theme.motion["motion-duration-300"], 10),
       classNames: navTransitionClasses
-    }, /* @__PURE__ */ import_react118.default.createElement("div", Object.assign({
+    }, /* @__PURE__ */ import_react122.default.createElement("div", Object.assign({
       key: "NavContent"
     }, mobileNavAttributes, {
       "aria-label": i18n.translate("Polaris.Frame.navigationLabel"),
@@ -11809,39 +12205,39 @@ var FrameInner = class extends import_react118.PureComponent {
       onKeyDown: this.handleNavKeydown,
       id: APP_FRAME_NAV,
       hidden: mobileNavHidden
-    }), navigation, /* @__PURE__ */ import_react118.default.createElement("button", {
+    }), navigation, /* @__PURE__ */ import_react122.default.createElement("button", {
       type: "button",
-      className: styles18.NavigationDismiss,
+      className: styles20.NavigationDismiss,
       onClick: this.handleNavigationDismiss,
       "aria-hidden": mobileNavHidden || !isNavigationCollapsed && !showMobileNavigation,
       "aria-label": i18n.translate("Polaris.Frame.Navigation.closeMobileNavigationLabel"),
       tabIndex
-    }, /* @__PURE__ */ import_react118.default.createElement(Icon, {
+    }, /* @__PURE__ */ import_react122.default.createElement(Icon, {
       source: SvgXIcon
     })))))) : null;
-    const loadingMarkup = loadingStack > 0 ? /* @__PURE__ */ import_react118.default.createElement("div", {
-      className: styles18.LoadingBar,
+    const loadingMarkup = loadingStack > 0 ? /* @__PURE__ */ import_react122.default.createElement("div", {
+      className: styles20.LoadingBar,
       id: APP_FRAME_LOADING_BAR
-    }, /* @__PURE__ */ import_react118.default.createElement(Loading, null)) : null;
-    const topBarMarkup = topBar ? /* @__PURE__ */ import_react118.default.createElement("div", Object.assign({
-      className: styles18.TopBar
+    }, /* @__PURE__ */ import_react122.default.createElement(Loading, null)) : null;
+    const topBarMarkup = topBar ? /* @__PURE__ */ import_react122.default.createElement("div", Object.assign({
+      className: styles20.TopBar
     }, layer.props, dataPolarisTopBar.props, {
       id: APP_FRAME_TOP_BAR
     }), topBar) : null;
-    const globalRibbonMarkup = globalRibbon ? /* @__PURE__ */ import_react118.default.createElement("div", {
-      className: styles18.GlobalRibbonContainer,
+    const globalRibbonMarkup = globalRibbon ? /* @__PURE__ */ import_react122.default.createElement("div", {
+      className: styles20.GlobalRibbonContainer,
       ref: this.setGlobalRibbonContainer
     }, globalRibbon) : null;
-    const skipClassName = classNames(styles18.Skip, skipFocused && styles18.focused);
+    const skipClassName = classNames(styles20.Skip, skipFocused && styles20.focused);
     const skipTarget = skipToContentTarget?.current ? skipToContentTarget.current.id : APP_FRAME_MAIN;
-    const skipMarkup = /* @__PURE__ */ import_react118.default.createElement("div", {
+    const skipMarkup = /* @__PURE__ */ import_react122.default.createElement("div", {
       className: skipClassName
-    }, /* @__PURE__ */ import_react118.default.createElement("a", {
+    }, /* @__PURE__ */ import_react122.default.createElement("a", {
       href: `#${skipTarget}`,
       onFocus: this.handleFocus,
       onBlur: this.handleBlur,
       onClick: this.handleClick
-    }, /* @__PURE__ */ import_react118.default.createElement(Text, {
+    }, /* @__PURE__ */ import_react122.default.createElement(Text, {
       as: "span",
       variant: "bodyLg",
       fontWeight: "medium"
@@ -11849,13 +12245,13 @@ var FrameInner = class extends import_react118.PureComponent {
     const navigationAttributes = navigation ? {
       "data-has-navigation": true
     } : {};
-    const frameClassName = classNames(styles18.Frame, navigation && styles18.hasNav, topBar && styles18.hasTopBar, sidebar && styles18.hasSidebar);
-    const contextualSaveBarMarkup = /* @__PURE__ */ import_react118.default.createElement(CSSAnimation, {
+    const frameClassName = classNames(styles20.Frame, navigation && styles20.hasNav, topBar && styles20.hasTopBar, sidebar && styles20.hasSidebar);
+    const contextualSaveBarMarkup = /* @__PURE__ */ import_react122.default.createElement(CSSAnimation, {
       in: showContextualSaveBar,
-      className: styles18.ContextualSaveBar,
+      className: styles20.ContextualSaveBar,
       type: "fade"
-    }, /* @__PURE__ */ import_react118.default.createElement(ContextualSaveBar, this.contextualSaveBar));
-    const navigationOverlayMarkup = showMobileNavigation && isNavigationCollapsed ? /* @__PURE__ */ import_react118.default.createElement(Backdrop, {
+    }, /* @__PURE__ */ import_react122.default.createElement(ContextualSaveBar, this.contextualSaveBar));
+    const navigationOverlayMarkup = showMobileNavigation && isNavigationCollapsed ? /* @__PURE__ */ import_react122.default.createElement(Backdrop, {
       belowNavigation: true,
       onClick: this.handleNavigationDismiss,
       onTouchStart: this.handleNavigationDismiss
@@ -11870,45 +12266,45 @@ var FrameInner = class extends import_react118.PureComponent {
       setContextualSaveBar: this.setContextualSaveBar,
       removeContextualSaveBar: this.removeContextualSaveBar
     };
-    return /* @__PURE__ */ import_react118.default.createElement(FrameContext.Provider, {
+    return /* @__PURE__ */ import_react122.default.createElement(FrameContext.Provider, {
       value: context
-    }, /* @__PURE__ */ import_react118.default.createElement("div", Object.assign({
+    }, /* @__PURE__ */ import_react122.default.createElement("div", Object.assign({
       className: frameClassName
-    }, layer.props, navigationAttributes), skipMarkup, topBarMarkup, navigationMarkup, contextualSaveBarMarkup, loadingMarkup, navigationOverlayMarkup, /* @__PURE__ */ import_react118.default.createElement("main", {
-      className: styles18.Main,
+    }, layer.props, navigationAttributes), skipMarkup, topBarMarkup, navigationMarkup, contextualSaveBarMarkup, loadingMarkup, navigationOverlayMarkup, /* @__PURE__ */ import_react122.default.createElement("main", {
+      className: styles20.Main,
       id: APP_FRAME_MAIN,
       "data-has-global-ribbon": Boolean(globalRibbon)
-    }, /* @__PURE__ */ import_react118.default.createElement("div", {
-      className: styles18.Content
-    }, children)), /* @__PURE__ */ import_react118.default.createElement(ToastManager, {
+    }, /* @__PURE__ */ import_react122.default.createElement("div", {
+      className: styles20.Content
+    }, children)), /* @__PURE__ */ import_react122.default.createElement(ToastManager, {
       toastMessages
-    }), globalRibbonMarkup, /* @__PURE__ */ import_react118.default.createElement(EventListener, {
+    }), globalRibbonMarkup, /* @__PURE__ */ import_react122.default.createElement(EventListener, {
       event: "resize",
       handler: this.handleResize
     })));
   }
 };
 var navTransitionClasses = {
-  enter: classNames(styles18["Navigation-enter"]),
-  enterActive: classNames(styles18["Navigation-enterActive"]),
-  enterDone: classNames(styles18["Navigation-enterActive"]),
-  exit: classNames(styles18["Navigation-exit"]),
-  exitActive: classNames(styles18["Navigation-exitActive"])
+  enter: classNames(styles20["Navigation-enter"]),
+  enterActive: classNames(styles20["Navigation-enterActive"]),
+  enterDone: classNames(styles20["Navigation-enterActive"]),
+  exit: classNames(styles20["Navigation-exit"]),
+  exitActive: classNames(styles20["Navigation-exitActive"])
 };
 function Frame(props) {
   const i18n = useI18n();
   const mediaQuery = useMediaQuery();
-  return /* @__PURE__ */ import_react118.default.createElement(FrameInner, Object.assign({}, props, {
+  return /* @__PURE__ */ import_react122.default.createElement(FrameInner, Object.assign({}, props, {
     i18n,
     mediaQuery
   }));
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Layout/Layout.js
-var import_react122 = __toESM(require_react());
+var import_react126 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Layout/Layout.css.js
-var styles32 = {
+var styles34 = {
   "Layout": "Polaris-Layout",
   "Section": "Polaris-Layout__Section",
   "Section-fullWidth": "Polaris-Layout__Section--fullWidth",
@@ -11921,13 +12317,13 @@ var styles32 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Layout/components/AnnotatedSection/AnnotatedSection.js
-var import_react120 = __toESM(require_react());
+var import_react124 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TextContainer/TextContainer.js
-var import_react119 = __toESM(require_react());
+var import_react123 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TextContainer/TextContainer.css.js
-var styles33 = {
+var styles35 = {
   "TextContainer": "Polaris-TextContainer",
   "spacingTight": "Polaris-TextContainer--spacingTight",
   "spacingLoose": "Polaris-TextContainer--spacingLoose"
@@ -11938,8 +12334,8 @@ function TextContainer({
   spacing,
   children
 }) {
-  const className = classNames(styles33.TextContainer, spacing && styles33[variationName("spacing", spacing)]);
-  return /* @__PURE__ */ import_react119.default.createElement("div", {
+  const className = classNames(styles35.TextContainer, spacing && styles35[variationName("spacing", spacing)]);
+  return /* @__PURE__ */ import_react123.default.createElement("div", {
     className
   }, children);
 }
@@ -11951,37 +12347,37 @@ function AnnotatedSection({
   description,
   id
 }) {
-  const descriptionMarkup = typeof description === "string" ? /* @__PURE__ */ import_react120.default.createElement(Text, {
+  const descriptionMarkup = typeof description === "string" ? /* @__PURE__ */ import_react124.default.createElement(Text, {
     as: "p",
     variant: "bodyMd"
   }, description) : description;
-  return /* @__PURE__ */ import_react120.default.createElement("div", {
-    className: styles32.AnnotatedSection
-  }, /* @__PURE__ */ import_react120.default.createElement("div", {
-    className: styles32.AnnotationWrapper
-  }, /* @__PURE__ */ import_react120.default.createElement("div", {
-    className: styles32.Annotation
-  }, /* @__PURE__ */ import_react120.default.createElement(TextContainer, {
+  return /* @__PURE__ */ import_react124.default.createElement("div", {
+    className: styles34.AnnotatedSection
+  }, /* @__PURE__ */ import_react124.default.createElement("div", {
+    className: styles34.AnnotationWrapper
+  }, /* @__PURE__ */ import_react124.default.createElement("div", {
+    className: styles34.Annotation
+  }, /* @__PURE__ */ import_react124.default.createElement(TextContainer, {
     spacing: "tight"
-  }, /* @__PURE__ */ import_react120.default.createElement(Text, {
+  }, /* @__PURE__ */ import_react124.default.createElement(Text, {
     id,
     variant: "headingMd",
     as: "h2"
-  }, title), descriptionMarkup && /* @__PURE__ */ import_react120.default.createElement(Box, {
+  }, title), descriptionMarkup && /* @__PURE__ */ import_react124.default.createElement(Box, {
     color: "text-secondary"
-  }, descriptionMarkup))), /* @__PURE__ */ import_react120.default.createElement("div", {
-    className: styles32.AnnotationContent
+  }, descriptionMarkup))), /* @__PURE__ */ import_react124.default.createElement("div", {
+    className: styles34.AnnotationContent
   }, children)));
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Layout/components/Section/Section.js
-var import_react121 = __toESM(require_react());
+var import_react125 = __toESM(require_react());
 function Section2({
   children,
   variant
 }) {
-  const className = classNames(styles32.Section, styles32[`Section-${variant}`]);
-  return /* @__PURE__ */ import_react121.default.createElement("div", {
+  const className = classNames(styles34.Section, styles34[`Section-${variant}`]);
+  return /* @__PURE__ */ import_react125.default.createElement("div", {
     className
   }, children);
 }
@@ -11991,25 +12387,25 @@ var Layout = function Layout2({
   sectioned,
   children
 }) {
-  const content = sectioned ? /* @__PURE__ */ import_react122.default.createElement(Section2, null, children) : children;
-  return /* @__PURE__ */ import_react122.default.createElement("div", {
-    className: styles32.Layout
+  const content = sectioned ? /* @__PURE__ */ import_react126.default.createElement(Section2, null, children) : children;
+  return /* @__PURE__ */ import_react126.default.createElement("div", {
+    className: styles34.Layout
   }, content);
 };
 Layout.AnnotatedSection = AnnotatedSection;
 Layout.Section = Section2;
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Navigation/Navigation.js
-var import_react136 = __toESM(require_react());
+var import_react140 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Navigation/context.js
-var import_react123 = __toESM(require_react());
-var NavigationContext = /* @__PURE__ */ (0, import_react123.createContext)({
+var import_react127 = __toESM(require_react());
+var NavigationContext = /* @__PURE__ */ (0, import_react127.createContext)({
   location: ""
 });
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Navigation/Navigation.css.js
-var styles34 = {
+var styles36 = {
   "Navigation": "Polaris-Navigation",
   "UserMenu": "Polaris-Navigation__UserMenu",
   "ContextControl": "Polaris-Navigation__ContextControl",
@@ -12059,10 +12455,10 @@ var styles34 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Navigation/components/Section/Section.js
-var import_react135 = __toESM(require_react());
+var import_react139 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Navigation/components/Item/Item.js
-var import_react134 = __toESM(require_react());
+var import_react138 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Navigation/types.js
 var MatchState;
@@ -12075,14 +12471,14 @@ var MatchState;
 })(MatchState || (MatchState = {}));
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Navigation/components/Item/components/SecondaryNavigation/SecondaryNavigation.js
-var import_react125 = __toESM(require_react());
+var import_react129 = __toESM(require_react());
 var import_react_fast_compare2 = __toESM(require_react_fast_compare());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Collapsible/Collapsible.js
-var import_react124 = __toESM(require_react());
+var import_react128 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Collapsible/Collapsible.css.js
-var styles35 = {
+var styles37 = {
   "Collapsible": "Polaris-Collapsible",
   "isFullyClosed": "Polaris-Collapsible--isFullyClosed",
   "expandOnPrint": "Polaris-Collapsible--expandOnPrint"
@@ -12097,14 +12493,14 @@ function Collapsible({
   children,
   onAnimationEnd
 }) {
-  const [height2, setHeight] = (0, import_react124.useState)(0);
-  const [isOpen, setIsOpen] = (0, import_react124.useState)(open);
-  const [animationState, setAnimationState] = (0, import_react124.useState)("idle");
-  const collapsibleContainer = (0, import_react124.useRef)(null);
+  const [height2, setHeight] = (0, import_react128.useState)(0);
+  const [isOpen, setIsOpen] = (0, import_react128.useState)(open);
+  const [animationState, setAnimationState] = (0, import_react128.useState)("idle");
+  const collapsibleContainer = (0, import_react128.useRef)(null);
   const isFullyOpen = animationState === "idle" && open && isOpen;
   const isFullyClosed = animationState === "idle" && !open && !isOpen;
   const content = expandOnPrint || !isFullyClosed ? children : null;
-  const wrapperClassName = classNames(styles35.Collapsible, isFullyClosed && styles35.isFullyClosed, expandOnPrint && styles35.expandOnPrint);
+  const wrapperClassName = classNames(styles37.Collapsible, isFullyClosed && styles37.isFullyClosed, expandOnPrint && styles37.expandOnPrint);
   const transitionDisabled = isTransitionDisabled(transition);
   const transitionStyles = typeof transition === "object" && {
     transitionDuration: transition.duration,
@@ -12117,7 +12513,7 @@ function Collapsible({
       overflow: isFullyOpen ? "visible" : "hidden"
     }
   };
-  const handleCompleteAnimation = (0, import_react124.useCallback)(({
+  const handleCompleteAnimation = (0, import_react128.useCallback)(({
     target
   }) => {
     if (target === collapsibleContainer.current) {
@@ -12126,7 +12522,7 @@ function Collapsible({
       onAnimationEnd && onAnimationEnd();
     }
   }, [onAnimationEnd, open]);
-  const startAnimation = (0, import_react124.useCallback)(() => {
+  const startAnimation = (0, import_react128.useCallback)(() => {
     if (transitionDisabled) {
       setIsOpen(open);
       setAnimationState("idle");
@@ -12139,17 +12535,17 @@ function Collapsible({
       setAnimationState("measuring");
     }
   }, [open, transitionDisabled]);
-  (0, import_react124.useEffect)(() => {
+  (0, import_react128.useEffect)(() => {
     if (open !== isOpen) {
       startAnimation();
     }
   }, [open, isOpen]);
-  (0, import_react124.useEffect)(() => {
+  (0, import_react128.useEffect)(() => {
     if (!open || !collapsibleContainer.current)
       return;
     setHeight(collapsibleContainer.current.scrollHeight);
   }, []);
-  (0, import_react124.useEffect)(() => {
+  (0, import_react128.useEffect)(() => {
     if (!collapsibleContainer.current)
       return;
     switch (animationState) {
@@ -12163,7 +12559,7 @@ function Collapsible({
         setHeight(open ? collapsibleContainer.current.scrollHeight : 0);
     }
   }, [animationState, open, isOpen]);
-  return /* @__PURE__ */ import_react124.default.createElement("div", {
+  return /* @__PURE__ */ import_react128.default.createElement("div", {
     id,
     style: collapsibleStyles,
     ref: collapsibleContainer,
@@ -12196,21 +12592,21 @@ function SecondaryNavigation({
   truncateText,
   secondaryNavigationId
 }) {
-  const uid = (0, import_react125.useId)();
+  const uid = (0, import_react129.useId)();
   const {
     onNavigationDismiss
-  } = (0, import_react125.useContext)(NavigationContext);
-  const [hoveredItem, setHoveredItem] = (0, import_react125.useState)();
+  } = (0, import_react129.useContext)(NavigationContext);
+  const [hoveredItem, setHoveredItem] = (0, import_react129.useState)();
   const matchedItemPosition = subNavigationItems.findIndex((item) => (0, import_react_fast_compare2.default)(item, longestMatch));
   const hoveredItemPosition = subNavigationItems.findIndex((item) => (0, import_react_fast_compare2.default)(item, hoveredItem));
-  return /* @__PURE__ */ import_react125.default.createElement("div", {
-    className: classNames(styles34.SecondaryNavigation, showExpanded && styles34.SecondaryNavigationOpen, !icon && styles34["SecondaryNavigation-noIcon"])
-  }, /* @__PURE__ */ import_react125.default.createElement(Collapsible, {
+  return /* @__PURE__ */ import_react129.default.createElement("div", {
+    className: classNames(styles36.SecondaryNavigation, showExpanded && styles36.SecondaryNavigationOpen, !icon && styles36["SecondaryNavigation-noIcon"])
+  }, /* @__PURE__ */ import_react129.default.createElement(Collapsible, {
     id: secondaryNavigationId || uid,
     open: showExpanded,
     transition: false
-  }, /* @__PURE__ */ import_react125.default.createElement("ul", {
-    className: styles34.List
+  }, /* @__PURE__ */ import_react129.default.createElement("ul", {
+    className: styles36.List
   }, subNavigationItems.map((item, index) => {
     const {
       label,
@@ -12223,7 +12619,7 @@ function SecondaryNavigation({
       }
     };
     const shouldShowVerticalLine = index < matchedItemPosition;
-    return /* @__PURE__ */ import_react125.default.createElement(ItemComponent, Object.assign({
+    return /* @__PURE__ */ import_react129.default.createElement(ItemComponent, Object.assign({
       key: label
     }, rest, {
       label,
@@ -12240,10 +12636,10 @@ function SecondaryNavigation({
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Indicator/Indicator.js
-var import_react126 = __toESM(require_react());
+var import_react130 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Indicator/Indicator.css.js
-var styles36 = {
+var styles38 = {
   "Indicator": "Polaris-Indicator",
   "pulseIndicator": "Polaris-Indicator--pulseIndicator"
 };
@@ -12252,21 +12648,21 @@ var styles36 = {
 function Indicator({
   pulse = true
 }) {
-  const className = classNames(styles36.Indicator, pulse && styles36.pulseIndicator);
-  return /* @__PURE__ */ import_react126.default.createElement("span", {
+  const className = classNames(styles38.Indicator, pulse && styles38.pulseIndicator);
+  return /* @__PURE__ */ import_react130.default.createElement("span", {
     className
   });
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Badge/Badge.js
-var import_react129 = __toESM(require_react());
+var import_react133 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/within-filter-context.js
-var import_react127 = __toESM(require_react());
-var WithinFilterContext = /* @__PURE__ */ (0, import_react127.createContext)(false);
+var import_react131 = __toESM(require_react());
+var WithinFilterContext = /* @__PURE__ */ (0, import_react131.createContext)(false);
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Badge/Badge.css.js
-var styles37 = {
+var styles39 = {
   "Badge": "Polaris-Badge",
   "toneSuccess": "Polaris-Badge--toneSuccess",
   "toneSuccess-strong": "Polaris-Badge__toneSuccess--strong",
@@ -12375,10 +12771,10 @@ function getDefaultAccessibilityLabel(i18n, progress, tone) {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Badge/components/Pip/Pip.js
-var import_react128 = __toESM(require_react());
+var import_react132 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Badge/components/Pip/Pip.css.js
-var styles38 = {
+var styles40 = {
   "Pip": "Polaris-Badge-Pip",
   "toneInfo": "Polaris-Badge-Pip--toneInfo",
   "toneSuccess": "Polaris-Badge-Pip--toneSuccess",
@@ -12398,11 +12794,11 @@ function Pip({
   accessibilityLabelOverride
 }) {
   const i18n = useI18n();
-  const className = classNames(styles38.Pip, tone && styles38[variationName("tone", tone)], progress && styles38[variationName("progress", progress)]);
+  const className = classNames(styles40.Pip, tone && styles40[variationName("tone", tone)], progress && styles40[variationName("progress", progress)]);
   const accessibilityLabel = accessibilityLabelOverride ? accessibilityLabelOverride : getDefaultAccessibilityLabel(i18n, progress, tone);
-  return /* @__PURE__ */ import_react128.default.createElement("span", {
+  return /* @__PURE__ */ import_react132.default.createElement("span", {
     className
-  }, /* @__PURE__ */ import_react128.default.createElement(Text, {
+  }, /* @__PURE__ */ import_react132.default.createElement(Text, {
     as: "span",
     visuallyHidden: true
   }, accessibilityLabel));
@@ -12411,20 +12807,20 @@ function Pip({
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Badge/Badge.js
 var DEFAULT_SIZE = "medium";
 var progressIconMap = {
-  complete: () => /* @__PURE__ */ import_react129.default.createElement("svg", {
+  complete: () => /* @__PURE__ */ import_react133.default.createElement("svg", {
     viewBox: "0 0 20 20"
-  }, /* @__PURE__ */ import_react129.default.createElement("path", {
+  }, /* @__PURE__ */ import_react133.default.createElement("path", {
     d: "M6 10c0-.93 0-1.395.102-1.776a3 3 0 0 1 2.121-2.122C8.605 6 9.07 6 10 6c.93 0 1.395 0 1.776.102a3 3 0 0 1 2.122 2.122C14 8.605 14 9.07 14 10s0 1.395-.102 1.777a3 3 0 0 1-2.122 2.12C11.395 14 10.93 14 10 14s-1.395 0-1.777-.102a3 3 0 0 1-2.12-2.121C6 11.395 6 10.93 6 10Z"
   })),
-  partiallyComplete: () => /* @__PURE__ */ import_react129.default.createElement("svg", {
+  partiallyComplete: () => /* @__PURE__ */ import_react133.default.createElement("svg", {
     viewBox: "0 0 20 20"
-  }, /* @__PURE__ */ import_react129.default.createElement("path", {
+  }, /* @__PURE__ */ import_react133.default.createElement("path", {
     fillRule: "evenodd",
     d: "m8.888 6.014-.017-.018-.02.02c-.253.013-.45.038-.628.086a3 3 0 0 0-2.12 2.122C6 8.605 6 9.07 6 10s0 1.395.102 1.777a3 3 0 0 0 2.121 2.12C8.605 14 9.07 14 10 14c.93 0 1.395 0 1.776-.102a3 3 0 0 0 2.122-2.121C14 11.395 14 10.93 14 10c0-.93 0-1.395-.102-1.776a3 3 0 0 0-2.122-2.122C11.395 6 10.93 6 10 6c-.475 0-.829 0-1.112.014ZM8.446 7.34a1.75 1.75 0 0 0-1.041.94l4.314 4.315c.443-.2.786-.576.941-1.042L8.446 7.34Zm4.304 2.536L10.124 7.25c.908.001 1.154.013 1.329.06a1.75 1.75 0 0 1 1.237 1.237c.047.175.059.42.06 1.329ZM8.547 12.69c.182.05.442.06 1.453.06h.106L7.25 9.894V10c0 1.01.01 1.27.06 1.453a1.75 1.75 0 0 0 1.237 1.237Z"
   })),
-  incomplete: () => /* @__PURE__ */ import_react129.default.createElement("svg", {
+  incomplete: () => /* @__PURE__ */ import_react133.default.createElement("svg", {
     viewBox: "0 0 20 20"
-  }, /* @__PURE__ */ import_react129.default.createElement("path", {
+  }, /* @__PURE__ */ import_react133.default.createElement("path", {
     fillRule: "evenodd",
     d: "M8.547 12.69c.183.05.443.06 1.453.06s1.27-.01 1.453-.06a1.75 1.75 0 0 0 1.237-1.237c.05-.182.06-.443.06-1.453s-.01-1.27-.06-1.453a1.75 1.75 0 0 0-1.237-1.237c-.182-.05-.443-.06-1.453-.06s-1.27.01-1.453.06A1.75 1.75 0 0 0 7.31 8.547c-.05.183-.06.443-.06 1.453s.01 1.27.06 1.453a1.75 1.75 0 0 0 1.237 1.237ZM6.102 8.224C6 8.605 6 9.07 6 10s0 1.395.102 1.777a3 3 0 0 0 2.122 2.12C8.605 14 9.07 14 10 14s1.395 0 1.777-.102a3 3 0 0 0 2.12-2.121C14 11.395 14 10.93 14 10c0-.93 0-1.395-.102-1.776a3 3 0 0 0-2.121-2.122C11.395 6 10.93 6 10 6c-.93 0-1.395 0-1.776.102a3 3 0 0 0-2.122 2.122Z"
   }))
@@ -12438,28 +12834,28 @@ function Badge({
   toneAndProgressLabelOverride
 }) {
   const i18n = useI18n();
-  const withinFilter = (0, import_react129.useContext)(WithinFilterContext);
-  const className = classNames(styles37.Badge, tone && styles37[variationName("tone", tone)], size2 && size2 !== DEFAULT_SIZE && styles37[variationName("size", size2)], withinFilter && styles37.withinFilter);
+  const withinFilter = (0, import_react133.useContext)(WithinFilterContext);
+  const className = classNames(styles39.Badge, tone && styles39[variationName("tone", tone)], size2 && size2 !== DEFAULT_SIZE && styles39[variationName("size", size2)], withinFilter && styles39.withinFilter);
   const accessibilityLabel = toneAndProgressLabelOverride ? toneAndProgressLabelOverride : getDefaultAccessibilityLabel(i18n, progress, tone);
-  let accessibilityMarkup = Boolean(accessibilityLabel) && /* @__PURE__ */ import_react129.default.createElement(Text, {
+  let accessibilityMarkup = Boolean(accessibilityLabel) && /* @__PURE__ */ import_react133.default.createElement(Text, {
     as: "span",
     visuallyHidden: true
   }, accessibilityLabel);
   if (progress && !icon) {
-    accessibilityMarkup = /* @__PURE__ */ import_react129.default.createElement("span", {
-      className: styles37.Icon
-    }, /* @__PURE__ */ import_react129.default.createElement(Icon, {
+    accessibilityMarkup = /* @__PURE__ */ import_react133.default.createElement("span", {
+      className: styles39.Icon
+    }, /* @__PURE__ */ import_react133.default.createElement(Icon, {
       accessibilityLabel,
       source: progressIconMap[progress]
     }));
   }
-  return /* @__PURE__ */ import_react129.default.createElement("span", {
+  return /* @__PURE__ */ import_react133.default.createElement("span", {
     className
-  }, accessibilityMarkup, icon && /* @__PURE__ */ import_react129.default.createElement("span", {
-    className: styles37.Icon
-  }, /* @__PURE__ */ import_react129.default.createElement(Icon, {
+  }, accessibilityMarkup, icon && /* @__PURE__ */ import_react133.default.createElement("span", {
+    className: styles39.Icon
+  }, /* @__PURE__ */ import_react133.default.createElement(Icon, {
     source: icon
-  })), children && /* @__PURE__ */ import_react129.default.createElement(Text, {
+  })), children && /* @__PURE__ */ import_react133.default.createElement(Text, {
     as: "span",
     variant: "bodySm",
     fontWeight: tone === "new" ? "medium" : void 0
@@ -12468,18 +12864,18 @@ function Badge({
 Badge.Pip = Pip;
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Tooltip/Tooltip.js
-var import_react133 = __toESM(require_react());
+var import_react137 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Tooltip/Tooltip.css.js
-var styles39 = {
+var styles41 = {
   "TooltipContainer": "Polaris-Tooltip__TooltipContainer",
   "HasUnderline": "Polaris-Tooltip__HasUnderline"
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/ephemeral-presence-manager/hooks.js
-var import_react130 = __toESM(require_react());
+var import_react134 = __toESM(require_react());
 function useEphemeralPresenceManager() {
-  const ephemeralPresenceManager = (0, import_react130.useContext)(EphemeralPresenceManagerContext);
+  const ephemeralPresenceManager = (0, import_react134.useContext)(EphemeralPresenceManagerContext);
   if (!ephemeralPresenceManager) {
     throw new Error("No ephemeral presence manager was provided. Your application must be wrapped in an <AppProvider> component. See https://polaris.shopify.com/components/app-provider for implementation instructions.");
   }
@@ -12487,10 +12883,10 @@ function useEphemeralPresenceManager() {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Tooltip/components/TooltipOverlay/TooltipOverlay.js
-var import_react132 = __toESM(require_react());
+var import_react136 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Tooltip/components/TooltipOverlay/TooltipOverlay.css.js
-var styles40 = {
+var styles42 = {
   "TooltipOverlay": "Polaris-Tooltip-TooltipOverlay",
   "Tail": "Polaris-Tooltip-TooltipOverlay__Tail",
   "positionedAbove": "Polaris-Tooltip-TooltipOverlay--positionedAbove",
@@ -12503,7 +12899,7 @@ var styles40 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/PositionedOverlay/PositionedOverlay.js
-var import_react131 = __toESM(require_react());
+var import_react135 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/PositionedOverlay/utilities/math.js
 function calculateVerticalPosition(activatorRect, overlayRect, overlayMargins, scrollableContainerRect, containerRect, preferredPosition, fixed, topBarOffset = 0) {
@@ -12595,7 +12991,7 @@ function windowRect() {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/PositionedOverlay/PositionedOverlay.css.js
-var styles41 = {
+var styles43 = {
   "PositionedOverlay": "Polaris-PositionedOverlay",
   "fixed": "Polaris-PositionedOverlay--fixed",
   "calculating": "Polaris-PositionedOverlay--calculating",
@@ -12609,7 +13005,7 @@ var OBSERVER_CONFIG = {
   characterData: true,
   attributeFilter: ["style"]
 };
-var PositionedOverlay = class extends import_react131.PureComponent {
+var PositionedOverlay = class extends import_react135.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -12802,12 +13198,12 @@ var PositionedOverlay = class extends import_react131.PureComponent {
       width: width2 == null || isNaN(width2) ? void 0 : width2,
       zIndex: zIndexOverride || zIndex2 || void 0
     };
-    const className = classNames(styles41.PositionedOverlay, fixed && styles41.fixed, preventInteraction && styles41.preventInteraction, propClassNames);
-    return /* @__PURE__ */ import_react131.default.createElement("div", {
+    const className = classNames(styles43.PositionedOverlay, fixed && styles43.fixed, preventInteraction && styles43.preventInteraction, propClassNames);
+    return /* @__PURE__ */ import_react135.default.createElement("div", {
       className,
       style,
       ref: this.setOverlay
-    }, /* @__PURE__ */ import_react131.default.createElement(EventListener, {
+    }, /* @__PURE__ */ import_react135.default.createElement(EventListener, {
       event: "resize",
       handler: this.handleMeasurement
     }), render(this.overlayDetails()));
@@ -12837,17 +13233,17 @@ function isDocument2(node) {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Tooltip/components/TooltipOverlay/TooltipOverlay.js
-var tailUpPaths = /* @__PURE__ */ import_react132.default.createElement(import_react132.default.Fragment, null, /* @__PURE__ */ import_react132.default.createElement("path", {
+var tailUpPaths = /* @__PURE__ */ import_react136.default.createElement(import_react136.default.Fragment, null, /* @__PURE__ */ import_react136.default.createElement("path", {
   d: "M18.829 8.171 11.862.921A3 3 0 0 0 7.619.838L0 8.171h1.442l6.87-6.612a2 2 0 0 1 2.83.055l6.3 6.557h1.387Z",
   fill: "var(--p-color-tooltip-tail-up-border-experimental)"
-}), /* @__PURE__ */ import_react132.default.createElement("path", {
+}), /* @__PURE__ */ import_react136.default.createElement("path", {
   d: "M17.442 10.171h-16v-2l6.87-6.612a2 2 0 0 1 2.83.055l6.3 6.557v2Z",
   fill: "var(--p-color-bg-surface)"
 }));
-var tailDownPaths = /* @__PURE__ */ import_react132.default.createElement(import_react132.default.Fragment, null, /* @__PURE__ */ import_react132.default.createElement("path", {
+var tailDownPaths = /* @__PURE__ */ import_react136.default.createElement(import_react136.default.Fragment, null, /* @__PURE__ */ import_react136.default.createElement("path", {
   d: "m0 2 6.967 7.25a3 3 0 0 0 4.243.083L18.829 2h-1.442l-6.87 6.612a2 2 0 0 1-2.83-.055L1.387 2H0Z",
   fill: "var(--p-color-tooltip-tail-down-border-experimental)"
-}), /* @__PURE__ */ import_react132.default.createElement("path", {
+}), /* @__PURE__ */ import_react136.default.createElement("path", {
   d: "M1.387 0h16v2l-6.87 6.612a2 2 0 0 1-2.83-.055L1.387 2V0Z",
   fill: "var(--p-color-bg-surface)"
 }));
@@ -12866,7 +13262,7 @@ function TooltipOverlay({
   instant
 }) {
   const i18n = useI18n();
-  const markup = active ? /* @__PURE__ */ import_react132.default.createElement(PositionedOverlay, {
+  const markup = active ? /* @__PURE__ */ import_react136.default.createElement(PositionedOverlay, {
     active,
     activator,
     preferredPosition,
@@ -12882,8 +13278,8 @@ function TooltipOverlay({
       positioning,
       chevronOffset
     } = overlayDetails;
-    const containerClassName = classNames(styles40.TooltipOverlay, measuring && styles40.measuring, !measuring && styles40.measured, instant && styles40.instant, positioning === "above" && styles40.positionedAbove);
-    const contentClassName = classNames(styles40.Content, width2 && styles40[width2]);
+    const containerClassName = classNames(styles42.TooltipOverlay, measuring && styles42.measuring, !measuring && styles42.measured, instant && styles42.instant, positioning === "above" && styles42.positionedAbove);
+    const contentClassName = classNames(styles42.Content, width2 && styles42[width2]);
     const contentStyles = measuring ? void 0 : {
       minHeight: desiredHeight
     };
@@ -12892,15 +13288,15 @@ function TooltipOverlay({
       "--pc-tooltip-border-radius": borderRadius ? `var(--p-border-radius-${borderRadius})` : void 0,
       "--pc-tooltip-padding": padding && padding === "default" ? "var(--p-space-100) var(--p-space-200)" : `var(--p-space-${padding})`
     };
-    return /* @__PURE__ */ import_react132.default.createElement("div", Object.assign({
+    return /* @__PURE__ */ import_react136.default.createElement("div", Object.assign({
       style,
       className: containerClassName
-    }, layer.props), /* @__PURE__ */ import_react132.default.createElement("svg", {
-      className: styles40.Tail,
+    }, layer.props), /* @__PURE__ */ import_react136.default.createElement("svg", {
+      className: styles42.Tail,
       width: "19",
       height: "11",
       fill: "none"
-    }, positioning === "above" ? tailDownPaths : tailUpPaths), /* @__PURE__ */ import_react132.default.createElement("div", {
+    }, positioning === "above" ? tailDownPaths : tailUpPaths), /* @__PURE__ */ import_react136.default.createElement("div", {
       id,
       role: "tooltip",
       className: contentClassName,
@@ -12946,24 +13342,24 @@ function Tooltip({
     value: persist,
     toggle: togglePersisting
   } = useToggle(Boolean(originalActive) && Boolean(persistOnClick));
-  const [activatorNode, setActivatorNode] = (0, import_react133.useState)(null);
+  const [activatorNode, setActivatorNode] = (0, import_react137.useState)(null);
   const {
     presenceList,
     addPresence,
     removePresence
   } = useEphemeralPresenceManager();
-  const id = (0, import_react133.useId)();
-  const activatorContainer = (0, import_react133.useRef)(null);
-  const mouseEntered = (0, import_react133.useRef)(false);
-  const [shouldAnimate, setShouldAnimate] = (0, import_react133.useState)(Boolean(!originalActive));
-  const hoverDelayTimeout = (0, import_react133.useRef)(null);
-  const hoverOutTimeout = (0, import_react133.useRef)(null);
-  const handleFocus = (0, import_react133.useCallback)(() => {
+  const id = (0, import_react137.useId)();
+  const activatorContainer = (0, import_react137.useRef)(null);
+  const mouseEntered = (0, import_react137.useRef)(false);
+  const [shouldAnimate, setShouldAnimate] = (0, import_react137.useState)(Boolean(!originalActive));
+  const hoverDelayTimeout = (0, import_react137.useRef)(null);
+  const hoverOutTimeout = (0, import_react137.useRef)(null);
+  const handleFocus = (0, import_react137.useCallback)(() => {
     if (originalActive !== false) {
       setActiveTrue();
     }
   }, [originalActive, setActiveTrue]);
-  (0, import_react133.useEffect)(() => {
+  (0, import_react137.useEffect)(() => {
     const firstFocusable = activatorContainer.current ? findFirstFocusableNode(activatorContainer.current) : null;
     const accessibilityNode = firstFocusable || activatorContainer.current;
     if (!accessibilityNode)
@@ -12972,7 +13368,7 @@ function Tooltip({
     accessibilityNode.setAttribute("aria-describedby", id);
     accessibilityNode.setAttribute("data-polaris-tooltip-activator", "true");
   }, [id, children]);
-  (0, import_react133.useEffect)(() => {
+  (0, import_react137.useEffect)(() => {
     return () => {
       if (hoverDelayTimeout.current) {
         clearTimeout(hoverDelayTimeout.current);
@@ -12982,34 +13378,34 @@ function Tooltip({
       }
     };
   }, []);
-  const handleOpen = (0, import_react133.useCallback)(() => {
+  const handleOpen = (0, import_react137.useCallback)(() => {
     setShouldAnimate(!presenceList.tooltip && !active);
     onOpen?.();
     addPresence("tooltip");
   }, [addPresence, presenceList.tooltip, onOpen, active]);
-  const handleClose = (0, import_react133.useCallback)(() => {
+  const handleClose = (0, import_react137.useCallback)(() => {
     onClose?.();
     setShouldAnimate(false);
     hoverOutTimeout.current = setTimeout(() => {
       removePresence("tooltip");
     }, HOVER_OUT_TIMEOUT);
   }, [removePresence, onClose]);
-  const handleKeyUp = (0, import_react133.useCallback)((event) => {
+  const handleKeyUp = (0, import_react137.useCallback)((event) => {
     if (event.key !== "Escape")
       return;
     handleClose?.();
     handleBlur();
     persistOnClick && togglePersisting();
   }, [handleBlur, handleClose, persistOnClick, togglePersisting]);
-  (0, import_react133.useEffect)(() => {
+  (0, import_react137.useEffect)(() => {
     if (originalActive === false && active) {
       handleClose();
       handleBlur();
     }
   }, [originalActive, active, handleClose, handleBlur]);
-  const portal2 = activatorNode ? /* @__PURE__ */ import_react133.default.createElement(Portal, {
+  const portal2 = activatorNode ? /* @__PURE__ */ import_react137.default.createElement(Portal, {
     idPrefix: "tooltip"
-  }, /* @__PURE__ */ import_react133.default.createElement(TooltipOverlay, {
+  }, /* @__PURE__ */ import_react137.default.createElement(TooltipOverlay, {
     id,
     preferredPosition,
     activator: activatorNode,
@@ -13022,12 +13418,12 @@ function Tooltip({
     borderRadius,
     zIndexOverride,
     instant: !shouldAnimate
-  }, /* @__PURE__ */ import_react133.default.createElement(Text, {
+  }, /* @__PURE__ */ import_react137.default.createElement(Text, {
     as: "span",
     variant: "bodyMd"
   }, content))) : null;
-  const wrapperClassNames = classNames(activatorWrapper === "div" && styles39.TooltipContainer, hasUnderline && styles39.HasUnderline);
-  return /* @__PURE__ */ import_react133.default.createElement(WrapperComponent, {
+  const wrapperClassNames = classNames(activatorWrapper === "div" && styles41.TooltipContainer, hasUnderline && styles41.HasUnderline);
+  return /* @__PURE__ */ import_react137.default.createElement(WrapperComponent, {
     onFocus: () => {
       handleOpen();
       handleFocus();
@@ -13123,14 +13519,14 @@ function Item5({
   const {
     isNavigationCollapsed
   } = useMediaQuery();
-  const secondaryNavigationId = (0, import_react134.useId)();
+  const secondaryNavigationId = (0, import_react138.useId)();
   const {
     location,
     onNavigationDismiss
-  } = (0, import_react134.useContext)(NavigationContext);
-  const navTextRef = (0, import_react134.useRef)(null);
-  const [isTruncated, setIsTruncated] = (0, import_react134.useState)(false);
-  (0, import_react134.useEffect)(() => {
+  } = (0, import_react138.useContext)(NavigationContext);
+  const navTextRef = (0, import_react138.useRef)(null);
+  const [isTruncated, setIsTruncated] = (0, import_react138.useState)(false);
+  (0, import_react138.useEffect)(() => {
     if (!isNavigationCollapsed && expanded) {
       onToggleExpandedState?.();
     }
@@ -13143,9 +13539,9 @@ function Item5({
   }, [truncateText]);
   const tabIndex = disabled ? -1 : 0;
   const hasNewChild = subNavigationItems.filter((subNavigationItem) => subNavigationItem.new).length > 0;
-  const indicatorMarkup = hasNewChild ? /* @__PURE__ */ import_react134.default.createElement("span", {
-    className: styles34.Indicator
-  }, /* @__PURE__ */ import_react134.default.createElement(Indicator, {
+  const indicatorMarkup = hasNewChild ? /* @__PURE__ */ import_react138.default.createElement("span", {
+    className: styles36.Indicator
+  }, /* @__PURE__ */ import_react138.default.createElement(Indicator, {
     pulse: true
   })) : null;
   const matchState = matchStateForItem({
@@ -13162,25 +13558,25 @@ function Item5({
   const childIsActive = matchingSubNavigationItems.length > 0;
   const selected = selectedOverride == null ? matchState === MatchState.MatchForced || matchState === MatchState.MatchUrl || matchState === MatchState.MatchPaths : selectedOverride;
   const icon = selected || childIsActive ? matchedItemIcon ?? baseIcon : baseIcon;
-  const iconMarkup = icon ? /* @__PURE__ */ import_react134.default.createElement("div", {
-    className: classNames(styles34.Icon, shouldResizeIcon && styles34["Icon-resized"])
-  }, /* @__PURE__ */ import_react134.default.createElement(Icon, {
+  const iconMarkup = icon ? /* @__PURE__ */ import_react138.default.createElement("div", {
+    className: classNames(styles36.Icon, shouldResizeIcon && styles36["Icon-resized"])
+  }, /* @__PURE__ */ import_react138.default.createElement(Icon, {
     source: icon
   })) : null;
   let badgeMarkup = null;
   if (isNew) {
-    badgeMarkup = /* @__PURE__ */ import_react134.default.createElement(Badge, {
+    badgeMarkup = /* @__PURE__ */ import_react138.default.createElement(Badge, {
       tone: "new"
     }, i18n.translate("Polaris.Badge.TONE_LABELS.new"));
   } else if (typeof badge === "string") {
-    badgeMarkup = /* @__PURE__ */ import_react134.default.createElement(Badge, {
+    badgeMarkup = /* @__PURE__ */ import_react138.default.createElement(Badge, {
       tone: "new"
     }, badge);
   } else {
     badgeMarkup = badge;
   }
-  const wrappedBadgeMarkup = badgeMarkup == null ? null : /* @__PURE__ */ import_react134.default.createElement("div", {
-    className: styles34.Badge
+  const wrappedBadgeMarkup = badgeMarkup == null ? null : /* @__PURE__ */ import_react138.default.createElement("div", {
+    className: styles36.Badge
   }, badgeMarkup);
   const tone = !showVerticalHoverPointer && !matches2 && level !== 0 ? "subdued" : void 0;
   let fontWeight = "regular";
@@ -13189,24 +13585,24 @@ function Item5({
   } else if (level === 0 || showVerticalHoverPointer) {
     fontWeight = "medium";
   }
-  const itemLabelMarkup = /* @__PURE__ */ import_react134.default.createElement("span", {
-    className: classNames(styles34.Text, truncateText && styles34["Text-truncated"]),
+  const itemLabelMarkup = /* @__PURE__ */ import_react138.default.createElement("span", {
+    className: classNames(styles36.Text, truncateText && styles36["Text-truncated"]),
     ref: navTextRef
-  }, /* @__PURE__ */ import_react134.default.createElement(Text, {
+  }, /* @__PURE__ */ import_react138.default.createElement(Text, {
     as: "span",
     variant: "bodyMd",
     tone,
     fontWeight
   }, label), indicatorMarkup);
   if (url == null) {
-    const className2 = classNames(styles34.Item, disabled && styles34["Item-disabled"], selectedOverride && styles34["Item-selected"]);
-    return /* @__PURE__ */ import_react134.default.createElement("li", {
-      className: styles34.ListItem
-    }, /* @__PURE__ */ import_react134.default.createElement("div", {
-      className: styles34.ItemWrapper
-    }, /* @__PURE__ */ import_react134.default.createElement("div", {
-      className: classNames(styles34.ItemInnerWrapper, disabled && styles34.ItemInnerDisabled, selectedOverride && styles34["ItemInnerWrapper-selected"])
-    }, /* @__PURE__ */ import_react134.default.createElement("button", {
+    const className2 = classNames(styles36.Item, disabled && styles36["Item-disabled"], selectedOverride && styles36["Item-selected"]);
+    return /* @__PURE__ */ import_react138.default.createElement("li", {
+      className: styles36.ListItem
+    }, /* @__PURE__ */ import_react138.default.createElement("div", {
+      className: styles36.ItemWrapper
+    }, /* @__PURE__ */ import_react138.default.createElement("div", {
+      className: classNames(styles36.ItemInnerWrapper, disabled && styles36.ItemInnerDisabled, selectedOverride && styles36["ItemInnerWrapper-selected"])
+    }, /* @__PURE__ */ import_react138.default.createElement("button", {
       type: "button",
       className: className2,
       disabled,
@@ -13225,18 +13621,18 @@ function Item5({
       console.warn(`secondaryActions must have a maximum of ${MAX_SECONDARY_ACTIONS} actions. Only the first ${MAX_SECONDARY_ACTIONS} actions will be rendered.`);
     }
   }
-  const secondaryActionMarkup = actions?.length ? /* @__PURE__ */ import_react134.default.createElement("span", {
-    className: styles34.SecondaryActions
-  }, actions.map((action) => /* @__PURE__ */ import_react134.default.createElement(ItemSecondaryAction, Object.assign({
+  const secondaryActionMarkup = actions?.length ? /* @__PURE__ */ import_react138.default.createElement("span", {
+    className: styles36.SecondaryActions
+  }, actions.map((action) => /* @__PURE__ */ import_react138.default.createElement(ItemSecondaryAction, Object.assign({
     key: action.accessibilityLabel
   }, action, {
     tabIndex,
     disabled
   })))) : null;
-  const itemContentMarkup = /* @__PURE__ */ import_react134.default.createElement(import_react134.default.Fragment, null, iconMarkup, itemLabelMarkup, secondaryActionMarkup ? null : wrappedBadgeMarkup);
-  const outerContentMarkup = /* @__PURE__ */ import_react134.default.createElement(import_react134.default.Fragment, null, secondaryActionMarkup ? wrappedBadgeMarkup : null);
+  const itemContentMarkup = /* @__PURE__ */ import_react138.default.createElement(import_react138.default.Fragment, null, iconMarkup, itemLabelMarkup, secondaryActionMarkup ? null : wrappedBadgeMarkup);
+  const outerContentMarkup = /* @__PURE__ */ import_react138.default.createElement(import_react138.default.Fragment, null, secondaryActionMarkup ? wrappedBadgeMarkup : null);
   const showExpanded = selected || expanded || childIsActive;
-  const itemClassName = classNames(styles34.Item, disabled && styles34["Item-disabled"], (selected || childIsActive) && styles34["Item-selected"], showExpanded && styles34.subNavigationActive, childIsActive && styles34["Item-child-active"], showVerticalLine && styles34["Item-line"], matches2 && styles34["Item-line-pointer"], showVerticalHoverPointer && styles34["Item-hover-pointer"]);
+  const itemClassName = classNames(styles36.Item, disabled && styles36["Item-disabled"], (selected || childIsActive) && styles36["Item-selected"], showExpanded && styles36.subNavigationActive, childIsActive && styles36["Item-child-active"], showVerticalLine && styles36["Item-line"], matches2 && styles36["Item-line-pointer"], showVerticalHoverPointer && styles36["Item-hover-pointer"]);
   let secondaryNavigationMarkup = null;
   if (subNavigationItems.length > 0) {
     const longestMatch = matchingSubNavigationItems.sort(({
@@ -13244,7 +13640,7 @@ function Item5({
     }, {
       url: secondUrl
     }) => secondUrl.length - firstUrl.length)[0];
-    secondaryNavigationMarkup = /* @__PURE__ */ import_react134.default.createElement(SecondaryNavigation, {
+    secondaryNavigationMarkup = /* @__PURE__ */ import_react138.default.createElement(SecondaryNavigation, {
       ItemComponent: Item5,
       icon,
       longestMatch,
@@ -13254,9 +13650,9 @@ function Item5({
       secondaryNavigationId
     });
   }
-  const className = classNames(styles34.ListItem, Boolean(actions && actions.length) && styles34["ListItem-hasAction"]);
+  const className = classNames(styles36.ListItem, Boolean(actions && actions.length) && styles36["ListItem-hasAction"]);
   const itemLinkMarkup = () => {
-    const linkMarkup = /* @__PURE__ */ import_react134.default.createElement(UnstyledLink, Object.assign({
+    const linkMarkup = /* @__PURE__ */ import_react138.default.createElement(UnstyledLink, Object.assign({
       url,
       className: itemClassName,
       external,
@@ -13265,25 +13661,25 @@ function Item5({
       "aria-label": accessibilityLabel,
       onClick: getClickHandler(onClick)
     }, normalizeAriaAttributes(secondaryNavigationId, subNavigationItems.length > 0, showExpanded)), itemContentMarkup);
-    return isTruncated ? /* @__PURE__ */ import_react134.default.createElement(Tooltip, {
+    return isTruncated ? /* @__PURE__ */ import_react138.default.createElement(Tooltip, {
       hoverDelay: TOOLTIP_HOVER_DELAY,
       content: label,
       preferredPosition: "above"
     }, linkMarkup) : linkMarkup;
   };
-  return /* @__PURE__ */ import_react134.default.createElement("li", {
+  return /* @__PURE__ */ import_react138.default.createElement("li", {
     className,
     onMouseEnter: () => {
       onMouseEnter?.(label);
     },
     onMouseLeave
-  }, /* @__PURE__ */ import_react134.default.createElement("div", {
-    className: styles34.ItemWrapper
-  }, /* @__PURE__ */ import_react134.default.createElement("div", {
-    className: classNames(styles34.ItemInnerWrapper, selected && childIsActive && styles34["ItemInnerWrapper-open"] || selected && !childIsActive && styles34["ItemInnerWrapper-selected"], displayActionsOnHover && styles34["ItemInnerWrapper-display-actions-on-hover"], disabled && styles34.ItemInnerDisabled)
-  }, displayActionsOnHover && secondaryActionMarkup && wrappedBadgeMarkup ? /* @__PURE__ */ import_react134.default.createElement("span", {
-    className: styles34.ItemWithFloatingActions
-  }, itemLinkMarkup(), secondaryActionMarkup) : /* @__PURE__ */ import_react134.default.createElement(import_react134.default.Fragment, null, itemLinkMarkup(), secondaryActionMarkup), outerContentMarkup)), secondaryNavigationMarkup);
+  }, /* @__PURE__ */ import_react138.default.createElement("div", {
+    className: styles36.ItemWrapper
+  }, /* @__PURE__ */ import_react138.default.createElement("div", {
+    className: classNames(styles36.ItemInnerWrapper, selected && childIsActive && styles36["ItemInnerWrapper-open"] || selected && !childIsActive && styles36["ItemInnerWrapper-selected"], displayActionsOnHover && styles36["ItemInnerWrapper-display-actions-on-hover"], disabled && styles36.ItemInnerDisabled)
+  }, displayActionsOnHover && secondaryActionMarkup && wrappedBadgeMarkup ? /* @__PURE__ */ import_react138.default.createElement("span", {
+    className: styles36.ItemWithFloatingActions
+  }, itemLinkMarkup(), secondaryActionMarkup) : /* @__PURE__ */ import_react138.default.createElement(import_react138.default.Fragment, null, itemLinkMarkup(), secondaryActionMarkup), outerContentMarkup)), secondaryNavigationMarkup);
   function getClickHandler(onClick2) {
     return (event) => {
       const {
@@ -13317,26 +13713,26 @@ function ItemSecondaryAction({
   disabled,
   tabIndex
 }) {
-  const markup = url ? /* @__PURE__ */ import_react134.default.createElement(UnstyledLink, {
+  const markup = url ? /* @__PURE__ */ import_react138.default.createElement(UnstyledLink, {
     external: true,
     url,
-    className: styles34.SecondaryAction,
+    className: styles36.SecondaryAction,
     tabIndex,
     "aria-disabled": disabled,
     "aria-label": accessibilityLabel,
     onClick
-  }, /* @__PURE__ */ import_react134.default.createElement(Icon, {
+  }, /* @__PURE__ */ import_react138.default.createElement(Icon, {
     source: icon
-  })) : /* @__PURE__ */ import_react134.default.createElement(UnstyledButton, {
-    className: styles34.SecondaryAction,
+  })) : /* @__PURE__ */ import_react138.default.createElement(UnstyledButton, {
+    className: styles36.SecondaryAction,
     tabIndex,
     disabled,
     accessibilityLabel,
     onClick
-  }, /* @__PURE__ */ import_react134.default.createElement(Icon, {
+  }, /* @__PURE__ */ import_react138.default.createElement(Icon, {
     source: icon
   }));
-  return tooltip ? /* @__PURE__ */ import_react134.default.createElement(Tooltip, tooltip, " ", markup, " ") : markup;
+  return tooltip ? /* @__PURE__ */ import_react138.default.createElement(Tooltip, tooltip, " ", markup, " ") : markup;
 }
 function normalizePathname(pathname) {
   const barePathname = pathname.split("?")[0].split("#")[0];
@@ -13391,11 +13787,11 @@ function Section3({
     toggle: toggleExpanded,
     setFalse: setExpandedFalse
   } = useToggle(false);
-  const animationFrame = (0, import_react135.useRef)(null);
+  const animationFrame = (0, import_react139.useRef)(null);
   const {
     isNavigationCollapsed
   } = useMediaQuery();
-  const [expandedIndex, setExpandedIndex] = (0, import_react135.useState)();
+  const [expandedIndex, setExpandedIndex] = (0, import_react139.useState)();
   const handleClick = (onClick, hasSubNavItems) => {
     return () => {
       if (onClick) {
@@ -13409,24 +13805,24 @@ function Section3({
       }
     };
   };
-  (0, import_react135.useEffect)(() => {
+  (0, import_react139.useEffect)(() => {
     return () => {
       animationFrame.current && cancelAnimationFrame(animationFrame.current);
     };
   });
-  const className = classNames(styles34.Section, separator && styles34["Section-withSeparator"], fill && styles34["Section-fill"]);
-  const buttonMarkup = action && /* @__PURE__ */ import_react135.default.createElement("button", {
+  const className = classNames(styles36.Section, separator && styles36["Section-withSeparator"], fill && styles36["Section-fill"]);
+  const buttonMarkup = action && /* @__PURE__ */ import_react139.default.createElement("button", {
     type: "button",
-    className: styles34.Action,
+    className: styles36.Action,
     "aria-label": action.accessibilityLabel,
     onClick: action.onClick
-  }, /* @__PURE__ */ import_react135.default.createElement(Icon, {
+  }, /* @__PURE__ */ import_react139.default.createElement(Icon, {
     source: action.icon
   }));
-  const actionMarkup = action && (action.tooltip ? /* @__PURE__ */ import_react135.default.createElement(Tooltip, action.tooltip, buttonMarkup) : buttonMarkup);
-  const sectionHeadingMarkup = title && /* @__PURE__ */ import_react135.default.createElement("li", {
-    className: styles34.SectionHeading
-  }, /* @__PURE__ */ import_react135.default.createElement(Text, {
+  const actionMarkup = action && (action.tooltip ? /* @__PURE__ */ import_react139.default.createElement(Tooltip, action.tooltip, buttonMarkup) : buttonMarkup);
+  const sectionHeadingMarkup = title && /* @__PURE__ */ import_react139.default.createElement("li", {
+    className: styles36.SectionHeading
+  }, /* @__PURE__ */ import_react139.default.createElement(Text, {
     as: "span",
     variant: "bodySm",
     fontWeight: "medium",
@@ -13447,7 +13843,7 @@ function Section3({
         setExpandedIndex(index);
       }
     };
-    return /* @__PURE__ */ import_react135.default.createElement(Item5, Object.assign({
+    return /* @__PURE__ */ import_react139.default.createElement(Item5, Object.assign({
       key: label
     }, rest, {
       label,
@@ -13457,23 +13853,23 @@ function Section3({
       expanded: expandedIndex === index
     }));
   });
-  const toggleClassName = classNames(styles34.Item, styles34.RollupToggle);
+  const toggleClassName = classNames(styles36.Item, styles36.RollupToggle);
   const ariaLabel = rollup && (expanded ? rollup.hide : rollup.view);
-  const toggleRollup = rollup && items.length > rollup.after && /* @__PURE__ */ import_react135.default.createElement("div", {
-    className: styles34.ListItem,
+  const toggleRollup = rollup && items.length > rollup.after && /* @__PURE__ */ import_react139.default.createElement("div", {
+    className: styles36.ListItem,
     key: "List Item"
-  }, /* @__PURE__ */ import_react135.default.createElement("div", {
-    className: styles34.ItemWrapper
-  }, /* @__PURE__ */ import_react135.default.createElement("div", {
-    className: styles34.ItemInnerWrapper
-  }, /* @__PURE__ */ import_react135.default.createElement("button", {
+  }, /* @__PURE__ */ import_react139.default.createElement("div", {
+    className: styles36.ItemWrapper
+  }, /* @__PURE__ */ import_react139.default.createElement("div", {
+    className: styles36.ItemInnerWrapper
+  }, /* @__PURE__ */ import_react139.default.createElement("button", {
     type: "button",
     className: toggleClassName,
     onClick: toggleExpanded,
     "aria-label": ariaLabel
-  }, /* @__PURE__ */ import_react135.default.createElement("span", {
-    className: styles34.Icon
-  }, /* @__PURE__ */ import_react135.default.createElement(Icon, {
+  }, /* @__PURE__ */ import_react139.default.createElement("span", {
+    className: styles36.Icon
+  }, /* @__PURE__ */ import_react139.default.createElement(Icon, {
     source: SvgMenuHorizontalIcon
   }))))));
   const activeItemIndex = items.findIndex((item) => {
@@ -13489,16 +13885,16 @@ function Section3({
   if (rollup && activeItemIndex !== -1 && activeItemIndex > rollup.after - 1) {
     sectionItems.push(...additionalItems.splice(activeItemIndex - rollup.after, 1));
   }
-  const additionalItemsId = (0, import_react135.useId)();
-  const activeItemsMarkup = rollup && additionalItems.length > 0 && /* @__PURE__ */ import_react135.default.createElement("li", {
-    className: styles34.RollupSection
-  }, /* @__PURE__ */ import_react135.default.createElement(Collapsible, {
+  const additionalItemsId = (0, import_react139.useId)();
+  const activeItemsMarkup = rollup && additionalItems.length > 0 && /* @__PURE__ */ import_react139.default.createElement("li", {
+    className: styles36.RollupSection
+  }, /* @__PURE__ */ import_react139.default.createElement(Collapsible, {
     id: additionalItemsId,
     open: expanded
-  }, /* @__PURE__ */ import_react135.default.createElement("ul", {
-    className: styles34.List
+  }, /* @__PURE__ */ import_react139.default.createElement("ul", {
+    className: styles36.List
   }, additionalItems)), toggleRollup);
-  return /* @__PURE__ */ import_react135.default.createElement("ul", {
+  return /* @__PURE__ */ import_react139.default.createElement("ul", {
     className
   }, sectionHeadingMarkup, sectionItems, activeItemsMarkup);
 }
@@ -13516,60 +13912,60 @@ var Navigation = function Navigation2({
     logo
   } = useFrame();
   const width2 = getWidth(logo, 104);
-  const logoMarkup = logo ? /* @__PURE__ */ import_react136.default.createElement("div", {
-    className: classNames(styles34.LogoContainer, logoSuffix && styles34.hasLogoSuffix)
-  }, /* @__PURE__ */ import_react136.default.createElement(UnstyledLink, {
+  const logoMarkup = logo ? /* @__PURE__ */ import_react140.default.createElement("div", {
+    className: classNames(styles36.LogoContainer, logoSuffix && styles36.hasLogoSuffix)
+  }, /* @__PURE__ */ import_react140.default.createElement(UnstyledLink, {
     url: logo.url || "",
-    className: styles34.LogoLink,
+    className: styles36.LogoLink,
     style: {
       width: width2
     }
-  }, /* @__PURE__ */ import_react136.default.createElement(Image, {
+  }, /* @__PURE__ */ import_react140.default.createElement(Image, {
     source: logo.topBarSource || "",
     alt: logo.accessibilityLabel || "",
-    className: styles34.Logo,
+    className: styles36.Logo,
     style: {
       width: width2
     }
   })), logoSuffix) : null;
-  const mediaMarkup = contextControl ? /* @__PURE__ */ import_react136.default.createElement("div", {
-    className: styles34.ContextControl
+  const mediaMarkup = contextControl ? /* @__PURE__ */ import_react140.default.createElement("div", {
+    className: styles36.ContextControl
   }, contextControl) : logoMarkup;
-  const context = (0, import_react136.useMemo)(() => ({
+  const context = (0, import_react140.useMemo)(() => ({
     location,
     onNavigationDismiss: onDismiss
   }), [location, onDismiss]);
-  return /* @__PURE__ */ import_react136.default.createElement(NavigationContext.Provider, {
+  return /* @__PURE__ */ import_react140.default.createElement(NavigationContext.Provider, {
     value: context
-  }, /* @__PURE__ */ import_react136.default.createElement(WithinContentContext.Provider, {
+  }, /* @__PURE__ */ import_react140.default.createElement(WithinContentContext.Provider, {
     value: true
-  }, /* @__PURE__ */ import_react136.default.createElement("nav", {
-    className: styles34.Navigation,
+  }, /* @__PURE__ */ import_react140.default.createElement("nav", {
+    className: styles36.Navigation,
     "aria-labelledby": ariaLabelledBy
-  }, mediaMarkup, /* @__PURE__ */ import_react136.default.createElement(Scrollable, {
-    className: styles34.PrimaryNavigation
+  }, mediaMarkup, /* @__PURE__ */ import_react140.default.createElement(Scrollable, {
+    className: styles36.PrimaryNavigation
   }, children))));
 };
 Navigation.Item = Item5;
 Navigation.Section = Section3;
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Page/Page.js
-var import_react158 = __toESM(require_react());
+var import_react162 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/is-interface.js
-var import_react137 = __toESM(require_react());
+var import_react141 = __toESM(require_react());
 function isInterface(x) {
-  return !/* @__PURE__ */ (0, import_react137.isValidElement)(x) && x !== void 0;
+  return !/* @__PURE__ */ (0, import_react141.isValidElement)(x) && x !== void 0;
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/is-react-element.js
-var import_react138 = __toESM(require_react());
+var import_react142 = __toESM(require_react());
 function isReactElement(x) {
-  return /* @__PURE__ */ (0, import_react138.isValidElement)(x) && x !== void 0;
+  return /* @__PURE__ */ (0, import_react142.isValidElement)(x) && x !== void 0;
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Page/Page.css.js
-var styles42 = {
+var styles44 = {
   "Page": "Polaris-Page",
   "fullWidth": "Polaris-Page--fullWidth",
   "narrowWidth": "Polaris-Page--narrowWidth",
@@ -13577,10 +13973,10 @@ var styles42 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Page/components/Header/Header.js
-var import_react157 = __toESM(require_react());
+var import_react161 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Page/components/Header/Header.css.js
-var styles43 = {
+var styles45 = {
   "TitleWrapper": "Polaris-Page-Header__TitleWrapper",
   "TitleWrapperExpand": "Polaris-Page-Header__TitleWrapperExpand",
   "BreadcrumbWrapper": "Polaris-Page-Header__BreadcrumbWrapper",
@@ -13598,14 +13994,14 @@ var styles43 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Breadcrumbs/Breadcrumbs.js
-var import_react139 = __toESM(require_react());
+var import_react143 = __toESM(require_react());
 function Breadcrumbs({
   backAction
 }) {
   const {
     content
   } = backAction;
-  return /* @__PURE__ */ import_react139.default.createElement(Button, {
+  return /* @__PURE__ */ import_react143.default.createElement(Button, {
     key: content,
     url: "url" in backAction ? backAction.url : void 0,
     onClick: "onAction" in backAction ? backAction.onAction : void 0,
@@ -13616,10 +14012,10 @@ function Breadcrumbs({
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Page/components/Header/components/Title/Title.js
-var import_react141 = __toESM(require_react());
+var import_react145 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Page/components/Header/components/Title/Title.css.js
-var styles44 = {
+var styles46 = {
   "Title": "Polaris-Header-Title",
   "TitleWithSubtitle": "Polaris-Header-Title__TitleWithSubtitle",
   "TitleWrapper": "Polaris-Header-Title__TitleWrapper",
@@ -13629,10 +14025,10 @@ var styles44 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Bleed/Bleed.js
-var import_react140 = __toESM(require_react());
+var import_react144 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Bleed/Bleed.css.js
-var styles45 = {
+var styles47 = {
   "Bleed": "Polaris-Bleed"
 };
 
@@ -13675,8 +14071,8 @@ var Bleed = ({
     ...getResponsiveProps("bleed", "margin-inline-start", "space", negativeMarginInlineStart),
     ...getResponsiveProps("bleed", "margin-inline-end", "space", negativeMarginInlineEnd)
   };
-  return /* @__PURE__ */ import_react140.default.createElement("div", {
-    className: styles45.Bleed,
+  return /* @__PURE__ */ import_react144.default.createElement("div", {
+    className: styles47.Bleed,
     style: sanitizeCustomProperties(style)
   }, children);
 };
@@ -13689,48 +14085,48 @@ function Title({
   compactTitle,
   hasSubtitleMaxWidth
 }) {
-  const className = classNames(styles44.Title, subtitle && styles44.TitleWithSubtitle);
-  const titleMarkup = title ? /* @__PURE__ */ import_react141.default.createElement("h1", {
+  const className = classNames(styles46.Title, subtitle && styles46.TitleWithSubtitle);
+  const titleMarkup = title ? /* @__PURE__ */ import_react145.default.createElement("h1", {
     className
-  }, /* @__PURE__ */ import_react141.default.createElement(Text, {
+  }, /* @__PURE__ */ import_react145.default.createElement(Text, {
     as: "span",
     variant: "headingLg",
     fontWeight: "bold"
   }, title)) : null;
-  const titleMetadataMarkup = titleMetadata ? /* @__PURE__ */ import_react141.default.createElement(Bleed, {
+  const titleMetadataMarkup = titleMetadata ? /* @__PURE__ */ import_react145.default.createElement(Bleed, {
     marginBlock: "100"
   }, titleMetadata) : null;
-  const wrappedTitleMarkup = /* @__PURE__ */ import_react141.default.createElement("div", {
-    className: styles44.TitleWrapper
+  const wrappedTitleMarkup = /* @__PURE__ */ import_react145.default.createElement("div", {
+    className: styles46.TitleWrapper
   }, titleMarkup, titleMetadataMarkup);
-  const subtitleMarkup = subtitle ? /* @__PURE__ */ import_react141.default.createElement("div", {
-    className: classNames(styles44.SubTitle, compactTitle && styles44.SubtitleCompact, hasSubtitleMaxWidth && styles44.SubtitleMaxWidth)
-  }, /* @__PURE__ */ import_react141.default.createElement(Text, {
+  const subtitleMarkup = subtitle ? /* @__PURE__ */ import_react145.default.createElement("div", {
+    className: classNames(styles46.SubTitle, compactTitle && styles46.SubtitleCompact, hasSubtitleMaxWidth && styles46.SubtitleMaxWidth)
+  }, /* @__PURE__ */ import_react145.default.createElement(Text, {
     as: "p",
     variant: "bodySm",
     tone: "subdued"
   }, subtitle)) : null;
-  return /* @__PURE__ */ import_react141.default.createElement(import_react141.default.Fragment, null, wrappedTitleMarkup, subtitleMarkup);
+  return /* @__PURE__ */ import_react145.default.createElement(import_react145.default.Fragment, null, wrappedTitleMarkup, subtitleMarkup);
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ActionMenu/ActionMenu.js
-var import_react155 = __toESM(require_react());
+var import_react159 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ActionMenu/ActionMenu.css.js
-var styles46 = {
+var styles48 = {
   "ActionMenu": "Polaris-ActionMenu"
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ActionMenu/components/RollupActions/RollupActions.js
-var import_react150 = __toESM(require_react());
+var import_react154 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ActionMenu/components/RollupActions/RollupActions.css.js
-var styles47 = {
+var styles49 = {
   "RollupActivator": "Polaris-ActionMenu-RollupActions__RollupActivator"
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Popover/Popover.js
-var import_react145 = __toESM(require_react());
+var import_react149 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Popover/set-activator-attributes.js
 function setActivatorAttributes(activator, {
@@ -13752,10 +14148,10 @@ function setActivatorAttributes(activator, {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Popover/components/PopoverOverlay/PopoverOverlay.js
-var import_react144 = __toESM(require_react());
+var import_react148 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Popover/Popover.css.js
-var styles48 = {
+var styles50 = {
   "Popover": "Polaris-Popover",
   "PopoverOverlay": "Polaris-Popover__PopoverOverlay",
   "PopoverOverlay-noAnimation": "Polaris-Popover__PopoverOverlay--noAnimation",
@@ -13780,16 +14176,16 @@ var styles48 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Popover/components/Pane/Pane.js
-var import_react143 = __toESM(require_react());
+var import_react147 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Popover/components/Section/Section.js
-var import_react142 = __toESM(require_react());
+var import_react146 = __toESM(require_react());
 function Section4({
   children
 }) {
-  return /* @__PURE__ */ import_react142.default.createElement("div", {
-    className: styles48.Section
-  }, /* @__PURE__ */ import_react142.default.createElement(Box, {
+  return /* @__PURE__ */ import_react146.default.createElement("div", {
+    className: styles50.Section
+  }, /* @__PURE__ */ import_react146.default.createElement(Box, {
     paddingInlineStart: "300",
     paddingInlineEnd: "300",
     paddingBlockStart: "200",
@@ -13807,17 +14203,17 @@ function Pane({
   subdued,
   onScrolledToBottom
 }) {
-  const className = classNames(styles48.Pane, fixed && styles48["Pane-fixed"], subdued && styles48["Pane-subdued"], captureOverscroll && styles48["Pane-captureOverscroll"]);
+  const className = classNames(styles50.Pane, fixed && styles50["Pane-fixed"], subdued && styles50["Pane-subdued"], captureOverscroll && styles50["Pane-captureOverscroll"]);
   const content = sectioned ? wrapWithComponent(children, Section4, {}) : children;
   const style = height2 ? {
     height: height2,
     maxHeight: height2,
     minHeight: height2
   } : void 0;
-  return fixed ? /* @__PURE__ */ import_react143.default.createElement("div", {
+  return fixed ? /* @__PURE__ */ import_react147.default.createElement("div", {
     style,
     className
-  }, content) : /* @__PURE__ */ import_react143.default.createElement(Scrollable, {
+  }, content) : /* @__PURE__ */ import_react147.default.createElement(Scrollable, {
     shadow: true,
     className,
     style,
@@ -13841,13 +14237,13 @@ var TransitionStatus2;
   TransitionStatus3["Exiting"] = "exiting";
   TransitionStatus3["Exited"] = "exited";
 })(TransitionStatus2 || (TransitionStatus2 = {}));
-var PopoverOverlay = class extends import_react144.PureComponent {
+var PopoverOverlay = class extends import_react148.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       transitionStatus: this.props.active ? TransitionStatus2.Entering : TransitionStatus2.Exited
     };
-    this.contentNode = /* @__PURE__ */ (0, import_react144.createRef)();
+    this.contentNode = /* @__PURE__ */ (0, import_react148.createRef)();
     this.renderPopover = (overlayDetails) => {
       const {
         measuring,
@@ -13866,29 +14262,29 @@ var PopoverOverlay = class extends import_react144.PureComponent {
         captureOverscroll
       } = this.props;
       const isCovering = positioning === "cover";
-      const className = classNames(styles48.Popover, measuring && styles48.measuring, (fullWidth || isCovering) && styles48.fullWidth, hideOnPrint && styles48["PopoverOverlay-hideOnPrint"], positioning && styles48[variationName("positioned", positioning)]);
+      const className = classNames(styles50.Popover, measuring && styles50.measuring, (fullWidth || isCovering) && styles50.fullWidth, hideOnPrint && styles50["PopoverOverlay-hideOnPrint"], positioning && styles50[variationName("positioned", positioning)]);
       const contentStyles = measuring ? void 0 : {
         height: desiredHeight
       };
-      const contentClassNames = classNames(styles48.Content, fullHeight && styles48["Content-fullHeight"], fluidContent && styles48["Content-fluidContent"]);
-      return /* @__PURE__ */ import_react144.default.createElement("div", Object.assign({
+      const contentClassNames = classNames(styles50.Content, fullHeight && styles50["Content-fullHeight"], fluidContent && styles50["Content-fluidContent"]);
+      return /* @__PURE__ */ import_react148.default.createElement("div", Object.assign({
         className
-      }, overlay.props), /* @__PURE__ */ import_react144.default.createElement(EventListener, {
+      }, overlay.props), /* @__PURE__ */ import_react148.default.createElement(EventListener, {
         event: "click",
         handler: this.handleClick
-      }), /* @__PURE__ */ import_react144.default.createElement(EventListener, {
+      }), /* @__PURE__ */ import_react148.default.createElement(EventListener, {
         event: "touchstart",
         handler: this.handleClick
-      }), /* @__PURE__ */ import_react144.default.createElement(KeypressListener, {
+      }), /* @__PURE__ */ import_react148.default.createElement(KeypressListener, {
         keyCode: Key.Escape,
         handler: this.handleEscape
-      }), /* @__PURE__ */ import_react144.default.createElement("div", {
-        className: styles48.FocusTracker,
+      }), /* @__PURE__ */ import_react148.default.createElement("div", {
+        className: styles50.FocusTracker,
         tabIndex: 0,
         onFocus: this.handleFocusFirstItem
-      }), /* @__PURE__ */ import_react144.default.createElement("div", {
-        className: styles48.ContentContainer
-      }, /* @__PURE__ */ import_react144.default.createElement("div", {
+      }), /* @__PURE__ */ import_react148.default.createElement("div", {
+        className: styles50.ContentContainer
+      }, /* @__PURE__ */ import_react148.default.createElement("div", {
         id,
         tabIndex: autofocusTarget === "none" ? void 0 : -1,
         className: contentClassNames,
@@ -13897,8 +14293,8 @@ var PopoverOverlay = class extends import_react144.PureComponent {
       }, renderPopoverContent(children, {
         captureOverscroll,
         sectioned
-      }))), /* @__PURE__ */ import_react144.default.createElement("div", {
-        className: styles48.FocusTracker,
+      }))), /* @__PURE__ */ import_react148.default.createElement("div", {
+        className: styles50.FocusTracker,
         tabIndex: 0,
         onFocus: this.handleFocusLastItem
       }));
@@ -13945,7 +14341,7 @@ var PopoverOverlay = class extends import_react144.PureComponent {
     this.handleFocusLastItem = () => {
       this.props.onClose(PopoverCloseSource.FocusOut);
     };
-    this.overlayRef = /* @__PURE__ */ (0, import_react144.createRef)();
+    this.overlayRef = /* @__PURE__ */ (0, import_react148.createRef)();
   }
   forceUpdatePosition() {
     this.overlayRef.current?.forceUpdatePosition();
@@ -14000,8 +14396,8 @@ var PopoverOverlay = class extends import_react144.PureComponent {
     } = this.state;
     if (transitionStatus === TransitionStatus2.Exited && !active)
       return null;
-    const className = classNames(styles48.PopoverOverlay, transitionStatus === TransitionStatus2.Entering && styles48["PopoverOverlay-entering"], transitionStatus === TransitionStatus2.Entered && styles48["PopoverOverlay-open"], transitionStatus === TransitionStatus2.Exiting && styles48["PopoverOverlay-exiting"], preferredPosition === "cover" && styles48["PopoverOverlay-noAnimation"]);
-    return /* @__PURE__ */ import_react144.default.createElement(PositionedOverlay, {
+    const className = classNames(styles50.PopoverOverlay, transitionStatus === TransitionStatus2.Entering && styles50["PopoverOverlay-entering"], transitionStatus === TransitionStatus2.Entered && styles50["PopoverOverlay-open"], transitionStatus === TransitionStatus2.Exiting && styles50["PopoverOverlay-exiting"], preferredPosition === "cover" && styles50["PopoverOverlay-noAnimation"]);
+    return /* @__PURE__ */ import_react148.default.createElement(PositionedOverlay, {
       ref: this.overlayRef,
       fullWidth,
       active,
@@ -14048,7 +14444,7 @@ var PopoverOverlay = class extends import_react144.PureComponent {
 };
 PopoverOverlay.contextType = PortalsManagerContext;
 function renderPopoverContent(children, props) {
-  const childrenArray = import_react144.Children.toArray(children);
+  const childrenArray = import_react148.Children.toArray(children);
   if (isElementOfType(childrenArray[0], Pane)) {
     return childrenArray;
   }
@@ -14075,7 +14471,7 @@ function wasPolarisPortalDescendant(composedPath, portalsContainerElement) {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Popover/Popover.js
-var PopoverComponent = /* @__PURE__ */ (0, import_react145.forwardRef)(function Popover({
+var PopoverComponent = /* @__PURE__ */ (0, import_react149.forwardRef)(function Popover({
   activatorWrapper = "div",
   children,
   onClose,
@@ -14088,20 +14484,20 @@ var PopoverComponent = /* @__PURE__ */ (0, import_react145.forwardRef)(function 
   zIndexOverride,
   ...rest
 }, ref) {
-  const [activatorNode, setActivatorNode] = (0, import_react145.useState)();
-  const overlayRef = (0, import_react145.useRef)(null);
-  const activatorContainer = (0, import_react145.useRef)(null);
+  const [activatorNode, setActivatorNode] = (0, import_react149.useState)();
+  const overlayRef = (0, import_react149.useRef)(null);
+  const activatorContainer = (0, import_react149.useRef)(null);
   const WrapperComponent = activatorWrapper;
-  const id = (0, import_react145.useId)();
+  const id = (0, import_react149.useId)();
   function forceUpdatePosition() {
     overlayRef.current?.forceUpdatePosition();
   }
-  (0, import_react145.useImperativeHandle)(ref, () => {
+  (0, import_react149.useImperativeHandle)(ref, () => {
     return {
       forceUpdatePosition
     };
   });
-  const setAccessibilityAttributes = (0, import_react145.useCallback)(() => {
+  const setAccessibilityAttributes = (0, import_react149.useCallback)(() => {
     if (activatorContainer.current == null) {
       return;
     }
@@ -14134,7 +14530,7 @@ var PopoverComponent = /* @__PURE__ */ (0, import_react145.forwardRef)(function 
       }
     }
   };
-  (0, import_react145.useEffect)(() => {
+  (0, import_react149.useEffect)(() => {
     if (!activatorNode && activatorContainer.current) {
       setActivatorNode(activatorContainer.current.firstElementChild);
     } else if (activatorNode && activatorContainer.current && !activatorContainer.current.contains(activatorNode)) {
@@ -14142,15 +14538,15 @@ var PopoverComponent = /* @__PURE__ */ (0, import_react145.forwardRef)(function 
     }
     setAccessibilityAttributes();
   }, [activatorNode, setAccessibilityAttributes]);
-  (0, import_react145.useEffect)(() => {
+  (0, import_react149.useEffect)(() => {
     if (activatorNode && activatorContainer.current) {
       setActivatorNode(activatorContainer.current.firstElementChild);
     }
     setAccessibilityAttributes();
   }, [activatorNode, setAccessibilityAttributes]);
-  const portal2 = activatorNode ? /* @__PURE__ */ import_react145.default.createElement(Portal, {
+  const portal2 = activatorNode ? /* @__PURE__ */ import_react149.default.createElement(Portal, {
     idPrefix: "popover"
-  }, /* @__PURE__ */ import_react145.default.createElement(PopoverOverlay, Object.assign({
+  }, /* @__PURE__ */ import_react149.default.createElement(PopoverOverlay, Object.assign({
     ref: overlayRef,
     id,
     activator: activatorNode,
@@ -14160,9 +14556,9 @@ var PopoverComponent = /* @__PURE__ */ (0, import_react145.forwardRef)(function 
     fixed,
     zIndexOverride
   }, rest), children)) : null;
-  return /* @__PURE__ */ import_react145.default.createElement(WrapperComponent, {
+  return /* @__PURE__ */ import_react149.default.createElement(WrapperComponent, {
     ref: activatorContainer
-  }, import_react145.Children.only(activator), portal2);
+  }, import_react149.Children.only(activator), portal2);
 });
 function isInPortal(element) {
   let parentElement = element.parentElement;
@@ -14179,28 +14575,28 @@ var Popover2 = Object.assign(PopoverComponent, {
 });
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ActionList/ActionList.js
-var import_react149 = __toESM(require_react());
+var import_react153 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/FilterActionsProvider/FilterActionsProvider.js
-var import_react146 = __toESM(require_react());
-var FilterActionsContext = /* @__PURE__ */ (0, import_react146.createContext)(false);
+var import_react150 = __toESM(require_react());
+var FilterActionsContext = /* @__PURE__ */ (0, import_react150.createContext)(false);
 function FilterActionsProvider({
   children,
   filterActions
 }) {
-  return /* @__PURE__ */ import_react146.default.createElement(FilterActionsContext.Provider, {
+  return /* @__PURE__ */ import_react150.default.createElement(FilterActionsContext.Provider, {
     value: filterActions
   }, children);
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ActionList/components/Section/Section.js
-var import_react148 = __toESM(require_react());
+var import_react152 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ActionList/components/Item/Item.js
-var import_react147 = __toESM(require_react());
+var import_react151 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ActionList/ActionList.css.js
-var styles49 = {
+var styles51 = {
   "Item": "Polaris-ActionList__Item",
   "default": "Polaris-ActionList--default",
   "active": "Polaris-ActionList--active",
@@ -14236,22 +14632,22 @@ function Item6({
   role,
   variant = "default"
 }) {
-  const className = classNames(styles49.Item, disabled && styles49.disabled, destructive && styles49.destructive, active && styles49.active, variant === "default" && styles49.default, variant === "indented" && styles49.indented, variant === "menu" && styles49.menu);
+  const className = classNames(styles51.Item, disabled && styles51.disabled, destructive && styles51.destructive, active && styles51.active, variant === "default" && styles51.default, variant === "indented" && styles51.indented, variant === "menu" && styles51.menu);
   let prefixMarkup = null;
   if (prefix) {
-    prefixMarkup = /* @__PURE__ */ import_react147.default.createElement("span", {
-      className: styles49.Prefix
+    prefixMarkup = /* @__PURE__ */ import_react151.default.createElement("span", {
+      className: styles51.Prefix
     }, prefix);
   } else if (icon) {
-    prefixMarkup = /* @__PURE__ */ import_react147.default.createElement("span", {
-      className: styles49.Prefix
-    }, /* @__PURE__ */ import_react147.default.createElement(Icon, {
+    prefixMarkup = /* @__PURE__ */ import_react151.default.createElement("span", {
+      className: styles51.Prefix
+    }, /* @__PURE__ */ import_react151.default.createElement(Icon, {
       source: icon
     }));
   } else if (image) {
-    prefixMarkup = /* @__PURE__ */ import_react147.default.createElement("span", {
+    prefixMarkup = /* @__PURE__ */ import_react151.default.createElement("span", {
       role: "presentation",
-      className: styles49.Prefix,
+      className: styles51.Prefix,
       style: {
         backgroundImage: `url(${image}`
       }
@@ -14259,44 +14655,44 @@ function Item6({
   }
   let contentText = content || "";
   if (truncate && content) {
-    contentText = /* @__PURE__ */ import_react147.default.createElement(TruncateText, null, content);
+    contentText = /* @__PURE__ */ import_react151.default.createElement(TruncateText, null, content);
   } else if (ellipsis) {
     contentText = `${content}\u2026`;
   }
-  const contentMarkup = helpText ? /* @__PURE__ */ import_react147.default.createElement(import_react147.default.Fragment, null, /* @__PURE__ */ import_react147.default.createElement(Box, null, contentText), /* @__PURE__ */ import_react147.default.createElement(Text, {
+  const contentMarkup = helpText ? /* @__PURE__ */ import_react151.default.createElement(import_react151.default.Fragment, null, /* @__PURE__ */ import_react151.default.createElement(Box, null, contentText), /* @__PURE__ */ import_react151.default.createElement(Text, {
     as: "span",
     variant: "bodySm",
     tone: active || disabled ? void 0 : "subdued"
-  }, helpText)) : /* @__PURE__ */ import_react147.default.createElement(Text, {
+  }, helpText)) : /* @__PURE__ */ import_react151.default.createElement(Text, {
     as: "span",
     variant: "bodyMd",
     fontWeight: active ? "semibold" : "regular"
   }, contentText);
-  const badgeMarkup = badge && /* @__PURE__ */ import_react147.default.createElement("span", {
-    className: styles49.Suffix
-  }, /* @__PURE__ */ import_react147.default.createElement(Badge, {
+  const badgeMarkup = badge && /* @__PURE__ */ import_react151.default.createElement("span", {
+    className: styles51.Suffix
+  }, /* @__PURE__ */ import_react151.default.createElement(Badge, {
     tone: badge.tone
   }, badge.content));
-  const suffixMarkup = suffix && /* @__PURE__ */ import_react147.default.createElement(Box, null, /* @__PURE__ */ import_react147.default.createElement("span", {
-    className: styles49.Suffix
+  const suffixMarkup = suffix && /* @__PURE__ */ import_react151.default.createElement(Box, null, /* @__PURE__ */ import_react151.default.createElement("span", {
+    className: styles51.Suffix
   }, suffix));
-  const textMarkup = /* @__PURE__ */ import_react147.default.createElement("span", {
-    className: styles49.Text
-  }, /* @__PURE__ */ import_react147.default.createElement(Text, {
+  const textMarkup = /* @__PURE__ */ import_react151.default.createElement("span", {
+    className: styles51.Text
+  }, /* @__PURE__ */ import_react151.default.createElement(Text, {
     as: "span",
     variant: "bodyMd",
     fontWeight: active ? "semibold" : "regular"
   }, contentMarkup));
-  const contentElement = /* @__PURE__ */ import_react147.default.createElement(InlineStack, {
+  const contentElement = /* @__PURE__ */ import_react151.default.createElement(InlineStack, {
     blockAlign: "center",
     gap: "150",
     wrap: false
   }, prefixMarkup, textMarkup, badgeMarkup, suffixMarkup);
-  const contentWrapper = /* @__PURE__ */ import_react147.default.createElement(Box, {
+  const contentWrapper = /* @__PURE__ */ import_react151.default.createElement(Box, {
     width: "100%"
   }, contentElement);
-  const scrollMarkup = active ? /* @__PURE__ */ import_react147.default.createElement(Scrollable.ScrollTo, null) : null;
-  const control = url ? /* @__PURE__ */ import_react147.default.createElement(UnstyledLink, {
+  const scrollMarkup = active ? /* @__PURE__ */ import_react151.default.createElement(Scrollable.ScrollTo, null) : null;
+  const control = url ? /* @__PURE__ */ import_react151.default.createElement(UnstyledLink, {
     id,
     url: disabled ? null : url,
     className,
@@ -14304,7 +14700,7 @@ function Item6({
     "aria-label": accessibilityLabel,
     onClick: disabled ? null : onAction,
     role
-  }, contentWrapper) : /* @__PURE__ */ import_react147.default.createElement("button", {
+  }, contentWrapper) : /* @__PURE__ */ import_react151.default.createElement("button", {
     id,
     type: "button",
     className,
@@ -14315,33 +14711,33 @@ function Item6({
     role,
     onMouseEnter
   }, contentWrapper);
-  return /* @__PURE__ */ import_react147.default.createElement(import_react147.default.Fragment, null, scrollMarkup, control);
+  return /* @__PURE__ */ import_react151.default.createElement(import_react151.default.Fragment, null, scrollMarkup, control);
 }
 var TruncateText = ({
   children
 }) => {
   const theme = useTheme();
-  const textRef = (0, import_react147.useRef)(null);
-  const [isOverflowing, setIsOverflowing] = (0, import_react147.useState)(false);
+  const textRef = (0, import_react151.useRef)(null);
+  const [isOverflowing, setIsOverflowing] = (0, import_react151.useState)(false);
   useIsomorphicLayoutEffect(() => {
     if (textRef.current) {
       setIsOverflowing(textRef.current.scrollWidth > textRef.current.offsetWidth);
     }
   }, [children]);
-  const text2 = /* @__PURE__ */ import_react147.default.createElement(Text, {
+  const text2 = /* @__PURE__ */ import_react151.default.createElement(Text, {
     as: "span",
     truncate: true
-  }, /* @__PURE__ */ import_react147.default.createElement(Box, {
+  }, /* @__PURE__ */ import_react151.default.createElement(Box, {
     width: "100%",
     ref: textRef
   }, children));
-  return isOverflowing ? /* @__PURE__ */ import_react147.default.createElement(Tooltip, {
+  return isOverflowing ? /* @__PURE__ */ import_react151.default.createElement(Tooltip, {
     zIndexOverride: Number(theme.zIndex["z-index-11"]),
     preferredPosition: "above",
     hoverDelay: 1e3,
     content: children,
     dismissOnMouseOut: true
-  }, /* @__PURE__ */ import_react147.default.createElement(Text, {
+  }, /* @__PURE__ */ import_react151.default.createElement(Text, {
     as: "span",
     truncate: true
   }, children)) : text2;
@@ -14371,31 +14767,31 @@ function Section5({
     onAction,
     ...item
   }, index) => {
-    const itemMarkup = /* @__PURE__ */ import_react148.default.createElement(Item6, Object.assign({
+    const itemMarkup = /* @__PURE__ */ import_react152.default.createElement(Item6, Object.assign({
       content,
       helpText,
       role: actionRole,
       onAction: handleAction(onAction)
     }, item));
-    return /* @__PURE__ */ import_react148.default.createElement(Box, {
+    return /* @__PURE__ */ import_react152.default.createElement(Box, {
       as: "li",
       key: `${content}-${index}`,
       role: actionRole === "menuitem" ? "presentation" : void 0
-    }, /* @__PURE__ */ import_react148.default.createElement(InlineStack, {
+    }, /* @__PURE__ */ import_react152.default.createElement(InlineStack, {
       wrap: false
     }, itemMarkup));
   });
   let titleMarkup = null;
   if (section.title) {
-    titleMarkup = typeof section.title === "string" ? /* @__PURE__ */ import_react148.default.createElement(Box, {
+    titleMarkup = typeof section.title === "string" ? /* @__PURE__ */ import_react152.default.createElement(Box, {
       paddingBlockStart: "300",
       paddingBlockEnd: "100",
       paddingInlineStart: "300",
       paddingInlineEnd: "300"
-    }, /* @__PURE__ */ import_react148.default.createElement(Text, {
+    }, /* @__PURE__ */ import_react152.default.createElement(Text, {
       as: "p",
       variant: "headingSm"
-    }, section.title)) : /* @__PURE__ */ import_react148.default.createElement(Box, {
+    }, section.title)) : /* @__PURE__ */ import_react152.default.createElement(Box, {
       padding: "200",
       paddingInlineEnd: "150"
     }, section.title);
@@ -14412,20 +14808,20 @@ function Section5({
       sectionRole = void 0;
       break;
   }
-  const sectionMarkup = /* @__PURE__ */ import_react148.default.createElement(import_react148.default.Fragment, null, titleMarkup, /* @__PURE__ */ import_react148.default.createElement(Box, Object.assign({
+  const sectionMarkup = /* @__PURE__ */ import_react152.default.createElement(import_react152.default.Fragment, null, titleMarkup, /* @__PURE__ */ import_react152.default.createElement(Box, Object.assign({
     as: "div",
     padding: "150"
   }, hasMultipleSections && {
     paddingBlockStart: "0"
   }, {
     tabIndex: !hasMultipleSections ? -1 : void 0
-  }), /* @__PURE__ */ import_react148.default.createElement(BlockStack, Object.assign({
+  }), /* @__PURE__ */ import_react152.default.createElement(BlockStack, Object.assign({
     gap: "050",
     as: "ul"
   }, sectionRole && {
     role: sectionRole
   }), actionMarkup)));
-  return hasMultipleSections ? /* @__PURE__ */ import_react148.default.createElement(Box, Object.assign({
+  return hasMultipleSections ? /* @__PURE__ */ import_react152.default.createElement(Box, Object.assign({
     as: "li",
     role: "presentation",
     borderColor: "border-secondary"
@@ -14446,10 +14842,10 @@ function ActionList({
   onActionAnyItem
 }) {
   const i18n = useI18n();
-  const filterActions = (0, import_react149.useContext)(FilterActionsContext);
+  const filterActions = (0, import_react153.useContext)(FilterActionsContext);
   let finalSections = [];
-  const actionListRef = (0, import_react149.useRef)(null);
-  const [searchText, setSearchText] = (0, import_react149.useState)("");
+  const actionListRef = (0, import_react153.useRef)(null);
+  const [searchText, setSearchText] = (0, import_react153.useState)("");
   if (items) {
     finalSections = [{
       items
@@ -14468,7 +14864,7 @@ function ActionList({
     }) => typeof content === "string" ? content?.toLowerCase().includes(searchText.toLowerCase()) : content)
   }));
   const sectionMarkup = filteredSections.map((section, index) => {
-    return section.items.length > 0 ? /* @__PURE__ */ import_react149.default.createElement(Section5, {
+    return section.items.length > 0 ? /* @__PURE__ */ import_react153.default.createElement(Section5, {
       key: typeof section.title === "string" ? section.title : index,
       section,
       hasMultipleSections,
@@ -14493,25 +14889,25 @@ function ActionList({
       }
     }
   };
-  const listeners = actionRole === "menuitem" ? /* @__PURE__ */ import_react149.default.createElement(import_react149.default.Fragment, null, /* @__PURE__ */ import_react149.default.createElement(KeypressListener, {
+  const listeners = actionRole === "menuitem" ? /* @__PURE__ */ import_react153.default.createElement(import_react153.default.Fragment, null, /* @__PURE__ */ import_react153.default.createElement(KeypressListener, {
     keyEvent: "keydown",
     keyCode: Key.DownArrow,
     handler: handleFocusNextItem
-  }), /* @__PURE__ */ import_react149.default.createElement(KeypressListener, {
+  }), /* @__PURE__ */ import_react153.default.createElement(KeypressListener, {
     keyEvent: "keydown",
     keyCode: Key.UpArrow,
     handler: handleFocusPreviousItem
   })) : null;
-  const totalFilteredActions = (0, import_react149.useMemo)(() => {
+  const totalFilteredActions = (0, import_react153.useMemo)(() => {
     const totalSectionItems = filteredSections?.reduce((acc, section) => acc + section.items.length, 0) || 0;
     return totalSectionItems;
   }, [filteredSections]);
   const totalActions = finalSections?.reduce((acc, section) => acc + section.items.length, 0) || 0;
   const hasManyActions = totalActions >= FILTER_ACTIONS_THRESHOLD;
-  return /* @__PURE__ */ import_react149.default.createElement(import_react149.default.Fragment, null, (allowFiltering || filterActions) && hasManyActions && isFilterable && /* @__PURE__ */ import_react149.default.createElement(Box, {
+  return /* @__PURE__ */ import_react153.default.createElement(import_react153.default.Fragment, null, (allowFiltering || filterActions) && hasManyActions && isFilterable && /* @__PURE__ */ import_react153.default.createElement(Box, {
     padding: "200",
     paddingBlockEnd: totalFilteredActions > 0 ? "0" : "200"
-  }, /* @__PURE__ */ import_react149.default.createElement(TextField, {
+  }, /* @__PURE__ */ import_react153.default.createElement(TextField, {
     clearButton: true,
     labelHidden: true,
     label: i18n.translate("Polaris.ActionList.SearchField.placeholder"),
@@ -14519,11 +14915,11 @@ function ActionList({
     autoComplete: "off",
     value: searchText,
     onChange: (value) => setSearchText(value),
-    prefix: /* @__PURE__ */ import_react149.default.createElement(Icon, {
+    prefix: /* @__PURE__ */ import_react153.default.createElement(Icon, {
       source: SvgSearchIcon
     }),
     onClearButtonClick: () => setSearchText("")
-  })), /* @__PURE__ */ import_react149.default.createElement(Box, {
+  })), /* @__PURE__ */ import_react153.default.createElement(Box, {
     as: hasMultipleSections ? "ul" : "div",
     ref: actionListRef,
     role: elementRole,
@@ -14546,20 +14942,20 @@ function RollupActions({
   if (items.length === 0 && sections.length === 0) {
     return null;
   }
-  const activatorMarkup = /* @__PURE__ */ import_react150.default.createElement("div", {
-    className: styles47.RollupActivator
-  }, /* @__PURE__ */ import_react150.default.createElement(Button, {
+  const activatorMarkup = /* @__PURE__ */ import_react154.default.createElement("div", {
+    className: styles49.RollupActivator
+  }, /* @__PURE__ */ import_react154.default.createElement(Button, {
     icon: SvgMenuHorizontalIcon,
     accessibilityLabel: accessibilityLabel || i18n.translate("Polaris.ActionMenu.RollupActions.rollupButton"),
     onClick: toggleRollupOpen
   }));
-  return /* @__PURE__ */ import_react150.default.createElement(Popover2, {
+  return /* @__PURE__ */ import_react154.default.createElement(Popover2, {
     active: rollupOpen,
     activator: activatorMarkup,
     preferredAlignment: "right",
     onClose: toggleRollupOpen,
     hideOnPrint: true
-  }, /* @__PURE__ */ import_react150.default.createElement(ActionList, {
+  }, /* @__PURE__ */ import_react154.default.createElement(ActionList, {
     items,
     sections,
     onActionAnyItem: toggleRollupOpen
@@ -14567,10 +14963,10 @@ function RollupActions({
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ActionMenu/components/Actions/Actions.js
-var import_react154 = __toESM(require_react());
+var import_react158 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ActionMenu/components/Actions/Actions.css.js
-var styles50 = {
+var styles52 = {
   "ActionsLayoutOuter": "Polaris-ActionMenu-Actions__ActionsLayoutOuter",
   "ActionsLayout": "Polaris-ActionMenu-Actions__ActionsLayout",
   "ActionsLayout--measuring": "Polaris-ActionMenu-Actions--actionsLayoutMeasuring",
@@ -14623,18 +15019,18 @@ function getVisibleAndHiddenActionsIndices(actions = [], groups = [], disclosure
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ActionMenu/components/MenuGroup/MenuGroup.js
-var import_react152 = __toESM(require_react());
+var import_react156 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ActionMenu/components/MenuGroup/MenuGroup.css.js
-var styles51 = {
+var styles53 = {
   "Details": "Polaris-ActionMenu-MenuGroup__Details"
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ActionMenu/components/SecondaryAction/SecondaryAction.js
-var import_react151 = __toESM(require_react());
+var import_react155 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ActionMenu/components/SecondaryAction/SecondaryAction.css.js
-var styles52 = {
+var styles54 = {
   "SecondaryAction": "Polaris-ActionMenu-SecondaryAction",
   "critical": "Polaris-ActionMenu-SecondaryAction--critical"
 };
@@ -14648,16 +15044,16 @@ function SecondaryAction({
   destructive,
   ...rest
 }) {
-  const buttonMarkup = /* @__PURE__ */ import_react151.default.createElement(Button, Object.assign({
+  const buttonMarkup = /* @__PURE__ */ import_react155.default.createElement(Button, Object.assign({
     onClick: onAction,
     tone: destructive ? "critical" : void 0
   }, rest), children);
-  const actionMarkup = helpText ? /* @__PURE__ */ import_react151.default.createElement(Tooltip, {
+  const actionMarkup = helpText ? /* @__PURE__ */ import_react155.default.createElement(Tooltip, {
     preferredPosition: "below",
     content: helpText
   }, buttonMarkup) : buttonMarkup;
-  return /* @__PURE__ */ import_react151.default.createElement("div", {
-    className: classNames(styles52.SecondaryAction, tone === "critical" && styles52.critical)
+  return /* @__PURE__ */ import_react155.default.createElement("div", {
+    className: classNames(styles54.SecondaryAction, tone === "critical" && styles54.critical)
   }, actionMarkup);
 }
 
@@ -14675,43 +15071,43 @@ function MenuGroup({
   onOpen,
   sections
 }) {
-  const handleClose = (0, import_react152.useCallback)(() => {
+  const handleClose = (0, import_react156.useCallback)(() => {
     onClose(title);
   }, [onClose, title]);
-  const handleOpen = (0, import_react152.useCallback)(() => {
+  const handleOpen = (0, import_react156.useCallback)(() => {
     onOpen(title);
   }, [onOpen, title]);
-  const handleClick = (0, import_react152.useCallback)(() => {
+  const handleClick = (0, import_react156.useCallback)(() => {
     if (onClick) {
       onClick(handleOpen);
     } else {
       handleOpen();
     }
   }, [onClick, handleOpen]);
-  const popoverActivator = /* @__PURE__ */ import_react152.default.createElement(SecondaryAction, {
+  const popoverActivator = /* @__PURE__ */ import_react156.default.createElement(SecondaryAction, {
     disclosure: true,
     disabled,
     icon,
     accessibilityLabel,
     onClick: handleClick
   }, title);
-  return /* @__PURE__ */ import_react152.default.createElement(Popover2, {
+  return /* @__PURE__ */ import_react156.default.createElement(Popover2, {
     active: Boolean(active),
     activator: popoverActivator,
     preferredAlignment: "left",
     onClose: handleClose,
     hideOnPrint: true
-  }, /* @__PURE__ */ import_react152.default.createElement(ActionList, {
+  }, /* @__PURE__ */ import_react156.default.createElement(ActionList, {
     items: actions,
     sections,
     onActionAnyItem: handleClose
-  }), details && /* @__PURE__ */ import_react152.default.createElement("div", {
-    className: styles51.Details
+  }), details && /* @__PURE__ */ import_react156.default.createElement("div", {
+    className: styles53.Details
   }, details));
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/ActionMenu/components/Actions/components/ActionsMeasurer/ActionsMeasurer.js
-var import_react153 = __toESM(require_react());
+var import_react157 = __toESM(require_react());
 var ACTION_SPACING = 8;
 function ActionsMeasurer({
   actions = [],
@@ -14719,15 +15115,15 @@ function ActionsMeasurer({
   handleMeasurement: handleMeasurementProp
 }) {
   const i18n = useI18n();
-  const containerNode = (0, import_react153.useRef)(null);
+  const containerNode = (0, import_react157.useRef)(null);
   const defaultRollupGroup = {
     title: i18n.translate("Polaris.ActionMenu.Actions.moreActions"),
     actions: []
   };
-  const activator = /* @__PURE__ */ import_react153.default.createElement(SecondaryAction, {
+  const activator = /* @__PURE__ */ import_react157.default.createElement(SecondaryAction, {
     disclosure: true
   }, defaultRollupGroup.title);
-  const handleMeasurement = (0, import_react153.useCallback)(() => {
+  const handleMeasurement = (0, import_react157.useCallback)(() => {
     if (!containerNode.current) {
       return;
     }
@@ -14745,7 +15141,7 @@ function ActionsMeasurer({
       hiddenActionsWidths
     });
   }, [handleMeasurementProp]);
-  (0, import_react153.useEffect)(() => {
+  (0, import_react157.useEffect)(() => {
     handleMeasurement();
   }, [handleMeasurement, actions, groups]);
   const actionsMarkup = actions.map((action) => {
@@ -14754,7 +15150,7 @@ function ActionsMeasurer({
       onAction,
       ...rest
     } = action;
-    return /* @__PURE__ */ import_react153.default.createElement(SecondaryAction, Object.assign({
+    return /* @__PURE__ */ import_react157.default.createElement(SecondaryAction, Object.assign({
       key: content,
       onClick: onAction
     }, rest), content);
@@ -14764,15 +15160,15 @@ function ActionsMeasurer({
       title,
       icon
     } = group;
-    return /* @__PURE__ */ import_react153.default.createElement(SecondaryAction, {
+    return /* @__PURE__ */ import_react157.default.createElement(SecondaryAction, {
       key: title,
       disclosure: true,
       icon
     }, title);
   });
   useEventListener("resize", handleMeasurement);
-  return /* @__PURE__ */ import_react153.default.createElement("div", {
-    className: styles50.ActionsLayoutMeasurer,
+  return /* @__PURE__ */ import_react157.default.createElement("div", {
+    className: styles52.ActionsLayoutMeasurer,
     ref: containerNode
   }, actionsMarkup, groupsMarkup, activator);
 }
@@ -14784,9 +15180,9 @@ function Actions({
   onActionRollup
 }) {
   const i18n = useI18n();
-  const rollupActiveRef = (0, import_react154.useRef)(null);
-  const [activeMenuGroup, setActiveMenuGroup] = (0, import_react154.useState)(void 0);
-  const [state, setState] = (0, import_react154.useReducer)((data, partialData) => {
+  const rollupActiveRef = (0, import_react158.useRef)(null);
+  const [activeMenuGroup, setActiveMenuGroup] = (0, import_react158.useState)(void 0);
+  const [state, setState] = (0, import_react158.useReducer)((data, partialData) => {
     return {
       ...data,
       ...partialData
@@ -14815,9 +15211,9 @@ function Actions({
     title: i18n.translate("Polaris.ActionMenu.Actions.moreActions"),
     actions: []
   };
-  const handleMenuGroupToggle = (0, import_react154.useCallback)((group) => setActiveMenuGroup(activeMenuGroup ? void 0 : group), [activeMenuGroup]);
-  const handleMenuGroupClose = (0, import_react154.useCallback)(() => setActiveMenuGroup(void 0), []);
-  (0, import_react154.useEffect)(() => {
+  const handleMenuGroupToggle = (0, import_react158.useCallback)((group) => setActiveMenuGroup(activeMenuGroup ? void 0 : group), [activeMenuGroup]);
+  const handleMenuGroupClose = (0, import_react158.useCallback)(() => setActiveMenuGroup(void 0), []);
+  (0, import_react158.useEffect)(() => {
     if (containerWidth === 0) {
       return;
     }
@@ -14835,8 +15231,8 @@ function Actions({
       hasMeasured: containerWidth !== Infinity
     });
   }, [containerWidth, disclosureWidth, actions, groups, actionsWidths, setState]);
-  const actionsOrDefault = (0, import_react154.useMemo)(() => actions ?? [], [actions]);
-  const groupsOrDefault = (0, import_react154.useMemo)(() => groups ?? [], [groups]);
+  const actionsOrDefault = (0, import_react158.useMemo)(() => actions ?? [], [actions]);
+  const groupsOrDefault = (0, import_react158.useMemo)(() => groups ?? [], [groups]);
   const actionsMarkup = actionsOrDefault.filter((_, index) => {
     if (!visibleActions.includes(index)) {
       return false;
@@ -14848,7 +15244,7 @@ function Actions({
       onAction,
       ...rest
     } = action;
-    return /* @__PURE__ */ import_react154.default.createElement(SecondaryAction, Object.assign({
+    return /* @__PURE__ */ import_react158.default.createElement(SecondaryAction, Object.assign({
       key: content,
       onClick: onAction
     }, rest), content);
@@ -14891,7 +15287,7 @@ function Actions({
       return [actions2, sections];
     }, [[], []]);
     if (!isDefaultGroup) {
-      return /* @__PURE__ */ import_react154.default.createElement(MenuGroup, Object.assign({
+      return /* @__PURE__ */ import_react158.default.createElement(MenuGroup, Object.assign({
         key: title,
         title,
         active: title === activeMenuGroup,
@@ -14901,7 +15297,7 @@ function Actions({
         onClose: handleMenuGroupClose
       }));
     }
-    return /* @__PURE__ */ import_react154.default.createElement(MenuGroup, Object.assign({
+    return /* @__PURE__ */ import_react158.default.createElement(MenuGroup, Object.assign({
       key: title,
       title,
       active: title === activeMenuGroup,
@@ -14912,7 +15308,7 @@ function Actions({
       onClose: handleMenuGroupClose
     }));
   });
-  const handleMeasurement = (0, import_react154.useCallback)((measurements) => {
+  const handleMeasurement = (0, import_react158.useCallback)((measurements) => {
     const {
       hiddenActionsWidths: actionsWidths2,
       containerWidth: containerWidth2,
@@ -14942,15 +15338,15 @@ function Actions({
       hasMeasured: true
     });
   }, [actionsOrDefault, groupsOrDefault, onActionRollup]);
-  const actionsMeasurer = /* @__PURE__ */ import_react154.default.createElement(ActionsMeasurer, {
+  const actionsMeasurer = /* @__PURE__ */ import_react158.default.createElement(ActionsMeasurer, {
     actions,
     groups,
     handleMeasurement
   });
-  return /* @__PURE__ */ import_react154.default.createElement("div", {
-    className: styles50.ActionsLayoutOuter
-  }, actionsMeasurer, /* @__PURE__ */ import_react154.default.createElement("div", {
-    className: classNames(styles50.ActionsLayout, !hasMeasured && styles50["ActionsLayout--measuring"])
+  return /* @__PURE__ */ import_react158.default.createElement("div", {
+    className: styles52.ActionsLayoutOuter
+  }, actionsMeasurer, /* @__PURE__ */ import_react158.default.createElement("div", {
+    className: classNames(styles52.ActionsLayout, !hasMeasured && styles52["ActionsLayout--measuring"])
   }, actionsMarkup, groupsMarkup));
 }
 function isMenuGroup(actionOrMenuGroup) {
@@ -14968,15 +15364,15 @@ function ActionMenu({
   if (actions.length === 0 && groups.length === 0) {
     return null;
   }
-  const actionMenuClassNames = classNames(styles46.ActionMenu, rollup && styles46.rollup);
+  const actionMenuClassNames = classNames(styles48.ActionMenu, rollup && styles48.rollup);
   const rollupSections = groups.map((group) => convertGroupToSection(group));
-  return /* @__PURE__ */ import_react155.default.createElement("div", {
+  return /* @__PURE__ */ import_react159.default.createElement("div", {
     className: actionMenuClassNames
-  }, rollup ? /* @__PURE__ */ import_react155.default.createElement(RollupActions, {
+  }, rollup ? /* @__PURE__ */ import_react159.default.createElement(RollupActions, {
     accessibilityLabel: rollupActionsLabel,
     items: actions,
     sections: rollupSections
-  }) : /* @__PURE__ */ import_react155.default.createElement(Actions, {
+  }) : /* @__PURE__ */ import_react159.default.createElement(Actions, {
     actions,
     groups,
     onActionRollup
@@ -15000,7 +15396,7 @@ function convertGroupToSection({
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Pagination/Pagination.js
-var import_react156 = __toESM(require_react());
+var import_react160 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/utilities/is-input-focused.js
 var EditableTarget;
@@ -15021,7 +15417,7 @@ function isInputFocused() {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Pagination/Pagination.css.js
-var styles53 = {
+var styles55 = {
   "Pagination": "Polaris-Pagination",
   "table": "Polaris-Pagination--table",
   "TablePaginationActions": "Polaris-Pagination__TablePaginationActions"
@@ -15045,11 +15441,11 @@ function Pagination({
   type = "page"
 }) {
   const i18n = useI18n();
-  const node = /* @__PURE__ */ (0, import_react156.createRef)();
+  const node = /* @__PURE__ */ (0, import_react160.createRef)();
   const navLabel = accessibilityLabel || i18n.translate("Polaris.Pagination.pagination");
   const previousLabel = accessibilityLabels?.previous || i18n.translate("Polaris.Pagination.previous");
   const nextLabel = accessibilityLabels?.next || i18n.translate("Polaris.Pagination.next");
-  const prev = /* @__PURE__ */ import_react156.default.createElement(Button, {
+  const prev = /* @__PURE__ */ import_react160.default.createElement(Button, {
     icon: SvgChevronLeftIcon,
     accessibilityLabel: previousLabel,
     url: previousURL,
@@ -15057,12 +15453,12 @@ function Pagination({
     disabled: !hasPrevious,
     id: "previousURL"
   });
-  const constructedPrevious = previousTooltip && hasPrevious ? /* @__PURE__ */ import_react156.default.createElement(Tooltip, {
+  const constructedPrevious = previousTooltip && hasPrevious ? /* @__PURE__ */ import_react160.default.createElement(Tooltip, {
     activatorWrapper: "span",
     content: previousTooltip,
     preferredPosition: "below"
   }, prev) : prev;
-  const next = /* @__PURE__ */ import_react156.default.createElement(Button, {
+  const next = /* @__PURE__ */ import_react160.default.createElement(Button, {
     icon: SvgChevronRightIcon,
     accessibilityLabel: nextLabel,
     url: nextURL,
@@ -15070,67 +15466,67 @@ function Pagination({
     disabled: !hasNext,
     id: "nextURL"
   });
-  const constructedNext = nextTooltip && hasNext ? /* @__PURE__ */ import_react156.default.createElement(Tooltip, {
+  const constructedNext = nextTooltip && hasNext ? /* @__PURE__ */ import_react160.default.createElement(Tooltip, {
     activatorWrapper: "span",
     content: nextTooltip,
     preferredPosition: "below"
   }, next) : next;
   const previousHandler = onPrevious || noop5;
-  const previousButtonEvents = previousKeys && (previousURL || onPrevious) && hasPrevious && previousKeys.map((key) => /* @__PURE__ */ import_react156.default.createElement(KeypressListener, {
+  const previousButtonEvents = previousKeys && (previousURL || onPrevious) && hasPrevious && previousKeys.map((key) => /* @__PURE__ */ import_react160.default.createElement(KeypressListener, {
     key,
     keyCode: key,
     handler: previousURL ? handleCallback(clickPaginationLink("previousURL", node)) : handleCallback(previousHandler)
   }));
   const nextHandler = onNext || noop5;
-  const nextButtonEvents = nextKeys && (nextURL || onNext) && hasNext && nextKeys.map((key) => /* @__PURE__ */ import_react156.default.createElement(KeypressListener, {
+  const nextButtonEvents = nextKeys && (nextURL || onNext) && hasNext && nextKeys.map((key) => /* @__PURE__ */ import_react160.default.createElement(KeypressListener, {
     key,
     keyCode: key,
     handler: nextURL ? handleCallback(clickPaginationLink("nextURL", node)) : handleCallback(nextHandler)
   }));
   if (type === "table") {
-    const labelMarkup2 = label ? /* @__PURE__ */ import_react156.default.createElement(Box, {
+    const labelMarkup2 = label ? /* @__PURE__ */ import_react160.default.createElement(Box, {
       padding: "300",
       paddingBlockStart: "0",
       paddingBlockEnd: "0"
-    }, /* @__PURE__ */ import_react156.default.createElement(Text, {
+    }, /* @__PURE__ */ import_react160.default.createElement(Text, {
       as: "span",
       variant: "bodySm",
       fontWeight: "medium"
     }, label)) : null;
-    return /* @__PURE__ */ import_react156.default.createElement("nav", {
+    return /* @__PURE__ */ import_react160.default.createElement("nav", {
       "aria-label": navLabel,
       ref: node,
-      className: classNames(styles53.Pagination, styles53.table)
-    }, previousButtonEvents, nextButtonEvents, /* @__PURE__ */ import_react156.default.createElement(Box, {
+      className: classNames(styles55.Pagination, styles55.table)
+    }, previousButtonEvents, nextButtonEvents, /* @__PURE__ */ import_react160.default.createElement(Box, {
       background: "bg-surface-secondary",
       paddingBlockStart: "150",
       paddingBlockEnd: "150",
       paddingInlineStart: "300",
       paddingInlineEnd: "200"
-    }, /* @__PURE__ */ import_react156.default.createElement(InlineStack, {
+    }, /* @__PURE__ */ import_react160.default.createElement(InlineStack, {
       align: "center",
       blockAlign: "center"
-    }, /* @__PURE__ */ import_react156.default.createElement("div", {
-      className: styles53.TablePaginationActions,
+    }, /* @__PURE__ */ import_react160.default.createElement("div", {
+      className: styles55.TablePaginationActions,
       "data-buttongroup-variant": "segmented"
-    }, /* @__PURE__ */ import_react156.default.createElement("div", null, constructedPrevious), labelMarkup2, /* @__PURE__ */ import_react156.default.createElement("div", null, constructedNext)))));
+    }, /* @__PURE__ */ import_react160.default.createElement("div", null, constructedPrevious), labelMarkup2, /* @__PURE__ */ import_react160.default.createElement("div", null, constructedNext)))));
   }
-  const labelTextMarkup = hasNext && hasPrevious ? /* @__PURE__ */ import_react156.default.createElement("span", null, label) : /* @__PURE__ */ import_react156.default.createElement(Text, {
+  const labelTextMarkup = hasNext && hasPrevious ? /* @__PURE__ */ import_react160.default.createElement("span", null, label) : /* @__PURE__ */ import_react160.default.createElement(Text, {
     tone: "subdued",
     as: "span"
   }, label);
-  const labelMarkup = label ? /* @__PURE__ */ import_react156.default.createElement(Box, {
+  const labelMarkup = label ? /* @__PURE__ */ import_react160.default.createElement(Box, {
     padding: "300",
     paddingBlockStart: "0",
     paddingBlockEnd: "0"
-  }, /* @__PURE__ */ import_react156.default.createElement("div", {
+  }, /* @__PURE__ */ import_react160.default.createElement("div", {
     "aria-live": "polite"
   }, labelTextMarkup)) : null;
-  return /* @__PURE__ */ import_react156.default.createElement("nav", {
+  return /* @__PURE__ */ import_react160.default.createElement("nav", {
     "aria-label": navLabel,
     ref: node,
-    className: styles53.Pagination
-  }, previousButtonEvents, nextButtonEvents, /* @__PURE__ */ import_react156.default.createElement(ButtonGroup, {
+    className: styles55.Pagination
+  }, previousButtonEvents, nextButtonEvents, /* @__PURE__ */ import_react160.default.createElement(ButtonGroup, {
     variant: "segmented"
   }, constructedPrevious, labelMarkup, constructedNext));
 }
@@ -15182,26 +15578,26 @@ function Header2({
   } = useMediaQuery();
   const isSingleRow = !primaryAction && !pagination && (isInterface(secondaryActions) && !secondaryActions.length || isReactElement(secondaryActions)) && !actionGroups.length;
   const hasActionGroupsOrSecondaryActions = actionGroups.length > 0 || isInterface(secondaryActions) && secondaryActions.length > 0 || isReactElement(secondaryActions);
-  const breadcrumbMarkup = backAction ? /* @__PURE__ */ import_react157.default.createElement("div", {
-    className: styles43.BreadcrumbWrapper
-  }, /* @__PURE__ */ import_react157.default.createElement(Box, {
+  const breadcrumbMarkup = backAction ? /* @__PURE__ */ import_react161.default.createElement("div", {
+    className: styles45.BreadcrumbWrapper
+  }, /* @__PURE__ */ import_react161.default.createElement(Box, {
     maxWidth: "100%",
     paddingInlineEnd: "100",
     printHidden: true
-  }, /* @__PURE__ */ import_react157.default.createElement(Breadcrumbs, {
+  }, /* @__PURE__ */ import_react161.default.createElement(Breadcrumbs, {
     backAction
   }))) : null;
-  const paginationMarkup = pagination && !isNavigationCollapsed ? /* @__PURE__ */ import_react157.default.createElement("div", {
-    className: styles43.PaginationWrapper
-  }, /* @__PURE__ */ import_react157.default.createElement(Box, {
+  const paginationMarkup = pagination && !isNavigationCollapsed ? /* @__PURE__ */ import_react161.default.createElement("div", {
+    className: styles45.PaginationWrapper
+  }, /* @__PURE__ */ import_react161.default.createElement(Box, {
     printHidden: true
-  }, /* @__PURE__ */ import_react157.default.createElement(Pagination, Object.assign({}, pagination, {
+  }, /* @__PURE__ */ import_react161.default.createElement(Pagination, Object.assign({}, pagination, {
     hasPrevious: pagination.hasPrevious,
     hasNext: pagination.hasNext
   })))) : null;
-  const pageTitleMarkup = /* @__PURE__ */ import_react157.default.createElement("div", {
-    className: classNames(styles43.TitleWrapper, !hasActionGroupsOrSecondaryActions && styles43.TitleWrapperExpand)
-  }, /* @__PURE__ */ import_react157.default.createElement(Title, {
+  const pageTitleMarkup = /* @__PURE__ */ import_react161.default.createElement("div", {
+    className: classNames(styles45.TitleWrapper, !hasActionGroupsOrSecondaryActions && styles45.TitleWrapperExpand)
+  }, /* @__PURE__ */ import_react161.default.createElement(Title, {
     title,
     subtitle,
     titleMetadata,
@@ -15209,20 +15605,20 @@ function Header2({
     hasSubtitleMaxWidth: hasActionGroupsOrSecondaryActions
   }));
   const labelForPageReadyAccessibilityLabel = pageReadyAccessibilityLabel || title;
-  const pageReadyAccessibilityLabelMarkup = labelForPageReadyAccessibilityLabel ? /* @__PURE__ */ import_react157.default.createElement("div", {
+  const pageReadyAccessibilityLabelMarkup = labelForPageReadyAccessibilityLabel ? /* @__PURE__ */ import_react161.default.createElement("div", {
     role: "status"
-  }, /* @__PURE__ */ import_react157.default.createElement(Text, {
+  }, /* @__PURE__ */ import_react161.default.createElement(Text, {
     visuallyHidden: true,
     as: "p"
   }, i18n.translate("Polaris.Page.Header.pageReadyAccessibilityLabel", {
     title: labelForPageReadyAccessibilityLabel
   }))) : void 0;
-  const primaryActionMarkup = primaryAction ? /* @__PURE__ */ import_react157.default.createElement(PrimaryActionMarkup, {
+  const primaryActionMarkup = primaryAction ? /* @__PURE__ */ import_react161.default.createElement(PrimaryActionMarkup, {
     primaryAction
   }) : null;
   let actionMenuMarkup = null;
   if (isInterface(secondaryActions) && (secondaryActions.length > 0 || hasGroupsWithActions(actionGroups))) {
-    actionMenuMarkup = /* @__PURE__ */ import_react157.default.createElement(ActionMenu, {
+    actionMenuMarkup = /* @__PURE__ */ import_react161.default.createElement(ActionMenu, {
       actions: secondaryActions,
       groups: actionGroups,
       rollup: isNavigationCollapsed,
@@ -15232,25 +15628,25 @@ function Header2({
       onActionRollup
     });
   } else if (isReactElement(secondaryActions)) {
-    actionMenuMarkup = /* @__PURE__ */ import_react157.default.createElement(import_react157.default.Fragment, null, secondaryActions);
+    actionMenuMarkup = /* @__PURE__ */ import_react161.default.createElement(import_react161.default.Fragment, null, secondaryActions);
   }
-  const navigationMarkup = breadcrumbMarkup || paginationMarkup ? /* @__PURE__ */ import_react157.default.createElement(Box, {
+  const navigationMarkup = breadcrumbMarkup || paginationMarkup ? /* @__PURE__ */ import_react161.default.createElement(Box, {
     printHidden: true,
     paddingBlockEnd: "100",
     paddingInlineEnd: actionMenuMarkup && isNavigationCollapsed ? "1000" : void 0
-  }, /* @__PURE__ */ import_react157.default.createElement(InlineStack, {
+  }, /* @__PURE__ */ import_react161.default.createElement(InlineStack, {
     gap: "400",
     align: "space-between",
     blockAlign: "center"
   }, breadcrumbMarkup, paginationMarkup)) : null;
-  const additionalMetadataMarkup = additionalMetadata ? /* @__PURE__ */ import_react157.default.createElement("div", {
-    className: styles43.AdditionalMetaData
-  }, /* @__PURE__ */ import_react157.default.createElement(Text, {
+  const additionalMetadataMarkup = additionalMetadata ? /* @__PURE__ */ import_react161.default.createElement("div", {
+    className: styles45.AdditionalMetaData
+  }, /* @__PURE__ */ import_react161.default.createElement(Text, {
     tone: "subdued",
     as: "span",
     variant: "bodySm"
   }, additionalMetadata)) : null;
-  const headerClassNames = classNames(isSingleRow && styles43.isSingleRow, navigationMarkup && styles43.hasNavigation, actionMenuMarkup && styles43.hasActionMenu, isNavigationCollapsed && styles43.mobileView, !backAction && styles43.noBreadcrumbs, title && title.length < LONG_TITLE && styles43.mediumTitle, title && title.length > LONG_TITLE && styles43.longTitle);
+  const headerClassNames = classNames(isSingleRow && styles45.isSingleRow, navigationMarkup && styles45.hasNavigation, actionMenuMarkup && styles45.hasActionMenu, isNavigationCollapsed && styles45.mobileView, !backAction && styles45.noBreadcrumbs, title && title.length < LONG_TITLE && styles45.mediumTitle, title && title.length > LONG_TITLE && styles45.longTitle);
   const {
     slot1,
     slot2,
@@ -15267,7 +15663,7 @@ function Header2({
     primaryActionMarkup,
     title
   });
-  return /* @__PURE__ */ import_react157.default.createElement(Box, {
+  return /* @__PURE__ */ import_react161.default.createElement(Box, {
     position: "relative",
     paddingBlockStart: {
       xs: "400",
@@ -15286,28 +15682,28 @@ function Header2({
       sm: "0"
     },
     visuallyHidden: titleHidden
-  }, pageReadyAccessibilityLabelMarkup, /* @__PURE__ */ import_react157.default.createElement("div", {
+  }, pageReadyAccessibilityLabelMarkup, /* @__PURE__ */ import_react161.default.createElement("div", {
     className: headerClassNames
-  }, /* @__PURE__ */ import_react157.default.createElement(FilterActionsProvider, {
+  }, /* @__PURE__ */ import_react161.default.createElement(FilterActionsProvider, {
     filterActions: Boolean(filterActions)
-  }, /* @__PURE__ */ import_react157.default.createElement(ConditionalRender, {
+  }, /* @__PURE__ */ import_react161.default.createElement(ConditionalRender, {
     condition: [slot1, slot2, slot3, slot4].some(notNull)
-  }, /* @__PURE__ */ import_react157.default.createElement("div", {
-    className: styles43.Row
-  }, slot1, slot2, /* @__PURE__ */ import_react157.default.createElement(ConditionalRender, {
+  }, /* @__PURE__ */ import_react161.default.createElement("div", {
+    className: styles45.Row
+  }, slot1, slot2, /* @__PURE__ */ import_react161.default.createElement(ConditionalRender, {
     condition: [slot3, slot4].some(notNull)
-  }, /* @__PURE__ */ import_react157.default.createElement("div", {
-    className: styles43.RightAlign
-  }, /* @__PURE__ */ import_react157.default.createElement(ConditionalWrapper, {
+  }, /* @__PURE__ */ import_react161.default.createElement("div", {
+    className: styles45.RightAlign
+  }, /* @__PURE__ */ import_react161.default.createElement(ConditionalWrapper, {
     condition: [slot3, slot4].every(notNull),
-    wrapper: (children) => /* @__PURE__ */ import_react157.default.createElement("div", {
-      className: styles43.Actions
+    wrapper: (children) => /* @__PURE__ */ import_react161.default.createElement("div", {
+      className: styles45.Actions
     }, children)
-  }, slot3, slot4))))), /* @__PURE__ */ import_react157.default.createElement(ConditionalRender, {
+  }, slot3, slot4))))), /* @__PURE__ */ import_react161.default.createElement(ConditionalRender, {
     condition: [slot5].some(notNull)
-  }, /* @__PURE__ */ import_react157.default.createElement("div", {
-    className: styles43.Row
-  }, /* @__PURE__ */ import_react157.default.createElement(InlineStack, {
+  }, /* @__PURE__ */ import_react161.default.createElement("div", {
+    className: styles45.Row
+  }, /* @__PURE__ */ import_react161.default.createElement(InlineStack, {
     gap: "400"
   }, slot5))))));
 }
@@ -15327,15 +15723,15 @@ function PrimaryActionMarkup({
     const content = buttonFrom(shouldShowIconOnly(isNavigationCollapsed, primaryAction), {
       variant: primary ? "primary" : void 0
     });
-    actionMarkup = helpText ? /* @__PURE__ */ import_react157.default.createElement(Tooltip, {
+    actionMarkup = helpText ? /* @__PURE__ */ import_react161.default.createElement(Tooltip, {
       content: helpText
     }, content) : content;
   } else {
     actionMarkup = primaryAction;
   }
-  return /* @__PURE__ */ import_react157.default.createElement("div", {
-    className: styles43.PrimaryActionWrapper
-  }, /* @__PURE__ */ import_react157.default.createElement(Box, {
+  return /* @__PURE__ */ import_react161.default.createElement("div", {
+    className: styles45.PrimaryActionWrapper
+  }, /* @__PURE__ */ import_react161.default.createElement(Box, {
     printHidden: true
   }, actionMarkup));
 }
@@ -15411,7 +15807,7 @@ function determineLayout({
       slots: {
         slot1: breadcrumbMarkup,
         slot2: pageTitleMarkup,
-        slot3: /* @__PURE__ */ import_react157.default.createElement(import_react157.default.Fragment, null, actionMenuMarkup, primaryActionMarkup),
+        slot3: /* @__PURE__ */ import_react161.default.createElement(import_react161.default.Fragment, null, actionMenuMarkup, primaryActionMarkup),
         slot4: paginationMarkup,
         slot5: additionalMetadataMarkup
       },
@@ -15429,24 +15825,57 @@ function Page({
   narrowWidth,
   ...rest
 }) {
-  const pageClassName = classNames(styles42.Page, fullWidth && styles42.fullWidth, narrowWidth && styles42.narrowWidth);
+  const pageClassName = classNames(styles44.Page, fullWidth && styles44.fullWidth, narrowWidth && styles44.narrowWidth);
   const hasHeaderContent = rest.title != null && rest.title !== "" || rest.subtitle != null && rest.subtitle !== "" || rest.primaryAction != null || rest.secondaryActions != null && (isInterface(rest.secondaryActions) && rest.secondaryActions.length > 0 || isReactElement(rest.secondaryActions)) || rest.actionGroups != null && rest.actionGroups.length > 0 || rest.backAction != null;
-  const contentClassName = classNames(!hasHeaderContent && styles42.Content);
-  const headerMarkup = hasHeaderContent ? /* @__PURE__ */ import_react158.default.createElement(Header2, Object.assign({
+  const contentClassName = classNames(!hasHeaderContent && styles44.Content);
+  const headerMarkup = hasHeaderContent ? /* @__PURE__ */ import_react162.default.createElement(Header2, Object.assign({
     filterActions: true
   }, rest)) : null;
-  return /* @__PURE__ */ import_react158.default.createElement("div", {
+  return /* @__PURE__ */ import_react162.default.createElement("div", {
     className: pageClassName
-  }, headerMarkup, /* @__PURE__ */ import_react158.default.createElement("div", {
+  }, headerMarkup, /* @__PURE__ */ import_react162.default.createElement("div", {
     className: contentClassName
   }, children));
 }
 
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Thumbnail/Thumbnail.js
+var import_react163 = __toESM(require_react());
+
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Thumbnail/Thumbnail.css.js
+var styles56 = {
+  "Thumbnail": "Polaris-Thumbnail",
+  "sizeExtraSmall": "Polaris-Thumbnail--sizeExtraSmall",
+  "sizeSmall": "Polaris-Thumbnail--sizeSmall",
+  "sizeMedium": "Polaris-Thumbnail--sizeMedium",
+  "sizeLarge": "Polaris-Thumbnail--sizeLarge",
+  "transparent": "Polaris-Thumbnail--transparent"
+};
+
+// node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Thumbnail/Thumbnail.js
+function Thumbnail({
+  source,
+  alt,
+  size: size2 = "medium",
+  transparent
+}) {
+  const className = classNames(styles56.Thumbnail, size2 && styles56[variationName("size", size2)], transparent && styles56.transparent);
+  const content = typeof source === "string" ? /* @__PURE__ */ import_react163.default.createElement(Image, {
+    alt,
+    source
+  }) : /* @__PURE__ */ import_react163.default.createElement(Icon, {
+    accessibilityLabel: alt,
+    source
+  });
+  return /* @__PURE__ */ import_react163.default.createElement("span", {
+    className
+  }, content);
+}
+
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TopBar/TopBar.js
-var import_react168 = __toESM(require_react());
+var import_react173 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TopBar/TopBar.css.js
-var styles54 = {
+var styles57 = {
   "TopBar": "Polaris-TopBar",
   "Container": "Polaris-TopBar__Container",
   "LogoDisplayControl": "Polaris-TopBar__LogoDisplayControl",
@@ -15466,10 +15895,10 @@ var styles54 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TopBar/components/Search/Search.js
-var import_react160 = __toESM(require_react());
+var import_react165 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TopBar/components/Search/Search.css.js
-var styles55 = {
+var styles58 = {
   "Search": "Polaris-TopBar-Search",
   "SearchContent": "Polaris-TopBar-Search__SearchContent",
   "visible": "Polaris-TopBar-Search--visible",
@@ -15477,10 +15906,10 @@ var styles55 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TopBar/components/SearchDismissOverlay/SearchDismissOverlay.js
-var import_react159 = __toESM(require_react());
+var import_react164 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TopBar/components/SearchDismissOverlay/SearchDismissOverlay.css.js
-var styles56 = {
+var styles59 = {
   "SearchDismissOverlay": "Polaris-TopBar-SearchDismissOverlay",
   "visible": "Polaris-TopBar-SearchDismissOverlay--visible"
 };
@@ -15490,17 +15919,17 @@ function SearchDismissOverlay({
   onDismiss,
   visible
 }) {
-  const node = (0, import_react159.useRef)(null);
-  const handleDismiss = (0, import_react159.useCallback)(({
+  const node = (0, import_react164.useRef)(null);
+  const handleDismiss = (0, import_react164.useCallback)(({
     target
   }) => {
     if (target === node.current && onDismiss != null) {
       onDismiss();
     }
   }, [onDismiss]);
-  return /* @__PURE__ */ import_react159.default.createElement(import_react159.default.Fragment, null, visible ? /* @__PURE__ */ import_react159.default.createElement(ScrollLock, null) : null, /* @__PURE__ */ import_react159.default.createElement("div", {
+  return /* @__PURE__ */ import_react164.default.createElement(import_react164.default.Fragment, null, visible ? /* @__PURE__ */ import_react164.default.createElement(ScrollLock, null) : null, /* @__PURE__ */ import_react164.default.createElement("div", {
     ref: node,
-    className: classNames(styles56.SearchDismissOverlay, visible && styles56.visible),
+    className: classNames(styles59.SearchDismissOverlay, visible && styles59.visible),
     onClick: handleDismiss
   }));
 }
@@ -15515,24 +15944,24 @@ function Search({
   if (children == null) {
     return null;
   }
-  const overlayMarkup = visible ? /* @__PURE__ */ import_react160.default.createElement(SearchDismissOverlay, {
+  const overlayMarkup = visible ? /* @__PURE__ */ import_react165.default.createElement(SearchDismissOverlay, {
     onDismiss,
     visible: overlayVisible
   }) : null;
-  return /* @__PURE__ */ import_react160.default.createElement(import_react160.default.Fragment, null, overlayMarkup, /* @__PURE__ */ import_react160.default.createElement("div", {
-    className: classNames(styles55.Search, visible && styles55.visible)
-  }, /* @__PURE__ */ import_react160.default.createElement("div", {
-    className: styles55.SearchContent
-  }, /* @__PURE__ */ import_react160.default.createElement("div", {
-    className: styles55.Results
+  return /* @__PURE__ */ import_react165.default.createElement(import_react165.default.Fragment, null, overlayMarkup, /* @__PURE__ */ import_react165.default.createElement("div", {
+    className: classNames(styles58.Search, visible && styles58.visible)
+  }, /* @__PURE__ */ import_react165.default.createElement("div", {
+    className: styles58.SearchContent
+  }, /* @__PURE__ */ import_react165.default.createElement("div", {
+    className: styles58.Results
   }, children))));
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TopBar/components/SearchField/SearchField.js
-var import_react161 = __toESM(require_react());
+var import_react166 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TopBar/components/SearchField/SearchField.css.js
-var styles57 = {
+var styles60 = {
   "SearchField": "Polaris-TopBar-SearchField",
   "focused": "Polaris-TopBar-SearchField--focused",
   "Input": "Polaris-TopBar-SearchField__Input",
@@ -15555,17 +15984,17 @@ function SearchField({
   showFocusBorder
 }) {
   const i18n = useI18n();
-  const [forceActive, setForceActive] = (0, import_react161.useState)(false);
-  const input = (0, import_react161.useRef)(null);
-  const searchId = (0, import_react161.useId)();
-  const handleChange = (0, import_react161.useCallback)(({
+  const [forceActive, setForceActive] = (0, import_react166.useState)(false);
+  const input = (0, import_react166.useRef)(null);
+  const searchId = (0, import_react166.useId)();
+  const handleChange = (0, import_react166.useCallback)(({
     currentTarget
   }) => {
     onChange(currentTarget.value);
   }, [onChange]);
-  const handleFocus = (0, import_react161.useCallback)(() => onFocus && onFocus(), [onFocus]);
-  const handleBlur = (0, import_react161.useCallback)(() => onBlur && onBlur(), [onBlur]);
-  const handleClear = (0, import_react161.useCallback)(() => {
+  const handleFocus = (0, import_react166.useCallback)(() => onFocus && onFocus(), [onFocus]);
+  const handleBlur = (0, import_react166.useCallback)(() => onBlur && onBlur(), [onBlur]);
+  const handleClear = (0, import_react166.useCallback)(() => {
     onCancel && onCancel();
     if (!input.current) {
       return;
@@ -15574,7 +16003,7 @@ function SearchField({
     onChange("");
     input.current.focus();
   }, [onCancel, onChange]);
-  (0, import_react161.useEffect)(() => {
+  (0, import_react166.useEffect)(() => {
     if (!input.current) {
       return;
     }
@@ -15584,10 +16013,10 @@ function SearchField({
       input.current.blur();
     }
   }, [focused]);
-  const clearMarkup = value !== "" && /* @__PURE__ */ import_react161.default.createElement("button", {
+  const clearMarkup = value !== "" && /* @__PURE__ */ import_react166.default.createElement("button", {
     type: "button",
     "aria-label": i18n.translate("Polaris.TopBar.SearchField.clearButtonLabel"),
-    className: styles57.Clear,
+    className: styles60.Clear,
     onClick: handleClear,
     onBlur: () => {
       setForceActive(false);
@@ -15597,22 +16026,22 @@ function SearchField({
       handleFocus();
       setForceActive(true);
     }
-  }, /* @__PURE__ */ import_react161.default.createElement(Icon, {
+  }, /* @__PURE__ */ import_react166.default.createElement(Icon, {
     source: SvgXCircleIcon
   }));
-  const className = classNames(styles57.SearchField, (focused || active || forceActive) && styles57.focused);
-  return /* @__PURE__ */ import_react161.default.createElement("div", {
+  const className = classNames(styles60.SearchField, (focused || active || forceActive) && styles60.focused);
+  return /* @__PURE__ */ import_react166.default.createElement("div", {
     className,
     onFocus: handleFocus,
     onBlur: handleBlur
-  }, /* @__PURE__ */ import_react161.default.createElement(Text, {
+  }, /* @__PURE__ */ import_react166.default.createElement(Text, {
     as: "span",
     visuallyHidden: true
-  }, /* @__PURE__ */ import_react161.default.createElement("label", {
+  }, /* @__PURE__ */ import_react166.default.createElement("label", {
     htmlFor: searchId
-  }, i18n.translate("Polaris.TopBar.SearchField.search"))), /* @__PURE__ */ import_react161.default.createElement("input", {
+  }, i18n.translate("Polaris.TopBar.SearchField.search"))), /* @__PURE__ */ import_react166.default.createElement("input", {
     id: searchId,
-    className: styles57.Input,
+    className: styles60.Input,
     placeholder,
     type: "search",
     autoCapitalize: "off",
@@ -15622,12 +16051,12 @@ function SearchField({
     value,
     onChange: handleChange,
     onKeyDown: preventDefault
-  }), /* @__PURE__ */ import_react161.default.createElement("span", {
-    className: styles57.Icon
-  }, /* @__PURE__ */ import_react161.default.createElement(Icon, {
+  }), /* @__PURE__ */ import_react166.default.createElement("span", {
+    className: styles60.Icon
+  }, /* @__PURE__ */ import_react166.default.createElement(Icon, {
     source: SvgSearchIcon
-  })), clearMarkup, /* @__PURE__ */ import_react161.default.createElement("div", {
-    className: classNames(styles57.Backdrop, showFocusBorder && styles57.BackdropShowFocusBorder)
+  })), clearMarkup, /* @__PURE__ */ import_react166.default.createElement("div", {
+    className: classNames(styles60.Backdrop, showFocusBorder && styles60.BackdropShowFocusBorder)
   }));
 }
 function preventDefault(event) {
@@ -15637,18 +16066,18 @@ function preventDefault(event) {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TopBar/components/UserMenu/UserMenu.js
-var import_react167 = __toESM(require_react());
+var import_react172 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TopBar/components/UserMenu/UserMenu.css.js
-var styles58 = {
+var styles61 = {
   "Details": "Polaris-TopBar-UserMenu__Details"
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/MessageIndicator/MessageIndicator.js
-var import_react162 = __toESM(require_react());
+var import_react167 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/MessageIndicator/MessageIndicator.css.js
-var styles59 = {
+var styles62 = {
   "MessageIndicatorWrapper": "Polaris-MessageIndicator__MessageIndicatorWrapper",
   "MessageIndicator": "Polaris-MessageIndicator"
 };
@@ -15658,19 +16087,19 @@ function MessageIndicator({
   children,
   active
 }) {
-  const indicatorMarkup = active && /* @__PURE__ */ import_react162.default.createElement("div", {
-    className: styles59.MessageIndicator
+  const indicatorMarkup = active && /* @__PURE__ */ import_react167.default.createElement("div", {
+    className: styles62.MessageIndicator
   });
-  return /* @__PURE__ */ import_react162.default.createElement("div", {
-    className: styles59.MessageIndicatorWrapper
+  return /* @__PURE__ */ import_react167.default.createElement("div", {
+    className: styles62.MessageIndicatorWrapper
   }, indicatorMarkup, children);
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TopBar/components/Menu/Menu.js
-var import_react165 = __toESM(require_react());
+var import_react170 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TopBar/components/Menu/Menu.css.js
-var styles60 = {
+var styles63 = {
   "ActivatorWrapper": "Polaris-TopBar-Menu__ActivatorWrapper",
   "Activator": "Polaris-TopBar-Menu__Activator",
   "Activator-userMenu": "Polaris-TopBar-Menu__Activator--userMenu",
@@ -15678,18 +16107,18 @@ var styles60 = {
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TopBar/components/Menu/components/Message/Message.js
-var import_react164 = __toESM(require_react());
+var import_react169 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/TopBar/components/Menu/components/Message/Message.css.js
-var styles61 = {
+var styles64 = {
   "Section": "Polaris-Menu-Message__Section"
 };
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Link/Link.js
-var import_react163 = __toESM(require_react());
+var import_react168 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Link/Link.css.js
-var styles62 = {
+var styles65 = {
   "Link": "Polaris-Link",
   "monochrome": "Polaris-Link--monochrome",
   "removeUnderline": "Polaris-Link--removeUnderline"
@@ -15708,10 +16137,10 @@ function Link({
   accessibilityLabel,
   dataPrimaryLink
 }) {
-  return /* @__PURE__ */ import_react163.default.createElement(BannerContext.Consumer, null, (BannerContext2) => {
+  return /* @__PURE__ */ import_react168.default.createElement(BannerContext.Consumer, null, (BannerContext2) => {
     const shouldBeMonochrome = monochrome || BannerContext2;
-    const className = classNames(styles62.Link, shouldBeMonochrome && styles62.monochrome, removeUnderline && styles62.removeUnderline);
-    return url ? /* @__PURE__ */ import_react163.default.createElement(UnstyledLink, {
+    const className = classNames(styles65.Link, shouldBeMonochrome && styles65.monochrome, removeUnderline && styles65.removeUnderline);
+    return url ? /* @__PURE__ */ import_react168.default.createElement(UnstyledLink, {
       onClick,
       className,
       url,
@@ -15720,7 +16149,7 @@ function Link({
       id,
       "aria-label": accessibilityLabel,
       "data-primary-link": dataPrimaryLink
-    }, children) : /* @__PURE__ */ import_react163.default.createElement("button", {
+    }, children) : /* @__PURE__ */ import_react168.default.createElement("button", {
       type: "button",
       onClick,
       className,
@@ -15739,7 +16168,7 @@ function Message({
   link,
   badge
 }) {
-  const badgeMarkup = badge && /* @__PURE__ */ import_react164.default.createElement(Badge, {
+  const badgeMarkup = badge && /* @__PURE__ */ import_react169.default.createElement(Badge, {
     tone: badge.tone
   }, badge.content);
   const {
@@ -15750,17 +16179,17 @@ function Message({
     onClick,
     content: actionContent
   } = action;
-  return /* @__PURE__ */ import_react164.default.createElement("div", {
-    className: styles61.Section
-  }, /* @__PURE__ */ import_react164.default.createElement(Popover2.Section, null, /* @__PURE__ */ import_react164.default.createElement(LegacyStack, {
+  return /* @__PURE__ */ import_react169.default.createElement("div", {
+    className: styles64.Section
+  }, /* @__PURE__ */ import_react169.default.createElement(Popover2.Section, null, /* @__PURE__ */ import_react169.default.createElement(LegacyStack, {
     vertical: true,
     spacing: "tight"
-  }, /* @__PURE__ */ import_react164.default.createElement(TextContainer, null, /* @__PURE__ */ import_react164.default.createElement(Text, {
+  }, /* @__PURE__ */ import_react169.default.createElement(TextContainer, null, /* @__PURE__ */ import_react169.default.createElement(Text, {
     variant: "headingMd",
     as: "h2"
-  }, title, badgeMarkup), /* @__PURE__ */ import_react164.default.createElement("p", null, description)), /* @__PURE__ */ import_react164.default.createElement(Link, {
+  }, title, badgeMarkup), /* @__PURE__ */ import_react169.default.createElement("p", null, description)), /* @__PURE__ */ import_react169.default.createElement(Link, {
     url: to
-  }, linkContent), /* @__PURE__ */ import_react164.default.createElement(Button, {
+  }, linkContent), /* @__PURE__ */ import_react169.default.createElement(Button, {
     variant: "plain",
     onClick
   }, actionContent))));
@@ -15783,7 +16212,7 @@ function Menu(props) {
     content: message.badge.content,
     tone: message.badge.tone
   };
-  const messageMarkup = message && /* @__PURE__ */ import_react165.default.createElement(Message, {
+  const messageMarkup = message && /* @__PURE__ */ import_react170.default.createElement(Message, {
     title: message.title,
     description: message.description,
     action: {
@@ -15796,12 +16225,12 @@ function Menu(props) {
     },
     badge: badgeProps
   });
-  return /* @__PURE__ */ import_react165.default.createElement(Popover2, {
-    activator: /* @__PURE__ */ import_react165.default.createElement("div", {
-      className: styles60.ActivatorWrapper
-    }, /* @__PURE__ */ import_react165.default.createElement("button", {
+  return /* @__PURE__ */ import_react170.default.createElement(Popover2, {
+    activator: /* @__PURE__ */ import_react170.default.createElement("div", {
+      className: styles63.ActivatorWrapper
+    }, /* @__PURE__ */ import_react170.default.createElement("button", {
       type: "button",
-      className: classNames(styles60.Activator, userMenu && styles60["Activator-userMenu"]),
+      className: classNames(styles63.Activator, userMenu && styles63["Activator-userMenu"]),
       onClick: onOpen,
       "aria-label": accessibilityLabel
     }, activatorContent)),
@@ -15810,11 +16239,11 @@ function Menu(props) {
     fixed: true,
     fullHeight: true,
     preferredAlignment: "right"
-  }, /* @__PURE__ */ import_react165.default.createElement("div", {
-    className: styles60.MenuItems
-  }, /* @__PURE__ */ import_react165.default.createElement(Box, {
+  }, /* @__PURE__ */ import_react170.default.createElement("div", {
+    className: styles63.MenuItems
+  }, /* @__PURE__ */ import_react170.default.createElement(Box, {
     width: customWidth
-  }, /* @__PURE__ */ import_react165.default.createElement(ActionList, {
+  }, /* @__PURE__ */ import_react170.default.createElement(ActionList, {
     actionRole: "menuitem",
     onActionAnyItem: onClose,
     sections: actions
@@ -15822,10 +16251,10 @@ function Menu(props) {
 }
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Avatar/Avatar.js
-var import_react166 = __toESM(require_react());
+var import_react171 = __toESM(require_react());
 
 // node_modules/.pnpm/@shopify+polaris@12.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@shopify/polaris/build/esm/components/Avatar/Avatar.css.js
-var styles63 = {
+var styles66 = {
   "Avatar": "Polaris-Avatar",
   "imageHasLoaded": "Polaris-Avatar--imageHasLoaded",
   "Text": "Polaris-Avatar__Text",
@@ -15884,17 +16313,17 @@ function Avatar({
 }) {
   const i18n = useI18n();
   const isAfterInitialMount = useIsAfterInitialMount();
-  const [status, setStatus] = (0, import_react166.useState)(Status.Pending);
-  (0, import_react166.useEffect)(() => {
+  const [status, setStatus] = (0, import_react171.useState)(Status.Pending);
+  (0, import_react171.useEffect)(() => {
     setStatus(Status.Pending);
   }, [source]);
-  const handleError = (0, import_react166.useCallback)(() => {
+  const handleError = (0, import_react171.useCallback)(() => {
     setStatus(Status.Errored);
     if (onError) {
       onError();
     }
   }, [onError]);
-  const handleLoad = (0, import_react166.useCallback)(() => {
+  const handleLoad = (0, import_react171.useCallback)(() => {
     setStatus(Status.Loaded);
   }, []);
   const hasImage = source && status !== Status.Errored;
@@ -15910,10 +16339,10 @@ function Avatar({
       initials: splitInitials
     });
   }
-  const className = classNames(styles63.Avatar, size2 && styles63[variationName("size", size2)], hasImage && status === Status.Loaded && styles63.imageHasLoaded, !customer && !hasImage && styles63[variationName("style", styleClass(nameString))]);
-  const textClassName = classNames(styles63.Text, (initials?.length || 0) > 2 && styles63.long);
-  const imageClassName = classNames(styles63.Image, status !== Status.Loaded && styles63.hidden);
-  const imageMarkUp = source && isAfterInitialMount && status !== Status.Errored ? /* @__PURE__ */ import_react166.default.createElement(Image, {
+  const className = classNames(styles66.Avatar, size2 && styles66[variationName("size", size2)], hasImage && status === Status.Loaded && styles66.imageHasLoaded, !customer && !hasImage && styles66[variationName("style", styleClass(nameString))]);
+  const textClassName = classNames(styles66.Text, (initials?.length || 0) > 2 && styles66.long);
+  const imageClassName = classNames(styles66.Image, status !== Status.Loaded && styles66.hidden);
+  const imageMarkUp = source && isAfterInitialMount && status !== Status.Errored ? /* @__PURE__ */ import_react171.default.createElement(Image, {
     className: imageClassName,
     source,
     alt: "",
@@ -15922,12 +16351,12 @@ function Avatar({
     onError: handleError
   }) : null;
   const verticalOffset = "0.35em";
-  const avatarPath = /* @__PURE__ */ import_react166.default.createElement(import_react166.default.Fragment, null, /* @__PURE__ */ import_react166.default.createElement("path", {
+  const avatarPath = /* @__PURE__ */ import_react171.default.createElement(import_react171.default.Fragment, null, /* @__PURE__ */ import_react171.default.createElement("path", {
     fill: "none",
     d: "M25.5 13.5C25.5 16.5376 23.0376 19 20 19C16.9624 19 14.5 16.5376 14.5 13.5C14.5 10.4624 16.9624 8 20 8C23.0376 8 25.5 10.4624 25.5 13.5Z",
     stroke: "currentColor",
     strokeWidth: avatarStrokeWidth[size2]
-  }), /* @__PURE__ */ import_react166.default.createElement("path", {
+  }), /* @__PURE__ */ import_react171.default.createElement("path", {
     fill: "none",
     d: "M10.3433 29.682L9.47 31.254C9.03481 32.0373 9.60125 33 10.4974 33H29.5026C30.3988 33 30.9652 32.0373 30.53 31.254L29.6567 29.682C27.7084 26.175 24.0119 24 20 24C15.9882 24 12.2916 26.175 10.3433 29.682Z",
     stroke: "currentColor",
@@ -15935,7 +16364,7 @@ function Avatar({
     strokeLinecap: "round",
     strokeLinejoin: "round"
   }));
-  const avatarBody = customer || !initials ? avatarPath : /* @__PURE__ */ import_react166.default.createElement("text", {
+  const avatarBody = customer || !initials ? avatarPath : /* @__PURE__ */ import_react171.default.createElement("text", {
     className: textClassName,
     x: "50%",
     y: "50%",
@@ -15943,13 +16372,13 @@ function Avatar({
     fill: "currentColor",
     textAnchor: "middle"
   }, initials);
-  const svgMarkup = hasImage ? null : /* @__PURE__ */ import_react166.default.createElement("span", {
-    className: styles63.Initials
-  }, /* @__PURE__ */ import_react166.default.createElement("svg", {
-    className: styles63.Svg,
+  const svgMarkup = hasImage ? null : /* @__PURE__ */ import_react171.default.createElement("span", {
+    className: styles66.Initials
+  }, /* @__PURE__ */ import_react171.default.createElement("svg", {
+    className: styles66.Svg,
     viewBox: "0 0 40 40"
   }, avatarBody));
-  return /* @__PURE__ */ import_react166.default.createElement("span", {
+  return /* @__PURE__ */ import_react171.default.createElement("span", {
     "aria-label": label,
     role: label ? "img" : "presentation",
     className
@@ -15971,31 +16400,31 @@ function UserMenu({
   customWidth
 }) {
   const showIndicator = Boolean(message);
-  const activatorContentMarkup = customActivator ? customActivator : /* @__PURE__ */ import_react167.default.createElement(import_react167.default.Fragment, null, /* @__PURE__ */ import_react167.default.createElement("span", {
-    className: styles58.Details
-  }, /* @__PURE__ */ import_react167.default.createElement(Text, {
+  const activatorContentMarkup = customActivator ? customActivator : /* @__PURE__ */ import_react172.default.createElement(import_react172.default.Fragment, null, /* @__PURE__ */ import_react172.default.createElement("span", {
+    className: styles61.Details
+  }, /* @__PURE__ */ import_react172.default.createElement(Text, {
     as: "p",
     variant: "bodySm",
     alignment: "start",
     fontWeight: "medium",
     truncate: true
-  }, name), /* @__PURE__ */ import_react167.default.createElement("span", {
-    className: styles58.Message
-  }, /* @__PURE__ */ import_react167.default.createElement(Text, {
+  }, name), /* @__PURE__ */ import_react172.default.createElement("span", {
+    className: styles61.Message
+  }, /* @__PURE__ */ import_react172.default.createElement(Text, {
     as: "p",
     variant: "bodyXs",
     alignment: "start",
     tone: "text-inverse-secondary",
     truncate: true
-  }, detail))), /* @__PURE__ */ import_react167.default.createElement(MessageIndicator, {
+  }, detail))), /* @__PURE__ */ import_react172.default.createElement(MessageIndicator, {
     active: showIndicator
-  }, /* @__PURE__ */ import_react167.default.createElement(Avatar, {
+  }, /* @__PURE__ */ import_react172.default.createElement(Avatar, {
     size: "md",
     initials: initials && initials.replace(" ", ""),
     source: avatar,
     name
   })));
-  return /* @__PURE__ */ import_react167.default.createElement(Menu, {
+  return /* @__PURE__ */ import_react172.default.createElement(Menu, {
     activatorContent: activatorContentMarkup,
     open,
     onOpen: onToggle,
@@ -16031,61 +16460,61 @@ var TopBar = function TopBar2({
     setTrue: forceTrueFocused,
     setFalse: forceFalseFocused
   } = useToggle(false);
-  const iconClassName = classNames(styles54.NavigationIcon, focused && styles54.focused);
-  const navigationButtonMarkup = showNavigationToggle ? /* @__PURE__ */ import_react168.default.createElement("button", {
+  const iconClassName = classNames(styles57.NavigationIcon, focused && styles57.focused);
+  const navigationButtonMarkup = showNavigationToggle ? /* @__PURE__ */ import_react173.default.createElement("button", {
     type: "button",
     className: iconClassName,
     onClick: onNavigationToggle,
     onFocus: forceTrueFocused,
     onBlur: forceFalseFocused,
     "aria-label": i18n.translate("Polaris.TopBar.toggleMenuLabel")
-  }, /* @__PURE__ */ import_react168.default.createElement("div", {
-    className: styles54.IconWrapper
-  }, /* @__PURE__ */ import_react168.default.createElement(Icon, {
+  }, /* @__PURE__ */ import_react173.default.createElement("div", {
+    className: styles57.IconWrapper
+  }, /* @__PURE__ */ import_react173.default.createElement(Icon, {
     source: SvgMenuIcon
   }))) : null;
   const width2 = getWidth(logo, 104);
   let contextMarkup;
   if (contextControl) {
-    contextMarkup = /* @__PURE__ */ import_react168.default.createElement("div", {
-      className: styles54.ContextControl
+    contextMarkup = /* @__PURE__ */ import_react173.default.createElement("div", {
+      className: styles57.ContextControl
     }, contextControl);
   } else if (logo) {
-    const className = classNames(styles54.LogoContainer, showNavigationToggle || searchField ? styles54.LogoDisplayControl : styles54.LogoDisplayContainer, logoSuffix && styles54.hasLogoSuffix);
-    contextMarkup = /* @__PURE__ */ import_react168.default.createElement("div", {
+    const className = classNames(styles57.LogoContainer, showNavigationToggle || searchField ? styles57.LogoDisplayControl : styles57.LogoDisplayContainer, logoSuffix && styles57.hasLogoSuffix);
+    contextMarkup = /* @__PURE__ */ import_react173.default.createElement("div", {
       className
-    }, /* @__PURE__ */ import_react168.default.createElement(UnstyledLink, {
+    }, /* @__PURE__ */ import_react173.default.createElement(UnstyledLink, {
       url: logo.url || "",
-      className: styles54.LogoLink,
+      className: styles57.LogoLink,
       style: {
         width: width2
       }
-    }, /* @__PURE__ */ import_react168.default.createElement(Image, {
+    }, /* @__PURE__ */ import_react173.default.createElement(Image, {
       source: logo.topBarSource || "",
       alt: logo.accessibilityLabel || "",
-      className: styles54.Logo,
+      className: styles57.Logo,
       style: {
         width: width2
       }
     })), logoSuffix);
   }
-  const searchMarkup = searchField ? /* @__PURE__ */ import_react168.default.createElement(import_react168.default.Fragment, null, searchField, /* @__PURE__ */ import_react168.default.createElement(Search, {
+  const searchMarkup = searchField ? /* @__PURE__ */ import_react173.default.createElement(import_react173.default.Fragment, null, searchField, /* @__PURE__ */ import_react173.default.createElement(Search, {
     visible: searchResultsVisible,
     onDismiss: onSearchResultsDismiss,
     overlayVisible: searchResultsOverlayVisible
   }, searchResults)) : null;
-  return /* @__PURE__ */ import_react168.default.createElement("div", {
-    className: styles54.TopBar
-  }, /* @__PURE__ */ import_react168.default.createElement("div", {
-    className: styles54.Container
-  }, /* @__PURE__ */ import_react168.default.createElement("div", {
-    className: styles54.LeftContent
-  }, navigationButtonMarkup, contextMarkup), /* @__PURE__ */ import_react168.default.createElement("div", {
-    className: styles54.Search
-  }, searchMarkup), /* @__PURE__ */ import_react168.default.createElement("div", {
-    className: styles54.RightContent
-  }, /* @__PURE__ */ import_react168.default.createElement("div", {
-    className: styles54.SecondaryMenu
+  return /* @__PURE__ */ import_react173.default.createElement("div", {
+    className: styles57.TopBar
+  }, /* @__PURE__ */ import_react173.default.createElement("div", {
+    className: styles57.Container
+  }, /* @__PURE__ */ import_react173.default.createElement("div", {
+    className: styles57.LeftContent
+  }, navigationButtonMarkup, contextMarkup), /* @__PURE__ */ import_react173.default.createElement("div", {
+    className: styles57.Search
+  }, searchMarkup), /* @__PURE__ */ import_react173.default.createElement("div", {
+    className: styles57.RightContent
+  }, /* @__PURE__ */ import_react173.default.createElement("div", {
+    className: styles57.SecondaryMenu
   }, secondaryMenu), userMenu)));
 };
 TopBar.Menu = Menu;
@@ -16095,17 +16524,21 @@ TopBar.UserMenu = UserMenu;
 export {
   AppProvider,
   Text,
+  Icon,
   Button,
   Card,
   InlineStack,
+  BlockStack,
   TextField,
   Banner,
   Divider,
+  DropZone,
   FormLayout,
   Frame,
   Layout,
   Navigation,
   Page,
+  Thumbnail,
   TopBar
 };
 /*! Bundled license information:
@@ -16127,4 +16560,4 @@ object-assign/index.js:
   @license MIT
   *)
 */
-//# sourceMappingURL=/build/_shared/chunk-ANTKSAN7.js.map
+//# sourceMappingURL=/build/_shared/chunk-RRH55SMP.js.map
