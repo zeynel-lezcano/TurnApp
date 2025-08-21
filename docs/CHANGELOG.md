@@ -1,5 +1,12 @@
+## 0.6.0 (2025-08-21)
+
+* feat: implement storefront API setup with GraphQL product proxy 5026239
+
+
+
 ## 0.5.0 (2025-08-21)
 
+* chore(release): 0.5.0 5a8807e
 * feat: implement comprehensive config API schema validation system 9b41e94
 
 
