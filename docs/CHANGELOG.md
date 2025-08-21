@@ -1,5 +1,12 @@
+## 0.5.0 (2025-08-21)
+
+* feat: implement comprehensive config API schema validation system 9b41e94
+
+
+
 ## 0.4.0 (2025-08-21)
 
+* chore(release): 0.4.0 75cd6c3
 * feat: implement session token middleware hardening system b95bf95
 
 
