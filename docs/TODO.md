@@ -3,14 +3,18 @@
 > Quelle: docs/backlog.yaml (auto-generiert)
 
 ## NOW
-- [ ] Mobile Demo Scaffold (id: mobile-demo-scaffold) — RN/Flutter template consuming /api/config, basic product list, checkout links
 - [ ] Simple Cache Integration (id: cache-integration) — Redis/memory cache für Product Proxy, 60s TTL, cache invalidation
 - [ ] Error Tracking Setup (id: error-tracking-setup) — Sentry integration, structured logging, error reporting setup
 - [ ] Rate Limit Implementation (id: rate-limit-implementation) — Rate limiting für API endpoints, Shopify GraphQL budget management
 - [ ] CI/CD Pipeline Setup (id: ci-cd-setup) — GitHub Actions, lint/test gates, automated deployment setup
+- [ ] Storefront Token Management (id: storefront-token-management) — Short-lived storefront access tokens für mobile apps, token refresh, API endpoint
 
 
 ## NEXT
+- [ ] API Rate Limiting Infrastructure (id: api-rate-limiting-infra) — Rate limiting middleware, request counting, budget tracking, exponential backoff
+- [ ] Mobile Config API Extensions (id: mobile-config-extension) — Storefront endpoint config, mobile-specific settings, version compatibility
+- [ ] Webhook Retry Logic Enhancement (id: webhook-retry-logic) — Retry queue, exponential backoff, dead letter handling, webhook validation
+- [ ] Asset Management Optimization (id: asset-optimization) — Image resizing, CDN integration, asset versioning, cache headers
 
 
 ## LATER
@@ -34,3 +38,4 @@
 - [x] Dev Tunnel Setup (ngrok) (id: dev-tunnel-setup) — ngrok integration für local dev, webhook endpoint routing, .env setup
 - [x] Admin API Integration (id: admin-api-integration) — GraphQL client setup für Admin API, shop validation, product queries
 - [x] Health & Monitoring Endpoints (id: health-endpoints) — /healthz, /readiness endpoints, request logging, error tracking setup
+- [x] Mobile Demo Scaffold (id: mobile-demo-scaffold) — RN/Flutter template consuming /api/config, basic product list, checkout links

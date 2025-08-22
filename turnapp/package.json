@@ -6,90 +6,59 @@
   "author": "TurnApp Development Team",
   "license": "UNLICENSED",
   "scripts": {
-    // === DEVELOPMENT SCRIPTS ===
-    "dev": "remix dev",                                            // Start Remix dev server
-    "dev:tunnel": "tsx scripts/dev-tunnel.ts",                   // Start ngrok tunnel for Shopify webhooks
-    "dev:full": "concurrently \"pnpm dev:tunnel\" \"pnpm dev\"", // Full dev setup: tunnel + server
-    
-    // === BUILD & DEPLOYMENT ===
-    "build": "remix build",              // Production build
-    "start": "remix-serve build",       // Production server
-    
-    // === CODE QUALITY ===
-    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .", // ESLint with caching
-    "typecheck": "tsc --noEmit",        // TypeScript type checking
-    
-    // === TESTING ===
-    "test": "vitest",                   // Run unit tests
-    "test:coverage": "vitest --coverage", // Test coverage report
-    
-    // === DATABASE MANAGEMENT ===
-    "db:push": "prisma db push",        // Push schema changes to DB
-    "db:generate": "prisma generate",   // Generate Prisma client
-    "db:migrate": "prisma migrate dev", // Run DB migrations
-    
-    // === DEVELOPMENT UTILITIES ===
-    "seed": "tsx scripts/seed.ts",                // Seed database with test data
-    "tunnel:check": "tsx scripts/tunnel-check.ts"  // Verify tunnel configuration
+    "dev": "remix dev",
+    "dev:tunnel": "tsx scripts/dev-tunnel.ts",
+    "dev:full": "concurrently \"pnpm dev:tunnel\" \"pnpm dev\"",
+    "build": "remix build",
+    "start": "remix-serve build",
+    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "db:push": "prisma db push",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "seed": "tsx scripts/seed.ts",
+    "tunnel:check": "tsx scripts/tunnel-check.ts"
   },
   "dependencies": {
-    // === DATABASE & ORM ===
-    "@prisma/client": "^5.7.1",          // Prisma client for type-safe database access
-    
-    // === REMIX FRAMEWORK ===
-    "@remix-run/node": "^2.4.1",         // Remix server-side runtime
-    "@remix-run/react": "^2.4.1",        // Remix React integration
-    "@remix-run/serve": "^2.4.1",        // Remix production server
-    "remix": "^2.4.1",                   // Remix framework core
-    
-    // === SHOPIFY INTEGRATION ===
-    "@shopify/app-bridge": "^3.7.9",     // Shopify App Bridge for embedded apps
-    "@shopify/app-bridge-react": "^3.7.9", // React components for App Bridge
-    "@shopify/polaris": "^12.12.0",      // Shopify design system components
-    "@shopify/shopify-api": "^8.1.1",    // Official Shopify API SDK
-    "graphql-request": "^7.2.0",         // GraphQL client for Admin/Storefront APIs
-    
-    // === FILE HANDLING ===
-    "@types/multer": "^2.0.0",           // TypeScript types for multer
-    "express": "^4.18.2",               // Express.js for file upload handling
-    "multer": "^2.0.2",                  // File upload middleware
-    
-    // === REACT ECOSYSTEM ===
-    "react": "^18.2.0",                  // React library
-    "react-dom": "^18.2.0",              // React DOM rendering
-    
-    // === UTILITIES ===
-    "isbot": "^4",                       // Bot detection for SSR optimization
-    "zod": "^3.22.4"                     // Schema validation and type safety
+    "@prisma/client": "^5.7.1",
+    "@remix-run/node": "^2.4.1",
+    "@remix-run/react": "^2.4.1",
+    "@remix-run/serve": "^2.4.1",
+    "remix": "^2.4.1",
+    "@shopify/app-bridge": "^3.7.9",
+    "@shopify/app-bridge-react": "^3.7.9",
+    "@shopify/polaris": "^12.12.0",
+    "@shopify/shopify-api": "^8.1.1",
+    "graphql-request": "^7.2.0",
+    "@types/multer": "^2.0.0",
+    "express": "^4.18.2",
+    "multer": "^2.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "isbot": "^4",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    // === TYPESCRIPT SUPPORT ===
-    "@types/express": "^5.0.3",          // TypeScript types for Express.js
-    "@types/node": "^20.10.5",           // Node.js TypeScript definitions
-    "@types/react": "^18.2.45",          // React TypeScript definitions
-    "@types/react-dom": "^18.2.18",      // React DOM TypeScript definitions
-    "typescript": "^5.3.3",             // TypeScript compiler
-    
-    // === LINTING & CODE QUALITY ===
-    "@typescript-eslint/eslint-plugin": "^6.15.0", // TypeScript ESLint rules
-    "@typescript-eslint/parser": "^6.15.0",        // TypeScript parser for ESLint
-    "eslint": "^8.56.0",                           // ESLint linter
-    "eslint-plugin-react": "^7.33.2",             // React-specific linting rules
-    
-    // === DEVELOPMENT TOOLS ===
-    "concurrently": "^9.2.0",           // Run multiple commands in parallel
-    "ngrok": "5.0.0-beta.2",             // Tunnel for local development with Shopify
-    "tsx": "^4.7.0",                     // TypeScript execution for scripts
-    
-    // === DATABASE DEVELOPMENT ===
-    "prisma": "^5.7.1",                  // Prisma CLI and schema management
-    
-    // === BUILD & TESTING ===
-    "vite": "^5.0.10",                   // Vite bundler (used by Remix)
-    "vitest": "^1.1.0"                   // Vite-based testing framework
+    "@types/express": "^5.0.3",
+    "@types/node": "^20.10.5",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "typescript": "^5.3.3",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react": "^7.33.2",
+    "concurrently": "^9.2.0",
+    "ngrok": "5.0.0-beta.2",
+    "tsx": "^4.7.0",
+    "prisma": "^5.7.1",
+    "vite": "^5.0.10",
+    "vitest": "^1.1.0"
   },
   "engines": {
-    "node": ">=18.0.0"     // Node.js 18+ required for modern features (fetch, etc.)
+    "node": ">=18.0.0"
   },
   "keywords": [
     "shopify",

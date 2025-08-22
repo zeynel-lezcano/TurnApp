@@ -1,9 +1,5 @@
 wip_limit_now: 5
 now:
-  - id: mobile-demo-scaffold
-    title: Mobile Demo Scaffold
-    desc: RN/Flutter template consuming /api/config, basic product list, checkout
-      links
   - id: cache-integration
     title: Simple Cache Integration
     desc: Redis/memory cache für Product Proxy, 60s TTL, cache invalidation
@@ -16,7 +12,24 @@ now:
   - id: ci-cd-setup
     title: CI/CD Pipeline Setup
     desc: GitHub Actions, lint/test gates, automated deployment setup
-next: []
+  - id: storefront-token-management
+    title: Storefront Token Management
+    desc: Short-lived storefront access tokens für mobile apps, token refresh, API
+      endpoint
+next:
+  - id: api-rate-limiting-infra
+    title: API Rate Limiting Infrastructure
+    desc: Rate limiting middleware, request counting, budget tracking, exponential
+      backoff
+  - id: mobile-config-extension
+    title: Mobile Config API Extensions
+    desc: Storefront endpoint config, mobile-specific settings, version compatibility
+  - id: webhook-retry-logic
+    title: Webhook Retry Logic Enhancement
+    desc: Retry queue, exponential backoff, dead letter handling, webhook validation
+  - id: asset-optimization
+    title: Asset Management Optimization
+    desc: Image resizing, CDN integration, asset versioning, cache headers
 later:
   - id: product-proxy
     title: Product Proxy + Cache
@@ -86,4 +99,9 @@ done:
   - id: health-endpoints
     title: Health & Monitoring Endpoints
     desc: /healthz, /readiness endpoints, request logging, error tracking setup
+    doneAt: 2025-08-22
+  - id: mobile-demo-scaffold
+    title: Mobile Demo Scaffold
+    desc: RN/Flutter template consuming /api/config, basic product list, checkout
+      links
     doneAt: 2025-08-22

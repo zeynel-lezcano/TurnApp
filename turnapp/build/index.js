@@ -14,7 +14,7 @@ import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import * as isbotModule from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
-import { jsxDEV } from "react/jsx-dev-runtime";
+import { jsx } from "react/jsx-runtime";
 var ABORT_DELAY = 5e3;
 function handleRequest(request, responseStatusCode, responseHeaders, remixContext, loadContext) {
   return isBotRequest(request.headers.get("user-agent")) || remixContext.isSpaMode ? handleBotRequest(
@@ -35,21 +35,13 @@ function isBotRequest(userAgent) {
 function handleBotRequest(request, responseStatusCode, responseHeaders, remixContext) {
   return new Promise((resolve, reject) => {
     let shellRendered = !1, { pipe, abort } = renderToPipeableStream(
-      /* @__PURE__ */ jsxDEV(
+      /* @__PURE__ */ jsx(
         RemixServer,
         {
           context: remixContext,
           url: request.url,
           abortDelay: ABORT_DELAY
-        },
-        void 0,
-        !1,
-        {
-          fileName: "node_modules/@remix-run/dev/dist/config/defaults/entry.server.node.tsx",
-          lineNumber: 66,
-          columnNumber: 7
-        },
-        this
+        }
       ),
       {
         onAllReady() {
@@ -76,21 +68,13 @@ function handleBotRequest(request, responseStatusCode, responseHeaders, remixCon
 function handleBrowserRequest(request, responseStatusCode, responseHeaders, remixContext) {
   return new Promise((resolve, reject) => {
     let shellRendered = !1, { pipe, abort } = renderToPipeableStream(
-      /* @__PURE__ */ jsxDEV(
+      /* @__PURE__ */ jsx(
         RemixServer,
         {
           context: remixContext,
           url: request.url,
           abortDelay: ABORT_DELAY
-        },
-        void 0,
-        !1,
-        {
-          fileName: "node_modules/@remix-run/dev/dist/config/defaults/entry.server.node.tsx",
-          lineNumber: 116,
-          columnNumber: 7
-        },
-        this
+        }
       ),
       {
         onShellReady() {
@@ -130,65 +114,25 @@ import {
   ScrollRestoration
 } from "@remix-run/react";
 import { AppProvider } from "@shopify/polaris";
-import { jsxDEV as jsxDEV2 } from "react/jsx-dev-runtime";
+import { jsx as jsx2, jsxs } from "react/jsx-runtime";
 var meta = () => [
   { charset: "utf-8" },
   { title: "TurnApp Admin" },
   { name: "viewport", content: "width=device-width,initial-scale=1" }
 ];
 function App() {
-  return /* @__PURE__ */ jsxDEV2("html", { lang: "en", children: [
-    /* @__PURE__ */ jsxDEV2("head", { children: [
-      /* @__PURE__ */ jsxDEV2(Meta, {}, void 0, !1, {
-        fileName: "app/root.tsx",
-        lineNumber: 23,
-        columnNumber: 9
-      }, this),
-      /* @__PURE__ */ jsxDEV2(Links, {}, void 0, !1, {
-        fileName: "app/root.tsx",
-        lineNumber: 24,
-        columnNumber: 9
-      }, this)
-    ] }, void 0, !0, {
-      fileName: "app/root.tsx",
-      lineNumber: 22,
-      columnNumber: 7
-    }, this),
-    /* @__PURE__ */ jsxDEV2("body", { children: [
-      /* @__PURE__ */ jsxDEV2(AppProvider, { i18n: {}, theme: "light", children: /* @__PURE__ */ jsxDEV2(Outlet, {}, void 0, !1, {
-        fileName: "app/root.tsx",
-        lineNumber: 28,
-        columnNumber: 11
-      }, this) }, void 0, !1, {
-        fileName: "app/root.tsx",
-        lineNumber: 27,
-        columnNumber: 9
-      }, this),
-      /* @__PURE__ */ jsxDEV2(ScrollRestoration, {}, void 0, !1, {
-        fileName: "app/root.tsx",
-        lineNumber: 30,
-        columnNumber: 9
-      }, this),
-      /* @__PURE__ */ jsxDEV2(Scripts, {}, void 0, !1, {
-        fileName: "app/root.tsx",
-        lineNumber: 31,
-        columnNumber: 9
-      }, this),
-      /* @__PURE__ */ jsxDEV2(LiveReload, {}, void 0, !1, {
-        fileName: "app/root.tsx",
-        lineNumber: 32,
-        columnNumber: 9
-      }, this)
-    ] }, void 0, !0, {
-      fileName: "app/root.tsx",
-      lineNumber: 26,
-      columnNumber: 7
-    }, this)
-  ] }, void 0, !0, {
-    fileName: "app/root.tsx",
-    lineNumber: 21,
-    columnNumber: 5
-  }, this);
+  return /* @__PURE__ */ jsxs("html", { lang: "en", children: [
+    /* @__PURE__ */ jsxs("head", { children: [
+      /* @__PURE__ */ jsx2(Meta, {}),
+      /* @__PURE__ */ jsx2(Links, {})
+    ] }),
+    /* @__PURE__ */ jsxs("body", { children: [
+      /* @__PURE__ */ jsx2(AppProvider, { i18n: {}, theme: "light", children: /* @__PURE__ */ jsx2(Outlet, {}) }),
+      /* @__PURE__ */ jsx2(ScrollRestoration, {}),
+      /* @__PURE__ */ jsx2(Scripts, {}),
+      /* @__PURE__ */ jsx2(LiveReload, {})
+    ] })
+  ] });
 }
 
 // app/routes/webhooks.app_uninstalled.tsx
@@ -203,7 +147,7 @@ import { createHmac as createHmac2 } from "node:crypto";
 
 // app/lib/tunnel.server.ts
 function isTunnelActive() {
-  return process.env.TUNNEL_ACTIVE === "true" && !0;
+  return process.env.TUNNEL_ACTIVE === "true" && !1;
 }
 function getWebhookBaseUrl() {
   return isTunnelActive() && process.env.WEBHOOK_BASE_URL ? process.env.WEBHOOK_BASE_URL : process.env.APP_URL || "http://localhost:3000";
@@ -219,7 +163,7 @@ import { GraphQLClient } from "graphql-request";
 // app/lib/prisma.server.ts
 import { PrismaClient } from "@prisma/client";
 var prisma;
-global.__db__ || (global.__db__ = new PrismaClient()), prisma = global.__db__, prisma.$connect();
+prisma = new PrismaClient();
 
 // app/lib/crypto.server.ts
 import { randomBytes, createCipheriv, createDecipheriv, pbkdf2Sync, createHmac } from "node:crypto";
@@ -234,7 +178,7 @@ function getEncryptionKey() {
       return pbkdf2Sync(envKey, salt2, 1e5, KEY_LENGTH, "sha256");
     }
   }
-  let fallbackSeed = "development-turnapp-dev-key-v1", salt = Buffer.from("dev-salt-turnapp", "utf8");
+  let fallbackSeed = "production-turnapp-dev-key-v1", salt = Buffer.from("dev-salt-turnapp", "utf8");
   return pbkdf2Sync(fallbackSeed, salt, 1e4, KEY_LENGTH, "sha256");
 }
 function encryptToken(plaintext) {
@@ -583,10 +527,10 @@ async function action({ request }) {
     return json({ error: "Method not allowed" }, { status: 405 });
   let hmacHeader = request.headers.get("X-Shopify-Hmac-Sha256"), shopDomain = request.headers.get("X-Shopify-Shop-Domain");
   if (!hmacHeader || !shopDomain)
-    return console.error("Missing required webhook headers"), json({ error: "Missing headers" }, { status: 400 });
+    return console.error("Missing required webhook headers", { hmacHeader: !!hmacHeader, shopDomain }), json({ error: "Missing headers" }, { status: 400 });
   let body = await request.text(), apiSecret = process.env.SHOPIFY_API_SECRET;
   if (!apiSecret)
-    return console.error("Missing Shopify API secret"), json({ error: "Server configuration error" }, { status: 500 });
+    return console.error("Missing Shopify API secret - check environment configuration"), json({ error: "Server configuration error" }, { status: 500 });
   if (!verifyWebhookHmac(body, hmacHeader, apiSecret))
     return console.error("Webhook HMAC verification failed for shop:", shopDomain), json({ error: "Invalid signature" }, { status: 403 });
   try {
@@ -594,23 +538,33 @@ async function action({ request }) {
     console.log("App uninstalled webhook received:", {
       shop: shopDomain,
       domain: payload.domain,
-      timestamp: (/* @__PURE__ */ new Date()).toISOString()
+      // Shopify Shop Domain aus Payload
+      timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+      webhookId: payload.id || "unknown"
+      // Shopify Webhook ID falls vorhanden
     });
     let updatedShop = await prisma.shop.update({
       where: { shopDomain },
       data: {
         uninstalledAt: /* @__PURE__ */ new Date()
-        // Keep the record for potential re-installation
-        // accessTokenEnc will be overwritten on re-install
+        // Deinstallation-Zeitstempel setzen
+        // WICHTIG: Record wird NICHT gelöscht:
+        // - DSGVO-Compliance: Daten für Re-Installation behalten
+        // - Business Logic: Installation-History erhalten
+        // - Security: accessTokenEnc wird bei Re-Install überschrieben
       }
     });
     return console.log("Shop uninstalled successfully:", {
       shopDomain,
       installedAt: updatedShop.installedAt,
-      uninstalledAt: updatedShop.uninstalledAt
+      // Original Installation
+      uninstalledAt: updatedShop.uninstalledAt,
+      // Deinstallation
+      shopId: updatedShop.id
+      // DB Record ID
     }), json({ status: "ok" }, { status: 200 });
   } catch (error) {
-    return console.error("Error processing app uninstall webhook:", error), error instanceof SyntaxError ? json({ status: "ok" }, { status: 200 }) : json({ error: "Internal error" }, { status: 500 });
+    return console.error("Error processing app uninstall webhook:", error, { shop: shopDomain }), error instanceof SyntaxError ? (console.warn("Malformed webhook payload - returning 200 to prevent retry loop"), json({ status: "ok" }, { status: 200 })) : json({ error: "Internal error" }, { status: 500 });
   }
 }
 
@@ -1242,7 +1196,7 @@ import {
 } from "@shopify/polaris";
 import { useState, useCallback } from "react";
 import { ImageIcon } from "@shopify/polaris-icons";
-import { jsxDEV as jsxDEV3 } from "react/jsx-dev-runtime";
+import { jsx as jsx3, jsxs as jsxs2 } from "react/jsx-runtime";
 async function loader2({ request }) {
   let context = await flexibleAuth(request);
   logRequest2(request, context);
@@ -1302,7 +1256,7 @@ function AdminBranding() {
       });
     }
   }, [shop, uploadFetcher]), uploadData = uploadFetcher.data;
-  return uploadData?.success && uploadData.asset?.url && uploadData.asset.url !== logoUrl && setLogoUrl(uploadData.asset.url), /* @__PURE__ */ jsxDEV3(
+  return uploadData?.success && uploadData.asset?.url && uploadData.asset.url !== logoUrl && setLogoUrl(uploadData.asset.url), /* @__PURE__ */ jsx3(
     Page,
     {
       title: "Branding Configuration",
@@ -1310,27 +1264,15 @@ function AdminBranding() {
       backAction: {
         url: "/admin"
       },
-      children: /* @__PURE__ */ jsxDEV3(Layout, { children: [
-        /* @__PURE__ */ jsxDEV3(Layout.Section, { children: [
-          actionData?.success && /* @__PURE__ */ jsxDEV3(Banner, { tone: "success", onDismiss: () => {
-          }, children: actionData.message }, void 0, !1, {
-            fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 155,
-            columnNumber: 13
-          }, this),
-          actionData?.error && /* @__PURE__ */ jsxDEV3(Banner, { tone: "critical", onDismiss: () => {
-          }, children: actionData.error }, void 0, !1, {
-            fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 160,
-            columnNumber: 13
-          }, this),
-          /* @__PURE__ */ jsxDEV3(Card, { children: /* @__PURE__ */ jsxDEV3(Form, { method: "post", children: /* @__PURE__ */ jsxDEV3(FormLayout, { children: [
-            /* @__PURE__ */ jsxDEV3(Text, { variant: "headingSm", as: "h3", children: "Basic Information" }, void 0, !1, {
-              fileName: "app/routes/admin.branding.tsx",
-              lineNumber: 168,
-              columnNumber: 17
-            }, this),
-            /* @__PURE__ */ jsxDEV3(
+      children: /* @__PURE__ */ jsxs2(Layout, { children: [
+        /* @__PURE__ */ jsxs2(Layout.Section, { children: [
+          actionData?.success && /* @__PURE__ */ jsx3(Banner, { tone: "success", onDismiss: () => {
+          }, children: actionData.message }),
+          actionData?.error && /* @__PURE__ */ jsx3(Banner, { tone: "critical", onDismiss: () => {
+          }, children: actionData.error }),
+          /* @__PURE__ */ jsx3(Card, { children: /* @__PURE__ */ jsx3(Form, { method: "post", children: /* @__PURE__ */ jsxs2(FormLayout, { children: [
+            /* @__PURE__ */ jsx3(Text, { variant: "headingSm", as: "h3", children: "Basic Information" }),
+            /* @__PURE__ */ jsx3(
               TextField,
               {
                 label: "App Name",
@@ -1339,17 +1281,9 @@ function AdminBranding() {
                 name: "brandName",
                 helpText: "This will be the name of your mobile app",
                 autoComplete: "off"
-              },
-              void 0,
-              !1,
-              {
-                fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 170,
-                columnNumber: 17
-              },
-              this
+              }
             ),
-            /* @__PURE__ */ jsxDEV3(
+            /* @__PURE__ */ jsx3(
               TextField,
               {
                 label: "Tagline",
@@ -1358,27 +1292,11 @@ function AdminBranding() {
                 name: "tagline",
                 helpText: "A short description for your mobile app",
                 autoComplete: "off"
-              },
-              void 0,
-              !1,
-              {
-                fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 179,
-                columnNumber: 17
-              },
-              this
+              }
             ),
-            /* @__PURE__ */ jsxDEV3(Divider, {}, void 0, !1, {
-              fileName: "app/routes/admin.branding.tsx",
-              lineNumber: 188,
-              columnNumber: 17
-            }, this),
-            /* @__PURE__ */ jsxDEV3(Text, { variant: "headingSm", as: "h3", children: "Visual Design" }, void 0, !1, {
-              fileName: "app/routes/admin.branding.tsx",
-              lineNumber: 190,
-              columnNumber: 17
-            }, this),
-            /* @__PURE__ */ jsxDEV3(
+            /* @__PURE__ */ jsx3(Divider, {}),
+            /* @__PURE__ */ jsx3(Text, { variant: "headingSm", as: "h3", children: "Visual Design" }),
+            /* @__PURE__ */ jsx3(
               TextField,
               {
                 label: "Primary Color",
@@ -1389,125 +1307,41 @@ function AdminBranding() {
                 autoComplete: "off",
                 prefix: "#",
                 placeholder: "007C3B"
-              },
-              void 0,
-              !1,
-              {
-                fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 192,
-                columnNumber: 17
-              },
-              this
+              }
             ),
-            /* @__PURE__ */ jsxDEV3("div", { children: [
-              /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", fontWeight: "medium", children: "Logo Upload" }, void 0, !1, {
-                fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 204,
-                columnNumber: 19
-              }, this),
-              /* @__PURE__ */ jsxDEV3("div", { style: { marginTop: "8px" }, children: /* @__PURE__ */ jsxDEV3(DropZone, { onDrop: handleDropZoneDrop, accept: "image/*", type: "image", children: uploadedFile ? /* @__PURE__ */ jsxDEV3(BlockStack, { gap: "200", children: [
-                /* @__PURE__ */ jsxDEV3(
+            /* @__PURE__ */ jsxs2("div", { children: [
+              /* @__PURE__ */ jsx3(Text, { variant: "bodyMd", as: "p", fontWeight: "medium", children: "Logo Upload" }),
+              /* @__PURE__ */ jsx3("div", { style: { marginTop: "8px" }, children: /* @__PURE__ */ jsx3(DropZone, { onDrop: handleDropZoneDrop, accept: "image/*", type: "image", children: uploadedFile ? /* @__PURE__ */ jsxs2(BlockStack, { gap: "200", children: [
+                /* @__PURE__ */ jsx3(
                   Thumbnail,
                   {
                     source: URL.createObjectURL(uploadedFile),
                     alt: uploadedFile.name,
                     size: "large"
-                  },
-                  void 0,
-                  !1,
-                  {
-                    fileName: "app/routes/admin.branding.tsx",
-                    lineNumber: 209,
-                    columnNumber: 27
-                  },
-                  this
+                  }
                 ),
-                /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", alignment: "center", children: uploadedFile.name }, void 0, !1, {
-                  fileName: "app/routes/admin.branding.tsx",
-                  lineNumber: 214,
-                  columnNumber: 27
-                }, this),
-                uploadFetcher.state === "submitting" && /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", alignment: "center", children: "Uploading..." }, void 0, !1, {
-                  fileName: "app/routes/admin.branding.tsx",
-                  lineNumber: 218,
-                  columnNumber: 29
-                }, this),
-                uploadFetcher.data?.success && /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", alignment: "center", tone: "success", children: "Upload successful!" }, void 0, !1, {
-                  fileName: "app/routes/admin.branding.tsx",
-                  lineNumber: 223,
-                  columnNumber: 29
-                }, this)
-              ] }, void 0, !0, {
-                fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 208,
-                columnNumber: 25
-              }, this) : logoUrl ? /* @__PURE__ */ jsxDEV3(BlockStack, { gap: "200", children: [
-                /* @__PURE__ */ jsxDEV3(
+                /* @__PURE__ */ jsx3(Text, { variant: "bodyMd", as: "p", alignment: "center", children: uploadedFile.name }),
+                uploadFetcher.state === "submitting" && /* @__PURE__ */ jsx3(Text, { variant: "bodyMd", as: "p", alignment: "center", children: "Uploading..." }),
+                uploadFetcher.data?.success && /* @__PURE__ */ jsx3(Text, { variant: "bodyMd", as: "p", alignment: "center", tone: "success", children: "Upload successful!" })
+              ] }) : logoUrl ? /* @__PURE__ */ jsxs2(BlockStack, { gap: "200", children: [
+                /* @__PURE__ */ jsx3(
                   Thumbnail,
                   {
                     source: logoUrl,
                     alt: "Current logo",
                     size: "large"
-                  },
-                  void 0,
-                  !1,
-                  {
-                    fileName: "app/routes/admin.branding.tsx",
-                    lineNumber: 230,
-                    columnNumber: 27
-                  },
-                  this
+                  }
                 ),
-                /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", alignment: "center", children: "Current logo" }, void 0, !1, {
-                  fileName: "app/routes/admin.branding.tsx",
-                  lineNumber: 235,
-                  columnNumber: 27
-                }, this)
-              ] }, void 0, !0, {
-                fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 229,
-                columnNumber: 25
-              }, this) : /* @__PURE__ */ jsxDEV3(BlockStack, { gap: "200", children: [
-                /* @__PURE__ */ jsxDEV3(Icon, { source: ImageIcon, tone: "subdued" }, void 0, !1, {
-                  fileName: "app/routes/admin.branding.tsx",
-                  lineNumber: 241,
-                  columnNumber: 27
-                }, this),
-                /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", alignment: "center", children: "Drop logo here or click to upload" }, void 0, !1, {
-                  fileName: "app/routes/admin.branding.tsx",
-                  lineNumber: 242,
-                  columnNumber: 27
-                }, this),
-                /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", alignment: "center", tone: "subdued", children: "Supports JPG, PNG, WebP, SVG (max 2MB)" }, void 0, !1, {
-                  fileName: "app/routes/admin.branding.tsx",
-                  lineNumber: 245,
-                  columnNumber: 27
-                }, this)
-              ] }, void 0, !0, {
-                fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 240,
-                columnNumber: 25
-              }, this) }, void 0, !1, {
-                fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 206,
-                columnNumber: 21
-              }, this) }, void 0, !1, {
-                fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 205,
-                columnNumber: 19
-              }, this),
-              uploadFetcher.data?.error && /* @__PURE__ */ jsxDEV3(Banner, { tone: "critical", onDismiss: () => {
-              }, children: uploadFetcher.data?.error || "Upload error" }, void 0, !1, {
-                fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 253,
-                columnNumber: 21
-              }, this)
-            ] }, void 0, !0, {
-              fileName: "app/routes/admin.branding.tsx",
-              lineNumber: 203,
-              columnNumber: 17
-            }, this),
-            /* @__PURE__ */ jsxDEV3(
+                /* @__PURE__ */ jsx3(Text, { variant: "bodyMd", as: "p", alignment: "center", children: "Current logo" })
+              ] }) : /* @__PURE__ */ jsxs2(BlockStack, { gap: "200", children: [
+                /* @__PURE__ */ jsx3(Icon, { source: ImageIcon, tone: "subdued" }),
+                /* @__PURE__ */ jsx3(Text, { variant: "bodyMd", as: "p", alignment: "center", children: "Drop logo here or click to upload" }),
+                /* @__PURE__ */ jsx3(Text, { variant: "bodyMd", as: "p", alignment: "center", tone: "subdued", children: "Supports JPG, PNG, WebP, SVG (max 2MB)" })
+              ] }) }) }),
+              uploadFetcher.data?.error && /* @__PURE__ */ jsx3(Banner, { tone: "critical", onDismiss: () => {
+              }, children: uploadFetcher.data?.error || "Upload error" })
+            ] }),
+            /* @__PURE__ */ jsx3(
               TextField,
               {
                 label: "Logo URL (Alternative)",
@@ -1516,50 +1350,14 @@ function AdminBranding() {
                 name: "logoUrl",
                 helpText: "Or provide a direct URL to your logo",
                 autoComplete: "off"
-              },
-              void 0,
-              !1,
-              {
-                fileName: "app/routes/admin.branding.tsx",
-                lineNumber: 259,
-                columnNumber: 17
-              },
-              this
+              }
             ),
-            /* @__PURE__ */ jsxDEV3(InlineStack, { align: "end", children: /* @__PURE__ */ jsxDEV3(Button, { variant: "primary", submit: !0, children: "Save Settings" }, void 0, !1, {
-              fileName: "app/routes/admin.branding.tsx",
-              lineNumber: 269,
-              columnNumber: 19
-            }, this) }, void 0, !1, {
-              fileName: "app/routes/admin.branding.tsx",
-              lineNumber: 268,
-              columnNumber: 17
-            }, this)
-          ] }, void 0, !0, {
-            fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 167,
-            columnNumber: 15
-          }, this) }, void 0, !1, {
-            fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 166,
-            columnNumber: 13
-          }, this) }, void 0, !1, {
-            fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 165,
-            columnNumber: 11
-          }, this)
-        ] }, void 0, !0, {
-          fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 153,
-          columnNumber: 9
-        }, this),
-        /* @__PURE__ */ jsxDEV3(Layout.Section, { variant: "oneThird", children: /* @__PURE__ */ jsxDEV3(Card, { children: /* @__PURE__ */ jsxDEV3("div", { style: { padding: "20px" }, children: [
-          /* @__PURE__ */ jsxDEV3(Text, { variant: "headingSm", as: "h3", children: "Preview" }, void 0, !1, {
-            fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 281,
-            columnNumber: 15
-          }, this),
-          /* @__PURE__ */ jsxDEV3("div", { style: { marginTop: "16px" }, children: /* @__PURE__ */ jsxDEV3(
+            /* @__PURE__ */ jsx3(InlineStack, { align: "end", children: /* @__PURE__ */ jsx3(Button, { variant: "primary", submit: !0, children: "Save Settings" }) })
+          ] }) }) })
+        ] }),
+        /* @__PURE__ */ jsx3(Layout.Section, { variant: "oneThird", children: /* @__PURE__ */ jsx3(Card, { children: /* @__PURE__ */ jsxs2("div", { style: { padding: "20px" }, children: [
+          /* @__PURE__ */ jsx3(Text, { variant: "headingSm", as: "h3", children: "Preview" }),
+          /* @__PURE__ */ jsx3("div", { style: { marginTop: "16px" }, children: /* @__PURE__ */ jsxs2(
             "div",
             {
               style: {
@@ -1570,58 +1368,14 @@ function AdminBranding() {
                 textAlign: "center"
               },
               children: [
-                /* @__PURE__ */ jsxDEV3(Text, { variant: "headingLg", as: "h2", children: brandName || "Your App Name" }, void 0, !1, {
-                  fileName: "app/routes/admin.branding.tsx",
-                  lineNumber: 292,
-                  columnNumber: 19
-                }, this),
-                /* @__PURE__ */ jsxDEV3(Text, { variant: "bodyMd", as: "p", children: tagline || "Your tagline here" }, void 0, !1, {
-                  fileName: "app/routes/admin.branding.tsx",
-                  lineNumber: 295,
-                  columnNumber: 19
-                }, this)
+                /* @__PURE__ */ jsx3(Text, { variant: "headingLg", as: "h2", children: brandName || "Your App Name" }),
+                /* @__PURE__ */ jsx3(Text, { variant: "bodyMd", as: "p", children: tagline || "Your tagline here" })
               ]
-            },
-            void 0,
-            !0,
-            {
-              fileName: "app/routes/admin.branding.tsx",
-              lineNumber: 283,
-              columnNumber: 17
-            },
-            this
-          ) }, void 0, !1, {
-            fileName: "app/routes/admin.branding.tsx",
-            lineNumber: 282,
-            columnNumber: 15
-          }, this)
-        ] }, void 0, !0, {
-          fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 280,
-          columnNumber: 13
-        }, this) }, void 0, !1, {
-          fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 279,
-          columnNumber: 11
-        }, this) }, void 0, !1, {
-          fileName: "app/routes/admin.branding.tsx",
-          lineNumber: 278,
-          columnNumber: 9
-        }, this)
-      ] }, void 0, !0, {
-        fileName: "app/routes/admin.branding.tsx",
-        lineNumber: 152,
-        columnNumber: 7
-      }, this)
-    },
-    void 0,
-    !1,
-    {
-      fileName: "app/routes/admin.branding.tsx",
-      lineNumber: 145,
-      columnNumber: 5
-    },
-    this
+            }
+          ) })
+        ] }) }) })
+      ] })
+    }
   );
 }
 
@@ -2196,7 +1950,7 @@ __export(test_oauth_exports, {
 });
 import { json as json10 } from "@remix-run/node";
 import { useLoaderData as useLoaderData2, Link } from "@remix-run/react";
-import { jsxDEV as jsxDEV4 } from "react/jsx-dev-runtime";
+import { jsx as jsx4, jsxs as jsxs3 } from "react/jsx-runtime";
 async function loader8() {
   let testShop = "zeytestshop", installUrl = `/auth/install?shop=${testShop}.myshopify.com`;
   return json10({
@@ -2208,55 +1962,27 @@ async function loader8() {
 }
 function TestOAuth() {
   let { testShop, installUrl, apiKey, appUrl } = useLoaderData2();
-  return /* @__PURE__ */ jsxDEV4("div", { style: { fontFamily: "system-ui, sans-serif", lineHeight: "1.8", padding: "20px" }, children: [
-    /* @__PURE__ */ jsxDEV4("h1", { children: "OAuth Test Page" }, void 0, !1, {
-      fileName: "app/routes/test.oauth.tsx",
-      lineNumber: 21,
-      columnNumber: 7
-    }, this),
-    /* @__PURE__ */ jsxDEV4("div", { style: { marginBottom: "20px" }, children: [
-      /* @__PURE__ */ jsxDEV4("h3", { children: "Configuration:" }, void 0, !1, {
-        fileName: "app/routes/test.oauth.tsx",
-        lineNumber: 24,
-        columnNumber: 9
-      }, this),
-      /* @__PURE__ */ jsxDEV4("p", { children: [
+  return /* @__PURE__ */ jsxs3("div", { style: { fontFamily: "system-ui, sans-serif", lineHeight: "1.8", padding: "20px" }, children: [
+    /* @__PURE__ */ jsx4("h1", { children: "OAuth Test Page" }),
+    /* @__PURE__ */ jsxs3("div", { style: { marginBottom: "20px" }, children: [
+      /* @__PURE__ */ jsx4("h3", { children: "Configuration:" }),
+      /* @__PURE__ */ jsxs3("p", { children: [
         "Test Shop: ",
         testShop,
         ".myshopify.com"
-      ] }, void 0, !0, {
-        fileName: "app/routes/test.oauth.tsx",
-        lineNumber: 25,
-        columnNumber: 9
-      }, this),
-      /* @__PURE__ */ jsxDEV4("p", { children: [
+      ] }),
+      /* @__PURE__ */ jsxs3("p", { children: [
         "API Key: ",
         apiKey
-      ] }, void 0, !0, {
-        fileName: "app/routes/test.oauth.tsx",
-        lineNumber: 26,
-        columnNumber: 9
-      }, this),
-      /* @__PURE__ */ jsxDEV4("p", { children: [
+      ] }),
+      /* @__PURE__ */ jsxs3("p", { children: [
         "App URL: ",
         appUrl
-      ] }, void 0, !0, {
-        fileName: "app/routes/test.oauth.tsx",
-        lineNumber: 27,
-        columnNumber: 9
-      }, this)
-    ] }, void 0, !0, {
-      fileName: "app/routes/test.oauth.tsx",
-      lineNumber: 23,
-      columnNumber: 7
-    }, this),
-    /* @__PURE__ */ jsxDEV4("div", { style: { marginBottom: "20px" }, children: [
-      /* @__PURE__ */ jsxDEV4("h3", { children: "Test OAuth Flow:" }, void 0, !1, {
-        fileName: "app/routes/test.oauth.tsx",
-        lineNumber: 31,
-        columnNumber: 9
-      }, this),
-      /* @__PURE__ */ jsxDEV4(
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs3("div", { style: { marginBottom: "20px" }, children: [
+      /* @__PURE__ */ jsx4("h3", { children: "Test OAuth Flow:" }),
+      /* @__PURE__ */ jsxs3(
         Link,
         {
           to: installUrl,
@@ -2272,58 +1998,18 @@ function TestOAuth() {
             testShop,
             ".myshopify.com"
           ]
-        },
-        void 0,
-        !0,
-        {
-          fileName: "app/routes/test.oauth.tsx",
-          lineNumber: 32,
-          columnNumber: 9
-        },
-        this
+        }
       )
-    ] }, void 0, !0, {
-      fileName: "app/routes/test.oauth.tsx",
-      lineNumber: 30,
-      columnNumber: 7
-    }, this),
-    /* @__PURE__ */ jsxDEV4("div", { style: { marginTop: "20px", fontSize: "14px", color: "#666" }, children: [
-      /* @__PURE__ */ jsxDEV4("p", { children: "\u26A0\uFE0F Make sure to:" }, void 0, !1, {
-        fileName: "app/routes/test.oauth.tsx",
-        lineNumber: 47,
-        columnNumber: 9
-      }, this),
-      /* @__PURE__ */ jsxDEV4("ul", { children: [
-        /* @__PURE__ */ jsxDEV4("li", { children: "Set SHOPIFY_API_KEY and SHOPIFY_API_SECRET in .env" }, void 0, !1, {
-          fileName: "app/routes/test.oauth.tsx",
-          lineNumber: 49,
-          columnNumber: 11
-        }, this),
-        /* @__PURE__ */ jsxDEV4("li", { children: "Update APP_URL with your ngrok URL" }, void 0, !1, {
-          fileName: "app/routes/test.oauth.tsx",
-          lineNumber: 50,
-          columnNumber: 11
-        }, this),
-        /* @__PURE__ */ jsxDEV4("li", { children: "Add the callback URL to your Shopify Partner Dashboard" }, void 0, !1, {
-          fileName: "app/routes/test.oauth.tsx",
-          lineNumber: 51,
-          columnNumber: 11
-        }, this)
-      ] }, void 0, !0, {
-        fileName: "app/routes/test.oauth.tsx",
-        lineNumber: 48,
-        columnNumber: 9
-      }, this)
-    ] }, void 0, !0, {
-      fileName: "app/routes/test.oauth.tsx",
-      lineNumber: 46,
-      columnNumber: 7
-    }, this)
-  ] }, void 0, !0, {
-    fileName: "app/routes/test.oauth.tsx",
-    lineNumber: 20,
-    columnNumber: 5
-  }, this);
+    ] }),
+    /* @__PURE__ */ jsxs3("div", { style: { marginTop: "20px", fontSize: "14px", color: "#666" }, children: [
+      /* @__PURE__ */ jsx4("p", { children: "\u26A0\uFE0F Make sure to:" }),
+      /* @__PURE__ */ jsxs3("ul", { children: [
+        /* @__PURE__ */ jsx4("li", { children: "Set SHOPIFY_API_KEY and SHOPIFY_API_SECRET in .env" }),
+        /* @__PURE__ */ jsx4("li", { children: "Update APP_URL with your ngrok URL" }),
+        /* @__PURE__ */ jsx4("li", { children: "Add the callback URL to your Shopify Partner Dashboard" })
+      ] })
+    ] })
+  ] });
 }
 
 // app/routes/readiness.tsx
@@ -2418,7 +2104,7 @@ __export(index_exports, {
 });
 import { json as json13 } from "@remix-run/node";
 import { useLoaderData as useLoaderData3, Link as Link2 } from "@remix-run/react";
-import { jsxDEV as jsxDEV5 } from "react/jsx-dev-runtime";
+import { jsx as jsx5, jsxs as jsxs4 } from "react/jsx-runtime";
 async function loader11() {
   try {
     await prisma.$queryRaw`SELECT 1`;
@@ -2450,48 +2136,24 @@ async function loader11() {
 }
 function Index() {
   let { message, timestamp, dbStatus, shopCount, recentShops } = useLoaderData3();
-  return /* @__PURE__ */ jsxDEV5("div", { style: { fontFamily: "system-ui, sans-serif", lineHeight: "1.8", padding: "20px" }, children: [
-    /* @__PURE__ */ jsxDEV5("h1", { children: message }, void 0, !1, {
-      fileName: "app/routes/_index.tsx",
-      lineNumber: 43,
-      columnNumber: 7
-    }, this),
-    /* @__PURE__ */ jsxDEV5("p", { children: [
+  return /* @__PURE__ */ jsxs4("div", { style: { fontFamily: "system-ui, sans-serif", lineHeight: "1.8", padding: "20px" }, children: [
+    /* @__PURE__ */ jsx5("h1", { children: message }),
+    /* @__PURE__ */ jsxs4("p", { children: [
       "Server Time: ",
       timestamp
-    ] }, void 0, !0, {
-      fileName: "app/routes/_index.tsx",
-      lineNumber: 44,
-      columnNumber: 7
-    }, this),
-    /* @__PURE__ */ jsxDEV5("p", { children: [
+    ] }),
+    /* @__PURE__ */ jsxs4("p", { children: [
       "Database Status: ",
       dbStatus
-    ] }, void 0, !0, {
-      fileName: "app/routes/_index.tsx",
-      lineNumber: 45,
-      columnNumber: 7
-    }, this),
-    /* @__PURE__ */ jsxDEV5("p", { children: [
+    ] }),
+    /* @__PURE__ */ jsxs4("p", { children: [
       "Registered Shops: ",
       shopCount
-    ] }, void 0, !0, {
-      fileName: "app/routes/_index.tsx",
-      lineNumber: 46,
-      columnNumber: 7
-    }, this),
-    /* @__PURE__ */ jsxDEV5("p", { children: "Status: OAuth Flow Implemented \u2705" }, void 0, !1, {
-      fileName: "app/routes/_index.tsx",
-      lineNumber: 47,
-      columnNumber: 7
-    }, this),
-    /* @__PURE__ */ jsxDEV5("div", { style: { marginTop: "30px" }, children: [
-      /* @__PURE__ */ jsxDEV5("h3", { children: "Development Tools:" }, void 0, !1, {
-        fileName: "app/routes/_index.tsx",
-        lineNumber: 50,
-        columnNumber: 9
-      }, this),
-      /* @__PURE__ */ jsxDEV5(
+    ] }),
+    /* @__PURE__ */ jsx5("p", { children: "Status: OAuth Flow Implemented \u2705" }),
+    /* @__PURE__ */ jsxs4("div", { style: { marginTop: "30px" }, children: [
+      /* @__PURE__ */ jsx5("h3", { children: "Development Tools:" }),
+      /* @__PURE__ */ jsx5(
         Link2,
         {
           to: "/test/oauth",
@@ -2504,51 +2166,19 @@ function Index() {
             marginRight: "10px"
           },
           children: "Test OAuth Flow"
-        },
-        void 0,
-        !1,
-        {
-          fileName: "app/routes/_index.tsx",
-          lineNumber: 51,
-          columnNumber: 9
-        },
-        this
+        }
       )
-    ] }, void 0, !0, {
-      fileName: "app/routes/_index.tsx",
-      lineNumber: 49,
-      columnNumber: 7
-    }, this),
-    recentShops.length > 0 && /* @__PURE__ */ jsxDEV5("div", { style: { marginTop: "30px" }, children: [
-      /* @__PURE__ */ jsxDEV5("h3", { children: "Recent Shop Installations:" }, void 0, !1, {
-        fileName: "app/routes/_index.tsx",
-        lineNumber: 68,
-        columnNumber: 11
-      }, this),
-      /* @__PURE__ */ jsxDEV5("ul", { children: recentShops.map((shop) => /* @__PURE__ */ jsxDEV5("li", { children: [
+    ] }),
+    recentShops.length > 0 && /* @__PURE__ */ jsxs4("div", { style: { marginTop: "30px" }, children: [
+      /* @__PURE__ */ jsx5("h3", { children: "Recent Shop Installations:" }),
+      /* @__PURE__ */ jsx5("ul", { children: recentShops.map((shop) => /* @__PURE__ */ jsxs4("li", { children: [
         shop.shopDomain,
         " - Installed: ",
         new Date(shop.installedAt).toLocaleString(),
         shop.uninstalledAt && ` (Uninstalled: ${new Date(shop.uninstalledAt).toLocaleString()})`
-      ] }, shop.shopDomain, !0, {
-        fileName: "app/routes/_index.tsx",
-        lineNumber: 71,
-        columnNumber: 15
-      }, this)) }, void 0, !1, {
-        fileName: "app/routes/_index.tsx",
-        lineNumber: 69,
-        columnNumber: 11
-      }, this)
-    ] }, void 0, !0, {
-      fileName: "app/routes/_index.tsx",
-      lineNumber: 67,
-      columnNumber: 9
-    }, this)
-  ] }, void 0, !0, {
-    fileName: "app/routes/_index.tsx",
-    lineNumber: 42,
-    columnNumber: 5
-  }, this);
+      ] }, shop.shopDomain)) })
+    ] })
+  ] });
 }
 
 // app/routes/admin.tsx
@@ -2570,16 +2200,21 @@ import {
   Button as Button2
 } from "@shopify/polaris";
 import { useState as useState2, useCallback as useCallback2 } from "react";
-import { jsxDEV as jsxDEV6 } from "react/jsx-dev-runtime";
+import { jsx as jsx6, jsxs as jsxs5 } from "react/jsx-runtime";
 async function loader12({ request }) {
   let url = new URL(request.url), context = await flexibleAuth(request);
   return logRequest2(request, context), json14({
     shop: context.shop,
+    // Shop Domain für UI Display
     host: url.searchParams.get("host"),
+    // Shopify Admin Host für App Bridge
     appBridgeConfig: {
       apiKey: process.env.SHOPIFY_API_KEY || "",
+      // Unsere App ID
       shop: context.shop,
+      // Shop Context
       host: url.searchParams.get("host") || ""
+      // Admin Host
     }
   });
 }
@@ -2587,173 +2222,90 @@ function AdminLayout() {
   let { shop } = useLoaderData4(), location = useLocation(), [mobileNavigationActive, setMobileNavigationActive] = useState2(!1), toggleMobileNavigationActive = useCallback2(
     () => setMobileNavigationActive((mobileNavigationActive2) => !mobileNavigationActive2),
     []
-  ), navigationMarkup = /* @__PURE__ */ jsxDEV6(Navigation, { location: location.pathname, children: /* @__PURE__ */ jsxDEV6(
+    // Keine Dependencies - stable function reference
+  ), navigationMarkup = /* @__PURE__ */ jsx6(Navigation, { location: location.pathname, children: /* @__PURE__ */ jsx6(
     Navigation.Section,
     {
       items: [
         {
           url: "/admin",
           label: "Overview",
+          // Dashboard/Hauptseite
           icon: "HomeIcon",
+          // Polaris Home Icon
           selected: location.pathname === "/admin"
+          // Active State
         },
         {
           url: "/admin/branding",
           label: "Branding",
+          // Shop Customization
           icon: "ColorIcon",
+          // Polaris Color Icon
           selected: location.pathname === "/admin/branding"
+          // Active State
         }
+        // Zukünftige Navigation Items können hier hinzugefügt werden:
+        // - Settings, Analytics, Mobile Preview, etc.
       ]
-    },
-    void 0,
-    !1,
-    {
-      fileName: "app/routes/admin.tsx",
-      lineNumber: 48,
-      columnNumber: 7
-    },
-    this
-  ) }, void 0, !1, {
-    fileName: "app/routes/admin.tsx",
-    lineNumber: 47,
-    columnNumber: 5
-  }, this), topBarMarkup = /* @__PURE__ */ jsxDEV6(
+    }
+  ) }), topBarMarkup = /* @__PURE__ */ jsx6(
     TopBar,
     {
       showNavigationToggle: !0,
       onNavigationToggle: toggleMobileNavigationActive
-    },
-    void 0,
-    !1,
-    {
-      fileName: "app/routes/admin.tsx",
-      lineNumber: 68,
-      columnNumber: 5
-    },
-    this
+    }
   ), currentPath = location.pathname;
-  return /* @__PURE__ */ jsxDEV6(
-    Frame,
-    {
-      topBar: topBarMarkup,
-      navigation: navigationMarkup,
-      showMobileNavigation: mobileNavigationActive,
-      onNavigationDismiss: toggleMobileNavigationActive,
-      children: currentPath === "/admin" || currentPath === "/admin/" ? /* @__PURE__ */ jsxDEV6(Page2, { title: "TurnApp Overview", children: /* @__PURE__ */ jsxDEV6(Layout2, { children: [
-        /* @__PURE__ */ jsxDEV6(Layout2.Section, { children: /* @__PURE__ */ jsxDEV6(Card2, { children: /* @__PURE__ */ jsxDEV6("div", { style: { padding: "20px" }, children: [
-          /* @__PURE__ */ jsxDEV6(Text2, { variant: "headingMd", as: "h2", children: "Welcome to TurnApp" }, void 0, !1, {
-            fileName: "app/routes/admin.tsx",
-            lineNumber: 90,
-            columnNumber: 19
-          }, this),
-          /* @__PURE__ */ jsxDEV6(Text2, { variant: "bodyMd", as: "p", tone: "subdued", children: "Transform your Shopify store into a mobile shopping app" }, void 0, !1, {
-            fileName: "app/routes/admin.tsx",
-            lineNumber: 91,
-            columnNumber: 19
-          }, this),
-          /* @__PURE__ */ jsxDEV6("div", { style: { marginTop: "20px" }, children: /* @__PURE__ */ jsxDEV6(Text2, { variant: "headingSm", as: "h3", children: [
-            "Shop: ",
-            shop
-          ] }, void 0, !0, {
-            fileName: "app/routes/admin.tsx",
-            lineNumber: 95,
-            columnNumber: 21
-          }, this) }, void 0, !1, {
-            fileName: "app/routes/admin.tsx",
-            lineNumber: 94,
-            columnNumber: 19
-          }, this),
-          /* @__PURE__ */ jsxDEV6("div", { style: { marginTop: "20px" }, children: /* @__PURE__ */ jsxDEV6(Link3, { to: "/admin/branding", children: /* @__PURE__ */ jsxDEV6(Button2, { variant: "primary", children: "Configure Branding" }, void 0, !1, {
-            fileName: "app/routes/admin.tsx",
-            lineNumber: 99,
-            columnNumber: 23
-          }, this) }, void 0, !1, {
-            fileName: "app/routes/admin.tsx",
-            lineNumber: 98,
-            columnNumber: 21
-          }, this) }, void 0, !1, {
-            fileName: "app/routes/admin.tsx",
-            lineNumber: 97,
-            columnNumber: 19
-          }, this)
-        ] }, void 0, !0, {
-          fileName: "app/routes/admin.tsx",
-          lineNumber: 89,
-          columnNumber: 17
-        }, this) }, void 0, !1, {
-          fileName: "app/routes/admin.tsx",
-          lineNumber: 88,
-          columnNumber: 15
-        }, this) }, void 0, !1, {
-          fileName: "app/routes/admin.tsx",
-          lineNumber: 87,
-          columnNumber: 13
-        }, this),
-        /* @__PURE__ */ jsxDEV6(Layout2.Section, { variant: "oneThird", children: /* @__PURE__ */ jsxDEV6(Card2, { children: /* @__PURE__ */ jsxDEV6("div", { style: { padding: "20px" }, children: [
-          /* @__PURE__ */ jsxDEV6(Text2, { variant: "headingSm", as: "h3", children: "Quick Stats" }, void 0, !1, {
-            fileName: "app/routes/admin.tsx",
-            lineNumber: 109,
-            columnNumber: 19
-          }, this),
-          /* @__PURE__ */ jsxDEV6("div", { style: { marginTop: "12px" }, children: [
-            /* @__PURE__ */ jsxDEV6(Text2, { variant: "bodyMd", as: "p", children: "Status: Active" }, void 0, !1, {
-              fileName: "app/routes/admin.tsx",
-              lineNumber: 111,
-              columnNumber: 21
-            }, this),
-            /* @__PURE__ */ jsxDEV6(Text2, { variant: "bodyMd", as: "p", children: "App Version: 1.0.0" }, void 0, !1, {
-              fileName: "app/routes/admin.tsx",
-              lineNumber: 112,
-              columnNumber: 21
-            }, this)
-          ] }, void 0, !0, {
-            fileName: "app/routes/admin.tsx",
-            lineNumber: 110,
-            columnNumber: 19
-          }, this)
-        ] }, void 0, !0, {
-          fileName: "app/routes/admin.tsx",
-          lineNumber: 108,
-          columnNumber: 17
-        }, this) }, void 0, !1, {
-          fileName: "app/routes/admin.tsx",
-          lineNumber: 107,
-          columnNumber: 15
-        }, this) }, void 0, !1, {
-          fileName: "app/routes/admin.tsx",
-          lineNumber: 106,
-          columnNumber: 13
-        }, this)
-      ] }, void 0, !0, {
-        fileName: "app/routes/admin.tsx",
-        lineNumber: 86,
-        columnNumber: 11
-      }, this) }, void 0, !1, {
-        fileName: "app/routes/admin.tsx",
-        lineNumber: 85,
-        columnNumber: 9
-      }, this) : /* @__PURE__ */ jsxDEV6(Outlet2, {}, void 0, !1, {
-        fileName: "app/routes/admin.tsx",
-        lineNumber: 120,
-        columnNumber: 9
-      }, this)
-    },
-    void 0,
-    !1,
-    {
-      fileName: "app/routes/admin.tsx",
-      lineNumber: 78,
-      columnNumber: 5
-    },
-    this
+  return (
+    // POLARIS FRAME - Haupt-Layout Container
+    /* @__PURE__ */ jsx6(
+      Frame,
+      {
+        topBar: topBarMarkup,
+        navigation: navigationMarkup,
+        showMobileNavigation: mobileNavigationActive,
+        onNavigationDismiss: toggleMobileNavigationActive,
+        children: currentPath === "/admin" || currentPath === "/admin/" ? (
+          // OVERVIEW DASHBOARD - Haupt-Dashboard der App
+          /* @__PURE__ */ jsx6(Page2, { title: "TurnApp Overview", children: /* @__PURE__ */ jsxs5(Layout2, { children: [
+            "  ",
+            /* @__PURE__ */ jsxs5(Layout2.Section, { children: [
+              "  ",
+              /* @__PURE__ */ jsx6(Card2, { children: /* @__PURE__ */ jsxs5("div", { style: { padding: "20px" }, children: [
+                /* @__PURE__ */ jsx6(Text2, { variant: "headingMd", as: "h2", children: "Welcome to TurnApp" }),
+                /* @__PURE__ */ jsx6(Text2, { variant: "bodyMd", as: "p", tone: "subdued", children: "Transform your Shopify store into a mobile shopping app" }),
+                /* @__PURE__ */ jsx6("div", { style: { marginTop: "20px" }, children: /* @__PURE__ */ jsxs5(Text2, { variant: "headingSm", as: "h3", children: [
+                  "Shop: ",
+                  shop
+                ] }) }),
+                /* @__PURE__ */ jsx6("div", { style: { marginTop: "20px" }, children: /* @__PURE__ */ jsx6(Link3, { to: "/admin/branding", children: /* @__PURE__ */ jsx6(Button2, { variant: "primary", children: "Configure Branding" }) }) })
+              ] }) })
+            ] }),
+            /* @__PURE__ */ jsxs5(Layout2.Section, { variant: "oneThird", children: [
+              "  ",
+              /* @__PURE__ */ jsx6(Card2, { children: /* @__PURE__ */ jsxs5("div", { style: { padding: "20px" }, children: [
+                /* @__PURE__ */ jsx6(Text2, { variant: "headingSm", as: "h3", children: "Quick Stats" }),
+                /* @__PURE__ */ jsxs5("div", { style: { marginTop: "12px" }, children: [
+                  /* @__PURE__ */ jsx6(Text2, { variant: "bodyMd", as: "p", children: "Status: Active" }),
+                  /* @__PURE__ */ jsx6(Text2, { variant: "bodyMd", as: "p", children: "App Version: 1.0.0" })
+                ] })
+              ] }) })
+            ] })
+          ] }) })
+        ) : (
+          // NESTED ROUTES - Andere Admin Seiten (z.B. /admin/branding)
+          /* @__PURE__ */ jsx6(Outlet2, {})
+        )
+      }
+    )
   );
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-2V7IEL3J.js", imports: ["/build/_shared/chunk-XC6BC2BP.js", "/build/_shared/chunk-PMI65YMG.js", "/build/_shared/chunk-YLJGUPYX.js", "/build/_shared/chunk-56LDNGDG.js", "/build/_shared/chunk-2Q7FBYOG.js", "/build/_shared/chunk-ALN5UVCC.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-6QLAV7O6.js", imports: ["/build/_shared/chunk-RRH55SMP.js"], hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-67LPGKLM.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin": { id: "routes/admin", parentId: "root", path: "admin", index: void 0, caseSensitive: void 0, module: "/build/routes/admin-N2GQHK5D.js", imports: ["/build/_shared/chunk-Q4XQCCJX.js", "/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin.branding": { id: "routes/admin.branding", parentId: "routes/admin", path: "branding", index: void 0, caseSensitive: void 0, module: "/build/routes/admin.branding-Z2RHQV6O.js", imports: ["/build/_shared/chunk-RRH55SMP.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.admin.products": { id: "routes/api.admin.products", parentId: "root", path: "api/admin/products", index: void 0, caseSensitive: void 0, module: "/build/routes/api.admin.products-O44RSELZ.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.admin.shop": { id: "routes/api.admin.shop", parentId: "root", path: "api/admin/shop", index: void 0, caseSensitive: void 0, module: "/build/routes/api.admin.shop-HY5KR6PZ.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.config": { id: "routes/api.config", parentId: "root", path: "api/config", index: void 0, caseSensitive: void 0, module: "/build/routes/api.config-F6QT7IN6.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.products": { id: "routes/api.products", parentId: "root", path: "api/products", index: void 0, caseSensitive: void 0, module: "/build/routes/api.products-BMEWO7CE.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.settings": { id: "routes/api.settings", parentId: "root", path: "api/settings", index: void 0, caseSensitive: void 0, module: "/build/routes/api.settings-C6JUPEZG.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.upload": { id: "routes/api.upload", parentId: "root", path: "api/upload", index: void 0, caseSensitive: void 0, module: "/build/routes/api.upload-NKI3ERUQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.callback": { id: "routes/auth.callback", parentId: "root", path: "auth/callback", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.callback-HTHTBQTT.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.install": { id: "routes/auth.install", parentId: "root", path: "auth/install", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.install-GWWDNMQD.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/healthz": { id: "routes/healthz", parentId: "root", path: "healthz", index: void 0, caseSensitive: void 0, module: "/build/routes/healthz-47L4ZWTK.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/readiness": { id: "routes/readiness", parentId: "root", path: "readiness", index: void 0, caseSensitive: void 0, module: "/build/routes/readiness-DLJ74LOW.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/test.oauth": { id: "routes/test.oauth", parentId: "root", path: "test/oauth", index: void 0, caseSensitive: void 0, module: "/build/routes/test.oauth-CVOQWQVM.js", imports: ["/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.app_uninstalled": { id: "routes/webhooks.app_uninstalled", parentId: "root", path: "webhooks/app_uninstalled", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.app_uninstalled-QBHIURQQ.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.products_update": { id: "routes/webhooks.products_update", parentId: "root", path: "webhooks/products_update", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.products_update-JGCI7S77.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "50c4824b", hmr: { runtime: "/build/_shared/chunk-ALN5UVCC.js", timestamp: 1755844851686 }, url: "/build/manifest-50C4824B.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-JJAXA5IT.js", imports: ["/build/_shared/chunk-6OAKFNAK.js", "/build/_shared/chunk-Q3IECNXJ.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-PJLMP6NN.js", imports: ["/build/_shared/chunk-Y54SY5VO.js"], hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-POCWQ2ZL.js", imports: ["/build/_shared/chunk-PGOH7JLP.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin": { id: "routes/admin", parentId: "root", path: "admin", index: void 0, caseSensitive: void 0, module: "/build/routes/admin-4TD2DM7A.js", imports: ["/build/_shared/chunk-YBNSPA7F.js", "/build/_shared/chunk-PGOH7JLP.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/admin.branding": { id: "routes/admin.branding", parentId: "routes/admin", path: "branding", index: void 0, caseSensitive: void 0, module: "/build/routes/admin.branding-I2TKKB3E.js", imports: ["/build/_shared/chunk-Y54SY5VO.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.admin.products": { id: "routes/api.admin.products", parentId: "root", path: "api/admin/products", index: void 0, caseSensitive: void 0, module: "/build/routes/api.admin.products-UERGH3GH.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.admin.shop": { id: "routes/api.admin.shop", parentId: "root", path: "api/admin/shop", index: void 0, caseSensitive: void 0, module: "/build/routes/api.admin.shop-MOMKHQXW.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.config": { id: "routes/api.config", parentId: "root", path: "api/config", index: void 0, caseSensitive: void 0, module: "/build/routes/api.config-VYVUKLOV.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.products": { id: "routes/api.products", parentId: "root", path: "api/products", index: void 0, caseSensitive: void 0, module: "/build/routes/api.products-HTAHYVUM.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.settings": { id: "routes/api.settings", parentId: "root", path: "api/settings", index: void 0, caseSensitive: void 0, module: "/build/routes/api.settings-WC5MSFW2.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/api.upload": { id: "routes/api.upload", parentId: "root", path: "api/upload", index: void 0, caseSensitive: void 0, module: "/build/routes/api.upload-EDJPRBR7.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.callback": { id: "routes/auth.callback", parentId: "root", path: "auth/callback", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.callback-YM4JZOLA.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/auth.install": { id: "routes/auth.install", parentId: "root", path: "auth/install", index: void 0, caseSensitive: void 0, module: "/build/routes/auth.install-DXK6BF6B.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/healthz": { id: "routes/healthz", parentId: "root", path: "healthz", index: void 0, caseSensitive: void 0, module: "/build/routes/healthz-FNKLRQV4.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/readiness": { id: "routes/readiness", parentId: "root", path: "readiness", index: void 0, caseSensitive: void 0, module: "/build/routes/readiness-OOG77MDA.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/test.oauth": { id: "routes/test.oauth", parentId: "root", path: "test/oauth", index: void 0, caseSensitive: void 0, module: "/build/routes/test.oauth-EMIJO535.js", imports: ["/build/_shared/chunk-PGOH7JLP.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.app_uninstalled": { id: "routes/webhooks.app_uninstalled", parentId: "root", path: "webhooks/app_uninstalled", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.app_uninstalled-PUWFJRDX.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/webhooks.products_update": { id: "routes/webhooks.products_update", parentId: "root", path: "webhooks/products_update", index: void 0, caseSensitive: void 0, module: "/build/routes/webhooks.products_update-GUQ3L4LT.js", imports: void 0, hasAction: !0, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "b4a7f254", hmr: void 0, url: "/build/manifest-B4A7F254.js" };
 
 // server-entry-module:@remix-run/dev/server-build
-var mode = "development", assetsBuildDirectory = "public/build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1, v3_throwAbortReason: !1, v3_routeConfig: !1, v3_singleFetch: !1, v3_lazyRouteDiscovery: !1, unstable_optimizeDeps: !1 }, publicPath = "/build/", entry = { module: entry_server_node_exports }, routes = {
+var mode = "production", assetsBuildDirectory = "public/build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1, v3_throwAbortReason: !1, v3_routeConfig: !1, v3_singleFetch: !1, v3_lazyRouteDiscovery: !1, unstable_optimizeDeps: !1 }, publicPath = "/build/", entry = { module: entry_server_node_exports }, routes = {
   root: {
     id: "root",
     parentId: void 0,
@@ -2900,4 +2452,3 @@ export {
   publicPath,
   routes
 };
-//# sourceMappingURL=index.js.map

@@ -192,7 +192,7 @@ export default function AdminLayout() {
         </Page>
       ) : (
         // NESTED ROUTES - Andere Admin Seiten (z.B. /admin/branding)
-        <Outlet />  {/* Remix Outlet für Nested Route Rendering */}
+        <Outlet />
       )}
     </Frame>
   );
