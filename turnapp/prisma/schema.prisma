@@ -1,38 +1,129 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+/**
+ * TurnApp Database Schema - Shopify App Datenmodell
+ * 
+ * Diese Prisma Schema definiert die Datenbankstruktur für TurnApp.
+ * Sie umfasst alle Entitäten die für eine Shopify App erforderlich sind:
+ * Shop-Management, Asset-Verwaltung und Sicherheit.
+ * 
+ * DESIGN PRINZIPIEN:
+ * - Security First: Access Tokens sind immer verschlüsselt (accessTokenEnc)
+ * - Soft Deletes: Shops werden nicht gelöscht, sondern als deinstalliert markiert
+ * - Audit Trail: Created/Updated Timestamps für alle Entitäten
+ * - Referential Integrity: Foreign Keys mit CASCADE für Data Consistency
+ * 
+ * DATENBANK: SQLite (Development) / PostgreSQL (Production)
+ * ORM: Prisma mit TypeScript Code Generation
+ */
 
+/**
+ * Prisma Client Generator Konfiguration
+ * 
+ * Generiert TypeScript Client Code aus diesem Schema.
+ * Der generierte Client wird in app/lib/prisma.server.ts verwendet.
+ */
 generator client {
   provider = "prisma-client-js"
 }
 
+/**
+ * Datenbank Connection Konfiguration
+ * 
+ * DEVELOPMENT: SQLite (einfaches File-basiertes DB)
+ * PRODUCTION: PostgreSQL oder MySQL (skalierbar)
+ * 
+ * DATABASE_URL Umgebungsvariable bestimmt Connection String:
+ * - SQLite: "file:./dev.sqlite"
+ * - PostgreSQL: "postgresql://user:pass@host:port/db"
+ */
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
+/**
+ * Shop Model - Zentrale Entität für Shopify Shop Management
+ * 
+ * Diese Tabelle speichert alle Informationen über installierte Shopify Shops.
+ * Jeder Shop der unsere App installiert bekommt einen Eintrag hier.
+ * 
+ * SICHERHEITSFEATURES:
+ * - accessTokenEnc: Shopify Access Token AES-256 verschlüsselt
+ * - shopDomain: Eindeutige Identifikation ("myshop.myshopify.com")
+ * - Soft Delete Pattern: uninstalledAt statt Record löschung
+ * 
+ * LIFECYCLE:
+ * 1. OAuth Installation: Record wird erstellt mit accessTokenEnc
+ * 2. App Usage: Token wird für API Calls entschlüsselt
+ * 3. Deinstallation: uninstalledAt wird gesetzt (Soft Delete)
+ * 4. Re-Installation: uninstalledAt wird auf null gesetzt, Token aktualisiert
+ */
 model Shop {
+  // Primärschlüssel: UUID für bessere Security als Auto-Increment
   id             String   @id @default(uuid())
+  
+  // Shop-Domain: Eindeutige Shopify-Identifikation (Index für Performance)
   shopDomain     String   @unique @map("shop_domain")
+  
+  // SICHERHEITSKRITISCH: Verschlüsselter Shopify Access Token
+  // Wird mit AES-256-CBC in crypto.server.ts verschlüsselt/entschlüsselt
   accessTokenEnc String   @map("access_token_enc")
-  installedAt    DateTime @default(now()) @map("installed_at")
-  uninstalledAt  DateTime? @map("uninstalled_at")
-  settings       String   @default("{}") // JSON string for branding/config
+  
+  // Installation Lifecycle Tracking
+  installedAt    DateTime @default(now()) @map("installed_at")    // Erste Installation
+  uninstalledAt  DateTime? @map("uninstalled_at")                // Soft Delete Timestamp
+  
+  // Shop-Konfiguration: JSON String für Branding/Settings
+  // Enthält: { brandName, primaryColor, logoUrl, tagline, ... }
+  settings       String   @default("{}")  // JSON für flexible Shop-Config
+  
+  // Audit Trail: Automatische Timestamps
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
 
+  // Relationen: Shop kann mehrere Assets haben (1:n)
   assets Asset[]
 
+  // Datenbank-Tabellenname (snake_case für DB-Konventionen)
   @@map("shops")
 }
 
+/**
+ * Asset Model - File/Upload Management für Shop Branding
+ * 
+ * Diese Tabelle speichert Metadaten für hochgeladene Dateien (Logos, Banner).
+ * Actual File Storage erfolgt in S3/Cloud Storage, hier wird nur URL gespeichert.
+ * 
+ * ASSET TYPES:
+ * - "logo": Shop-Logo für Mobile App Branding
+ * - "banner": Marketing-Banner für Promotions
+ * 
+ * WORKFLOW:
+ * 1. File Upload über /api/upload Endpoint
+ * 2. File wird zu S3/Cloud Storage hochgeladen
+ * 3. Asset Record wird mit URL in Datenbank erstellt
+ * 4. URL wird in Shop Settings für Branding verwendet
+ */
 model Asset {
+  // Primärschlüssel: UUID für bessere Security
   id        String   @id @default(uuid())
+  
+  // Foreign Key: Welchem Shop gehört dieses Asset?
   shopId    String   @map("shop_id")
-  kind      String   // 'logo' or 'banner'
+  
+  // Asset-Typ: Kategorisierung für verschiedene Verwendungszwecke
+  kind      String   // Enum: 'logo' | 'banner' (validiert in validation.server.ts)
+  
+  // Cloud Storage URL: Direkter Link zur hochgeladenen Datei
+  // Beispiel: "https://turnapp-assets.s3.amazonaws.com/shop123/logo.png"
   url       String
+  
+  // Upload-Zeitstempel für Audit Trail
   createdAt DateTime @default(now()) @map("created_at")
 
+  // FOREIGN KEY RELATION: Asset gehört zu einem Shop
+  // onDelete: Cascade = Wenn Shop gelöscht wird, werden Assets automatisch gelöscht
   shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
 
+  // Datenbank-Tabellenname
   @@map("assets")
 }
