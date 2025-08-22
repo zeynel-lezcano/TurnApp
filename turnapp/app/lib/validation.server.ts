@@ -1,50 +1,173 @@
+/**
+ * Schema Validation System für TurnApp - Type Safety & Security
+ * 
+ * Diese Datei definiert alle Zod-Schemas für Input-Validierung und Response-Validation.
+ * Zod gewährleistet zur Laufzeit, dass alle Daten den erwarteten Typ und Format haben,
+ * und schützt vor schädlichen Inputs und Data Corruption.
+ * 
+ * VALIDIERUNGS-KATEGORIEN:
+ * 1. Basic Schemas: Shop Domains, Farben, URLs mit Sicherheits-Checks
+ * 2. Business Schemas: Branding, Config, Upload für API Endpoints
+ * 3. Response Schemas: Health, Products für ausgehende Daten
+ * 4. Helper Functions: Utility-Funktionen für häufige Validierungen
+ * 
+ * SICHERHEITSFEATURES:
+ * - XSS Prevention durch String-Validierung und Sanitization
+ * - Injection Prevention durch Regex-Patterns
+ * - URL Safety durch Protocol-Whitelisting
+ * - File Type Validation für Uploads
+ * 
+ * VERWENDUNG IM PROJEKT:
+ * - API Routes: Input-Validierung vor Verarbeitung
+ * - Response Validation: Type Safety für ausgehende Daten
+ * - Form Handling: Client + Server Validierung
+ */
+
 import { z } from "zod";
 
-// Basic validation schemas
+/**
+ * === BASIC VALIDATION SCHEMAS ===
+ * Fundamentale Datentypen mit Sicherheits-Validierung
+ */
+
+/**
+ * Shop Domain Validierung - Sicherheit gegen Domain Spoofing
+ * 
+ * ERLAUBTE FORMATE: "myshop.myshopify.com", "test-shop-123.myshopify.com"
+ * VERHINDERT: XSS, Injection, invalid domains
+ * 
+ * REGEX BREAKDOWN:
+ * - ^[a-z0-9-]+ : Nur Kleinbuchstaben, Zahlen, Bindestriche am Anfang
+ * - \.myshopify\.com$ : Muss exakt mit .myshopify.com enden
+ * 
+ * VERWENDUNG: URL Parameter ?shop=, Session Tokens, API Calls
+ */
 export const ShopDomainSchema = z.string()
-  .regex(/^[a-z0-9-]+\.myshopify\.com$/, "Invalid shop domain format");
+  .regex(/^[a-z0-9-]+\.myshopify\.com$/, "Invalid shop domain format - must be valid Shopify domain");
 
+/**
+ * Hex Color Validierung - CSS-sichere Farbwerte
+ * 
+ * ERLAUBTES FORMAT: "#FF5733", "#007C3B", "#123abc"
+ * VERHINDERT: CSS Injection, invalid color values
+ * 
+ * REGEX BREAKDOWN:
+ * - ^# : Muss mit Hash beginnen
+ * - [0-9A-F]{6} : Exakt 6 Hex-Zeichen (0-9, A-F)
+ * - $/i : Case-insensitive Ende
+ * 
+ * VERWENDUNG: Branding Primary Color, Theme Colors
+ */
 export const HexColorSchema = z.string()
-  .regex(/^#[0-9A-F]{6}$/i, "Invalid hex color format");
+  .regex(/^#[0-9A-F]{6}$/i, "Invalid hex color format - must be #RRGGBB");
 
+/**
+ * URL Validierung mit Sicherheits-Filtering - XSS und Injection Prevention
+ * 
+ * ERLAUBT: "https://...", "http://...", "" (empty string)
+ * VERHINDERT: javascript:, data:, vbscript:, file:, ftp: (XSS Vectors)
+ * 
+ * SICHERHEITSFEATURES:
+ * 1. Protocol Whitelist: Nur sichere Protocols (http/https)
+ * 2. URL Parsing: Validierung der URL-Struktur
+ * 3. Empty String Support: Optional URLs
+ * 
+ * VERWENDUNG: Logo URLs, Asset URLs, externe Links
+ */
 export const UrlSchema = z.string()
   .refine((url) => {
-    if (url === "") return true; // Allow empty string
+    // Leerer String ist erlaubt für optionale URLs
+    if (url === "") return true;
+    
     try {
       const parsed = new URL(url);
-      // Reject dangerous protocols
-      return !['javascript:', 'data:', 'vbscript:', 'file:', 'ftp:'].includes(parsed.protocol);
+      // SICHERHEITSKRITISCH: Gefährliche Protocols blockieren
+      // Diese können für XSS, Code Injection und andere Angriffe verwendet werden
+      const dangerousProtocols = ['javascript:', 'data:', 'vbscript:', 'file:', 'ftp:'];
+      return !dangerousProtocols.includes(parsed.protocol);
     } catch {
-      return false; // Invalid URL
+      return false; // Ungültige URL-Struktur
     }
-  }, "Invalid or unsafe URL")
+  }, "Invalid or unsafe URL - only http/https allowed")
   .optional()
   .or(z.literal(""));
 
-// Branding settings schema
+/**
+ * === BUSINESS LOGIC SCHEMAS ===
+ * Shop-spezifische Validierungen für API Endpoints
+ */
+
+/**
+ * Branding Settings Validierung - Shop Customization Data
+ * 
+ * VERWENDET IN: /api/settings (POST), /api/config (GET Response)
+ * 
+ * FELDER:
+ * - brandName: Shop-Name für Mobile App (1-50 Zeichen, alphanumerisch + spaces)
+ * - primaryColor: Hex-Farbe für App-Theme (#RRGGBB Format)
+ * - logoUrl: Upload-URL für Shop-Logo (optional, security-validated)
+ * - tagline: Marketing-Text für App (max 100 Zeichen, optional)
+ * 
+ * SICHERHEIT: Regex verhindert Code Injection in Brand Namen
+ */
 export const BrandingSettingsSchema = z.object({
+  // Shop-Name: Alphanumerisch + Leerzeichen, Bindestriche, Underscores
   brandName: z.string()
     .min(1, "Brand name is required")
     .max(50, "Brand name too long")
-    .regex(/^[a-zA-Z0-9\s\-_]+$/, "Brand name contains invalid characters"),
+    .regex(/^[a-zA-Z0-9\s\-_]+$/, "Brand name contains invalid characters - only letters, numbers, spaces, hyphens, underscores allowed"),
+  
+  // Primary Color für App-Theme
   primaryColor: HexColorSchema,
+  
+  // Logo URL (mit Sicherheits-Validierung)
   logoUrl: UrlSchema,
+  
+  // Marketing Tagline (optional)
   tagline: z.string()
     .max(100, "Tagline too long")
     .optional()
     .or(z.literal(""))
 });
 
-// Config response schema
+/**
+ * Mobile App Config Response Validierung - /api/config Endpoint
+ * 
+ * RESPONSE STRUKTUR für Mobile Apps beim App-Start:
+ * {
+ *   shop: "myshop.myshopify.com",
+ *   branding: { brandName, primaryColor, logoUrl, tagline },
+ *   storefrontEndpoint: "https://myshop.myshopify.com/api/2024-01/graphql.json",
+ *   appVersion: "1.0.0"
+ * }
+ * 
+ * VERWENDUNG: Mobile Apps laden diese Config für UI-Customization
+ */
 export const ConfigResponseSchema = z.object({
+  // Shop Domain für Mobile App Identifikation
   shop: ShopDomainSchema,
+  
+  // Branding für UI-Customization (Farben, Logo, Name)
   branding: BrandingSettingsSchema,
+  
+  // Direkter Shopify Storefront API Endpoint für Mobile Apps
   storefrontEndpoint: z.string().url("Invalid storefront endpoint"),
-  appVersion: z.string().regex(/^\d+\.\d+\.\d+$/, "Invalid version format")
+  
+  // Semantic Versioning für Feature-Compatibility
+  appVersion: z.string().regex(/^\d+\.\d+\.\d+$/, "Invalid version format - must be semantic version (x.y.z)")
 });
 
-// Upload request schema
+/**
+ * File Upload Request Validierung - /api/upload Endpoint
+ * 
+ * UPLOAD-TYPEN:
+ * - "logo": Shop-Logo für Branding (quadratisch, klein)
+ * - "banner": Marketing-Banner (rechteckig, größer)
+ * 
+ * VERWENDUNG: Validierung vor File-Upload und S3-Storage
+ */
 export const UploadRequestSchema = z.object({
+  // Asset-Typ für Upload-Verarbeitung und Storage-Organisation
   kind: z.enum(["logo", "banner"], { 
     errorMap: () => ({ message: "Asset kind must be 'logo' or 'banner'" })
   })

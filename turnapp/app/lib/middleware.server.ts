@@ -1,17 +1,76 @@
+/**
+ * Request Middleware System für TurnApp - Authentifizierung & Request Context
+ * 
+ * Diese Datei implementiert das zentrale Middleware-System für alle API Requests.
+ * Sie kombiniert Session-Validierung mit Datenbank-Checks und Request-Logging
+ * für umfassende Request-Verarbeitung.
+ * 
+ * MIDDLEWARE-STRATEGIEN:
+ * 1. requireSession(): STRIKT - Session Token + DB Check erforderlich
+ * 2. optionalSession(): FLEXIBEL - Session optional, graceful fallback
+ * 3. flexibleAuth(): HYBRID - Session Token ODER Shop Parameter
+ * 
+ * VERWENDUNG IM PROJEKT:
+ * - Admin Routes (admin.tsx): requireSession() für eingeloggte User
+ * - API Endpoints: flexibleAuth() für Mobile + Admin Zugriff
+ * - Public APIs: optionalSession() für erweiterte Funktionen bei Login
+ * 
+ * SICHERHEITSFEATURES:
+ * - Session Token Validierung (JWT Signatur + Expiration)
+ * - Datenbank-Konsistenz (Shop muss existieren + installiert sein)
+ * - Strukturierte Error Responses mit Error Codes
+ * - Request Logging für Monitoring und Debugging
+ */
+
 import { json } from '@remix-run/node';
 import { requireValidSession, getOptionalSession } from './session.server.js';
 import { prisma } from './prisma.server.js';
 import { logRequestWithContext, generateRequestId } from './monitoring.server.js';
 
+/**
+ * Request Context - Einheitliche Datenstruktur für alle authentifizierten Requests
+ * 
+ * Diese Interface definiert den Standard-Context, den alle Middleware-Funktionen
+ * zurückgeben und den API Routes für Request-Verarbeitung verwenden.
+ * 
+ * FELDER:
+ * - shop: Shop Domain String für einfache Verwendung ("myshop.myshopify.com")
+ * - session: Vollständige Shopify Session mit User-Info (null bei Shop-Parameter Auth)
+ * - shopRecord: Datenbank-Record mit verschlüsselten Tokens und Settings
+ * 
+ * VERWENDUNG:
+ * - API Loaders: const context = await requireSession(request)
+ * - Shop-spezifische Operationen: context.shop
+ * - User-spezifische Features: context.session.sub (User ID)
+ * - Token-Zugriff: über shopRecord für API Calls
+ */
 export interface RequestContext {
-  shop: string;
-  session: any;
-  shopRecord?: any;
+  shop: string;        // Shop Domain für API Calls und Identifikation
+  session: any;        // Shopify Session Token (null bei Shop Parameter Auth)
+  shopRecord?: any;    // Vollständiger DB Shop Record mit Tokens
 }
 
 /**
- * Middleware to enforce session token validation
- * Throws 401 if no valid session token
+ * STRENGE Session-Authentifizierung - Erfordert gültigen Session Token
+ * 
+ * VERWENDUNG:
+ * - Admin UI Routes (admin.tsx, admin.branding.tsx)
+ * - Sichere API Endpoints die User-Kontext brauchen
+ * - Alle Operationen die eindeutige User-Identifikation erfordern
+ * 
+ * VALIDIERUNGSSCHRITTE:
+ * 1. Session Token Validierung (JWT Signatur + Expiration)
+ * 2. Shop-Existenz in Datenbank prüfen
+ * 3. Installation-Status prüfen (nicht deinstalliert)
+ * 
+ * FEHLERVERHALTEN:
+ * - 401: Kein/ungültiger Session Token
+ * - 404: Shop nicht in Datenbank gefunden
+ * - 403: Shop wurde deinstalliert
+ * 
+ * @param request - Remix Request mit X-Shopify-Session-Token Header
+ * @returns Garantiert gültigen RequestContext
+ * @throws Response mit entsprechendem HTTP Status bei Fehlern
  */
 export async function requireSession(request: Request): Promise<RequestContext> {
   try {
