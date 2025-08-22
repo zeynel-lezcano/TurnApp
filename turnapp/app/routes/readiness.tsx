@@ -1,32 +1,34 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { performHealthCheck, logRequest } from '~/lib/monitoring.server';
+import { checkReadiness, logRequest } from '~/lib/monitoring.server';
 import { HealthResponseSchema } from '~/lib/validation.server';
 
 /**
- * GET /healthz - Basic health check endpoint
+ * GET /readiness - Readiness probe endpoint
  * 
- * Returns simple health status for load balancers and monitoring systems
- * Does not perform extensive checks to avoid impacting performance
+ * Returns detailed health status to determine if the application
+ * is ready to serve traffic. Performs comprehensive checks.
  */
 export async function loader({ request }: LoaderFunctionArgs) {
   const startTime = Date.now();
   
   try {
-    // Log the health check request
+    // Log the readiness check request
     logRequest(request);
     
-    // Basic health check (no deep checks for performance)
-    const health = await performHealthCheck(false);
+    // Comprehensive readiness check
+    const readiness = await checkReadiness();
     
     // Validate response schema
-    const validatedHealth = HealthResponseSchema.parse(health);
+    const validatedReadiness = HealthResponseSchema.parse(readiness);
     
     const duration = Date.now() - startTime;
-    logRequest(request, undefined, { duration, statusCode: 200 });
+    const statusCode = readiness.status === 'healthy' ? 200 : 503;
     
-    return json(validatedHealth, {
-      status: health.status === 'healthy' ? 200 : 503,
+    logRequest(request, undefined, { duration, statusCode });
+    
+    return json(validatedReadiness, {
+      status: statusCode,
       headers: {
         'Content-Type': 'application/json',
         'Cache-Control': 'no-cache, no-store, must-revalidate'
@@ -34,10 +36,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     });
 
   } catch (error) {
-    console.error('Health check endpoint error:', error);
+    console.error('Readiness check endpoint error:', error);
     
     const duration = Date.now() - startTime;
-    const errorMessage = error instanceof Error ? error.message : 'Health check failed';
+    const errorMessage = error instanceof Error ? error.message : 'Readiness check failed';
     
     logRequest(request, undefined, { 
       duration, 

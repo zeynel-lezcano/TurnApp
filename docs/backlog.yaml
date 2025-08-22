@@ -1,8 +1,5 @@
 wip_limit_now: 5
 now:
-  - id: health-endpoints
-    title: Health & Monitoring Endpoints
-    desc: /healthz, /readiness endpoints, request logging, error tracking setup
   - id: mobile-demo-scaffold
     title: Mobile Demo Scaffold
     desc: RN/Flutter template consuming /api/config, basic product list, checkout
@@ -16,10 +13,10 @@ now:
   - id: rate-limit-implementation
     title: Rate Limit Implementation
     desc: Rate limiting für API endpoints, Shopify GraphQL budget management
-next:
   - id: ci-cd-setup
     title: CI/CD Pipeline Setup
     desc: GitHub Actions, lint/test gates, automated deployment setup
+next: []
 later:
   - id: product-proxy
     title: Product Proxy + Cache
@@ -86,3 +83,7 @@ done:
     title: Admin API Integration
     desc: GraphQL client setup für Admin API, shop validation, product queries
     doneAt: 2025-08-21
+  - id: health-endpoints
+    title: Health & Monitoring Endpoints
+    desc: /healthz, /readiness endpoints, request logging, error tracking setup
+    doneAt: 2025-08-22

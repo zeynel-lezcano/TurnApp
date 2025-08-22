@@ -1,6 +1,7 @@
 import { json } from '@remix-run/node';
 import { requireValidSession, getOptionalSession } from './session.server.js';
 import { prisma } from './prisma.server.js';
+import { logRequestWithContext, generateRequestId } from './monitoring.server.js';
 
 export interface RequestContext {
   shop: string;
@@ -227,17 +228,26 @@ export function checkRateLimit(shop: string, endpoint: string): boolean {
 }
 
 /**
- * Request logging helper
+ * Request logging helper with enhanced monitoring
  */
 export function logRequest(request: Request, context?: RequestContext): void {
-  const url = new URL(request.url);
-  const logData = {
-    method: request.method,
-    pathname: url.pathname,
-    shop: context?.shop || 'unknown',
-    userAgent: request.headers.get('User-Agent'),
-    timestamp: new Date().toISOString()
-  };
+  logRequestWithContext(request, context);
+}
 
-  console.log('API Request:', JSON.stringify(logData));
+/**
+ * Add request ID header if not present
+ */
+export function ensureRequestId(request: Request): Request {
+  if (!request.headers.get('x-request-id')) {
+    const requestId = generateRequestId();
+    const headers = new Headers(request.headers);
+    headers.set('x-request-id', requestId);
+    
+    return new Request(request.url, {
+      method: request.method,
+      headers,
+      body: request.body
+    });
+  }
+  return request;
 }

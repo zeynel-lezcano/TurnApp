@@ -86,10 +86,11 @@ export const SettingsUpdateSchema = z.object({
 // Health check response schema
 export const HealthResponseSchema = z.object({
   status: z.enum(["healthy", "unhealthy"]),
-  timestamp: z.string().datetime(),
+  timestamp: z.string(),
   database: z.object({
     connected: z.boolean(),
-    shops: z.number().int().nonnegative()
+    shops: z.number().int().nonnegative(),
+    latency: z.number().optional()
   }).optional(),
   crypto: z.object({
     working: z.boolean()
