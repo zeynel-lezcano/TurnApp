@@ -1,0 +1,25 @@
+# Learn more about configuring your Shopify app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+name = "turnapp"
+client_id = "fb96d4f7e65dcc56b7118b4b276f420c"
+application_url = "https://turn2app.com"
+embedded = false
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "read_products,write_products,read_themes,read_customers"
+
+[auth]
+redirect_urls = [
+  "https://turn2app.com/auth/callback",
+]
+
+[webhooks]
+api_version = "2024-10"
+
+[pos]
+embedded = false
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "zeytestshop.myshopify.com"

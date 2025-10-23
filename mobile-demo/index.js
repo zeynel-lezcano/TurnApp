@@ -1,7 +1,7 @@
 /**
- * TurnApp Mobile Demo Entry Point
+ * turn2app Mobile Demo Entry Point
  * 
- * React Native Demo für TurnApp Shopify Integration
+ * React Native Demo für turn2app Shopify Integration
  * Konsumiert /api/config und zeigt Dynamic Branding + Product List
  */
 

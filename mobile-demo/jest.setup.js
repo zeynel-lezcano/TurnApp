@@ -3,7 +3,7 @@ import 'react-native-gesture-handler/jestSetup';
 
 // Mock react-native-config
 jest.mock('react-native-config', () => ({
-  TURNAPP_API_URL: 'http://localhost:3000',
+  TURN2APP_API_URL: 'http://localhost:3000',
   SHOP_DOMAIN: 'test-shop.myshopify.com',
   DEMO_MODE: 'true',
 }));

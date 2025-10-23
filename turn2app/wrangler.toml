@@ -1,0 +1,16 @@
+name = "turn2app"
+main = "./build/index.js"
+compatibility_date = "2023-12-01"
+
+[build]
+command = "pnpm run build"
+
+[[pages.rules]]
+pattern = "/build/*"
+headers = { "Cache-Control" = "public, immutable, max-age=31536000" }
+
+[env.production]
+routes = [
+  { pattern = "turn2app.com", zone_name = "turn2app.com" },
+  { pattern = "www.turn2app.com", zone_name = "turn2app.com" }
+]

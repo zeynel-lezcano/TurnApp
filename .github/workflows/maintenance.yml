@@ -1,0 +1,142 @@
+name: Maintenance & Security
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  dependency-audit:
+    name: Dependency Security Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 'latest'
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+          cache-dependency-path: 'turn2app/pnpm-lock.yaml'
+      
+      - name: Install dependencies
+        working-directory: ./turn2app
+        run: pnpm install --frozen-lockfile
+      
+      - name: Run security audit
+        working-directory: ./turn2app
+        run: |
+          echo "Running security audit..."
+          pnpm audit --audit-level high --json > audit-results.json || true
+          
+          # Check if there are high or critical vulnerabilities
+          if [ -s audit-results.json ]; then
+            HIGH_VULNS=$(cat audit-results.json | jq '.advisories | length')
+            if [ "$HIGH_VULNS" -gt 0 ]; then
+              echo "Found $HIGH_VULNS high/critical vulnerabilities"
+              cat audit-results.json | jq '.advisories'
+              exit 1
+            fi
+          fi
+      
+      - name: Check for outdated packages
+        working-directory: ./turn2app
+        run: |
+          echo "Checking for outdated packages..."
+          pnpm outdated --format=json > outdated.json || true
+          
+          # Create issue if there are many outdated packages
+          OUTDATED_COUNT=$(cat outdated.json | jq 'length // 0')
+          echo "Found $OUTDATED_COUNT outdated packages"
+          
+          if [ "$OUTDATED_COUNT" -gt 10 ]; then
+            echo "Too many outdated packages ($OUTDATED_COUNT), consider updating"
+          fi
+      
+      - name: Upload audit results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: security-audit-results
+          path: |
+            turn2app/audit-results.json
+            turn2app/outdated.json
+          retention-days: 30
+
+  health-check:
+    name: Production Health Check
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    
+    steps:
+      - name: Check production health
+        run: |
+          echo "Checking production health endpoints..."
+          
+          # Health check
+          HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" ${{ secrets.PRODUCTION_APP_URL }}/healthz || echo "000")
+          echo "Health endpoint status: $HEALTH_STATUS"
+          
+          # Readiness check
+          READY_STATUS=$(curl -s -o /dev/null -w "%{http_code}" ${{ secrets.PRODUCTION_APP_URL }}/readiness || echo "000")
+          echo "Readiness endpoint status: $READY_STATUS"
+          
+          # Check if both are healthy
+          if [ "$HEALTH_STATUS" != "200" ] || [ "$READY_STATUS" != "200" ]; then
+            echo "❌ Production health check failed"
+            echo "Health: $HEALTH_STATUS, Readiness: $READY_STATUS"
+            exit 1
+          else
+            echo "✅ Production is healthy"
+          fi
+      
+      - name: Check API endpoints
+        run: |
+          echo "Testing API endpoints..."
+          
+          # Test config endpoint (should work without auth for mobile apps)
+          CONFIG_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${{ secrets.PRODUCTION_APP_URL }}/api/config?shop=demo.myshopify.com" || echo "000")
+          echo "Config API status: $CONFIG_STATUS"
+          
+          if [ "$CONFIG_STATUS" != "200" ] && [ "$CONFIG_STATUS" != "404" ]; then
+            echo "⚠️ Config API may have issues (status: $CONFIG_STATUS)"
+          fi
+      
+      - name: Notify if health check fails
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          channel: '#alerts'
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+          text: |
+            🚨 Production health check failed!
+            Please investigate: ${{ secrets.PRODUCTION_APP_URL }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
+  cleanup:
+    name: Cleanup Old Artifacts
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Delete old workflow runs
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 30
+          keep_minimum_runs: 10
+      
+      - name: Cleanup old releases
+        run: |
+          echo "Cleanup task completed"
+          # Could add logic to clean up old releases, artifacts, etc.

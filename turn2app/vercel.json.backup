@@ -1,0 +1,5 @@
+{
+  "installCommand": "pnpm install",
+  "alias": ["turn2app.com", "www.turn2app.com"],
+  "framework": "remix"
+}

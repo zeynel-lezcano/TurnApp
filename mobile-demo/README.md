@@ -1,14 +1,14 @@
-# TurnApp Mobile Demo
+# turn2app Mobile Demo
 
-React Native Demo App für TurnApp Shopify Integration. Diese App demonstriert wie Mobile Apps die TurnApp Config API konsumieren und Dynamic Branding verwenden können.
+React Native Demo App für turn2app Shopify Integration. Diese App demonstriert wie Mobile Apps die turn2app Config API konsumieren und Dynamic Branding verwenden können.
 
 ## Features
 
-✅ **Dynamic Branding** - Lädt Shop-spezifische Farben, Namen und Logo von TurnApp API  
-✅ **Product List** - Zeigt Shopify Products via TurnApp Backend Proxy  
+✅ **Dynamic Branding** - Lädt Shop-spezifische Farben, Namen und Logo von turn2app API  
+✅ **Product List** - Zeigt Shopify Products via turn2app Backend Proxy  
 ✅ **Shopify Checkout** - WebView Integration für Shopify Hosted Checkout  
 ✅ **Error Handling** - Graceful Fallbacks und Retry Funktionen  
-✅ **TypeScript** - Vollständige Typisierung für TurnApp APIs  
+✅ **TypeScript** - Vollständige Typisierung für turn2app APIs  
 
 ## Setup
 
@@ -17,7 +17,7 @@ React Native Demo App für TurnApp Shopify Integration. Diese App demonstriert w
 - Node.js ≥ 18
 - React Native CLI
 - Android Studio (für Android) oder Xcode (für iOS)
-- TurnApp Backend lokal oder deployed
+- turn2app Backend lokal oder deployed
 
 ### Installation
 
@@ -38,10 +38,10 @@ cd ios && pod install && cd ..
 cp .env.example .env
 ```
 
-2. Setze deine TurnApp Backend URL und Test Shop:
+2. Setze deine turn2app Backend URL und Test Shop:
 ```bash
 # .env
-TURNAPP_API_URL=https://your-app.ngrok.app
+TURN2APP_API_URL=https://your-app.ngrok.app
 SHOP_DOMAIN=your-test-shop.myshopify.com
 DEMO_MODE=true
 ```
@@ -67,18 +67,18 @@ src/
 │   ├── ProductCard.tsx  # Product Display mit Branding
 │   └── CheckoutWebView.tsx # Shopify Checkout WebView
 ├── services/           # API Services
-│   └── TurnAppAPI.ts   # TurnApp Backend Communication
+│   └── Turn2AppAPI.ts   # turn2app Backend Communication
 ├── types/             # TypeScript Interfaces
-│   └── index.ts       # TurnApp API Types
+│   └── index.ts       # turn2app API Types
 └── App.tsx           # Main App Component
 ```
 
-## TurnApp Integration
+## turn2app Integration
 
 ### Config Loading
 
 ```typescript
-const api = new TurnAppAPI(shopDomain);
+const api = new Turn2AppAPI(shopDomain);
 const config = await api.loadConfig();
 
 // Returns:
@@ -99,7 +99,7 @@ const config = await api.loadConfig();
 
 ```typescript
 const products = await api.loadProducts(20);
-// Lädt Products via TurnApp Backend (/api/products)
+// Lädt Products via turn2app Backend (/api/products)
 ```
 
 ### Checkout Flow
@@ -111,7 +111,7 @@ const checkoutUrl = await api.getCheckoutUrl(variantId);
 
 ## API Endpunkte
 
-Die App konsumiert folgende TurnApp Backend APIs:
+Die App konsumiert folgende turn2app Backend APIs:
 
 - `GET /api/config?shop=DOMAIN` - Shop Configuration
 - `GET /api/products?shop=DOMAIN&limit=N` - Product List (optional)
@@ -138,7 +138,7 @@ cd android && ./gradlew assembleRelease
 
 ### iOS
 
-1. Xcode öffnen: `ios/TurnAppDemo.xcworkspace`
+1. Xcode öffnen: `ios/Turn2AppDemo.xcworkspace`
 2. Product → Archive
 3. Distribute App
 
@@ -157,20 +157,20 @@ npm test
 
 ## Troubleshooting
 
-**Config API Error**: Prüfe TURNAPP_API_URL und stelle sicher dass Backend läuft
+**Config API Error**: Prüfe TURN2APP_API_URL und stelle sicher dass Backend läuft
 
-**Products nicht geladen**: Prüfe `/api/products` Endpoint im TurnApp Backend
+**Products nicht geladen**: Prüfe `/api/products` Endpoint im turn2app Backend
 
 **Checkout funktioniert nicht**: Shopify Test Store muss Zahlungen aktiviert haben
 
 **Android Build Fails**: Prüfe Android SDK und Java Version
 
-## Integration mit TurnApp
+## Integration mit turn2app
 
 Diese Demo App zeigt das End-to-End Szenario:
 
-1. **Merchant installiert TurnApp** in Shopify Admin
-2. **Merchant konfiguriert Branding** in TurnApp Admin
+1. **Merchant installiert turn2app** in Shopify Admin
+2. **Merchant konfiguriert Branding** in turn2app Admin
 3. **Mobile App lädt Configuration** via `/api/config`
 4. **App wendet Dynamic Branding an** (Farben, Name, Logo)
 5. **Products werden angezeigt** via Storefront API

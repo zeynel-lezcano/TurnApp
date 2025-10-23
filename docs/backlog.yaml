@@ -1,39 +1,116 @@
-wip_limit_now: 5
+wip_limit_now: 4
 now:
-  - id: cache-integration
-    title: Simple Cache Integration
-    desc: Redis/memory cache für Product Proxy, 60s TTL, cache invalidation
-  - id: error-tracking-setup
-    title: Error Tracking Setup
-    desc: Sentry integration, structured logging, error reporting setup
-  - id: rate-limit-implementation
-    title: Rate Limit Implementation
-    desc: Rate limiting für API endpoints, Shopify GraphQL budget management
-  - id: ci-cd-setup
-    title: CI/CD Pipeline Setup
-    desc: GitHub Actions, lint/test gates, automated deployment setup
-  - id: storefront-token-management
-    title: Storefront Token Management
-    desc: Short-lived storefront access tokens für mobile apps, token refresh, API
-      endpoint
+  - id: mobile-home-screen
+    title: Mobile Home Screen Component
+    desc: Hero Banner, Featured Collections, Quick Actions, Search Bar - responsive
+      design
+    priority: high
+  - id: product-catalog-screen
+    title: Product Catalog & Grid View
+    desc: Grid/List toggle, Filters, Sort, Search, Infinite scroll, Categories
+      navigation
+    priority: high
+  - id: product-detail-screen
+    title: Product Detail Screen
+    desc: Image gallery, Variants selection, Add to Cart, Product description,
+      Reviews placeholder
+    priority: high
+  - id: cart-checkout-flow
+    title: Shopping Cart & Checkout Flow
+    desc: Cart sidebar/screen, Quantity updates, Remove items, Checkout button →
+      Shopify Checkout
+    priority: high
 next:
-  - id: api-rate-limiting-infra
-    title: API Rate Limiting Infrastructure
-    desc: Rate limiting middleware, request counting, budget tracking, exponential
-      backoff
-  - id: mobile-config-extension
-    title: Mobile Config API Extensions
-    desc: Storefront endpoint config, mobile-specific settings, version compatibility
-  - id: webhook-retry-logic
-    title: Webhook Retry Logic Enhancement
-    desc: Retry queue, exponential backoff, dead letter handling, webhook validation
-  - id: asset-optimization
-    title: Asset Management Optimization
-    desc: Image resizing, CDN integration, asset versioning, cache headers
+  - id: search-autocomplete
+    title: Search & Autocomplete System
+    desc: Real-time search, suggestions, recent searches, voice search, search
+      analytics
+    priority: high
+  - id: user-account-screens
+    title: User Account & Profile Screens
+    desc: Login/Register, Profile editing, Order history, Wishlist, Address book
+    priority: high
+  - id: navigation-components
+    title: Navigation & Menu Components
+    desc: Bottom tab bar, Drawer menu, Category navigation, Breadcrumbs, Back
+      navigation
+    priority: medium
+  - id: onboarding-flow
+    title: App Onboarding & First-Time UX
+    desc: Welcome screens, Feature introduction, Permissions requests, Shop selection
+    priority: medium
+  - id: mobile-preview-admin
+    title: Mobile Preview in Admin
+    desc: Live preview iframe, Device frames, Orientation toggle, QR code generation
+    priority: medium
+  - id: brand-customization-ui
+    title: Enhanced Brand Customization UI
+    desc: Color picker, Font selection, Layout templates, Logo positioning, Theme
+      presets
+    priority: medium
+  - id: collections-api
+    title: Collections & Categories API
+    desc: GET /api/collections, Nested categories, Collection filtering, Featured
+      collections
+    priority: high
+  - id: search-api
+    title: Search API Enhancement
+    desc: Search endpoint, Filters, Faceted search, Autocomplete, Analytics tracking
+    priority: high
+  - id: wishlist-api
+    title: Wishlist & Favorites API
+    desc: User wishlist storage, Add/remove items, Wishlist sharing, Analytics
+    priority: medium
+  - id: user-preferences-api
+    title: User Preferences & Settings API
+    desc: User settings storage, App preferences, Notification settings, Theme
+      preferences
+    priority: low
 later:
-  - id: product-proxy
-    title: Product Proxy + Cache
-    desc: GET /api/products, 60s Cache
+  - id: social-features
+    title: Social Features & Sharing
+    desc: Social login, Share products, Social proof, Reviews integration,
+      User-generated content
+    priority: low
+  - id: promotional-features
+    title: Promotional & Marketing Features
+    desc: Discount codes, Banners, Flash sales, Loyalty program, Referral system
+    priority: low
+  - id: advanced-product-features
+    title: Advanced Product Features
+    desc: Product comparison, Recently viewed, Recommendations, Bundling,
+      Subscriptions
+    priority: low
+  - id: offline-support
+    title: Offline Support & PWA
+    desc: Service worker, Offline browsing, Cache strategies, Background sync
+    priority: low
+  - id: animations-micro-interactions
+    title: Animations & Micro-Interactions
+    desc: Loading animations, Transition effects, Gesture feedback, Smooth scrolling
+    priority: low
+  - id: accessibility-enhancements
+    title: Accessibility & WCAG Compliance
+    desc: Screen reader support, Keyboard navigation, High contrast mode, Voice
+      navigation
+    priority: low
+  - id: multi-language-support
+    title: Multi-language Support
+    desc: i18n für mobile apps, localized content, currency handling, RTL support
+    priority: low
+  - id: push-notifications
+    title: Push Notification Service
+    desc: Push infrastructure, segmentation, automation triggers, delivery tracking
+    priority: low
+  - id: advanced-caching
+    title: Advanced Caching Strategy
+    desc: Multi-layer caching, cache warming, predictive preloading
+    priority: low
+  - id: advanced-analytics
+    title: Advanced Analytics & Reporting
+    desc: Shop performance metrics, conversion tracking, dashboard visualization,
+      A/B testing
+    priority: low
 done:
   - id: oauth-setup
     title: Shopify CLI App Setup + DB Schema
@@ -105,3 +182,26 @@ done:
     desc: RN/Flutter template consuming /api/config, basic product list, checkout
       links
     doneAt: 2025-08-22
+  - id: cache-integration
+    title: Simple Cache Integration
+    desc: Redis/memory cache für Product Proxy, 60s TTL, cache invalidation
+    doneAt: 2025-08-22
+  - id: error-tracking-setup
+    title: Error Tracking Setup (MVP → Production)
+    desc: Sentry integration, structured logging, error reporting, performance
+      monitoring
+    doneAt: 2025-10-15
+  - id: rate-limit-implementation
+    title: Rate Limit Implementation (MVP → Production)
+    desc: Rate limiting middleware, Shopify GraphQL budget management, exponential
+      backoff
+    doneAt: 2025-10-15
+  - id: ci-cd-setup
+    title: CI/CD Pipeline Setup (MVP → Production)
+    desc: GitHub Actions, lint/test/build gates, automated deployment, rollback
+      strategy
+    doneAt: 2025-10-15
+  - id: storefront-token-management
+    title: Storefront Token Management (Production)
+    desc: Short-lived storefront access tokens, token refresh API, security hardening
+    doneAt: 2025-10-15

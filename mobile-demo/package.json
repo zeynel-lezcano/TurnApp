@@ -1,7 +1,7 @@
 {
-  "name": "turnapp-mobile-demo",
+  "name": "turn2app-mobile-demo",
   "version": "1.0.0",
-  "description": "Mobile Demo für TurnApp - React Native Template consuming TurnApp Config API",
+  "description": "Mobile Demo für turn2app - React Native Template consuming turn2app Config API",
   "main": "index.js",
   "scripts": {
     "android": "react-native run-android",

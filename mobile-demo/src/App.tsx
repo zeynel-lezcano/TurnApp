@@ -1,8 +1,8 @@
 /**
- * TurnApp Mobile Demo - Main App Component
+ * turn2app Mobile Demo - Main App Component
  * 
  * Hauptkomponente der Mobile Demo App
- * Lädt TurnApp Config, zeigt Products mit Dynamic Branding, handled Checkout
+ * Lädt turn2app Config, zeigt Products mit Dynamic Branding, handled Checkout
  */
 
 import React, { useState, useEffect } from 'react';
@@ -21,14 +21,14 @@ import {
 } from 'react-native';
 import Config from 'react-native-config';
 
-import { TurnAppAPI } from './services/TurnAppAPI';
+import { Turn2AppAPI } from './services/Turn2AppAPI';
 import { ProductCard } from './components/ProductCard';
 import { CheckoutWebView } from './components/CheckoutWebView';
-import { TurnAppConfig, ShopifyProduct } from './types';
+import { Turn2AppConfig, ShopifyProduct } from './types';
 
 const App: React.FC = () => {
   // State Management
-  const [config, setConfig] = useState<TurnAppConfig | null>(null);
+  const [config, setConfig] = useState<Turn2AppConfig | null>(null);
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -37,7 +37,7 @@ const App: React.FC = () => {
   
   // API Service
   const shopDomain = Config.SHOP_DOMAIN || 'demo-shop.myshopify.com';
-  const api = new TurnAppAPI(shopDomain);
+  const api = new Turn2AppAPI(shopDomain);
 
   // Load Initial Data
   useEffect(() => {
@@ -48,8 +48,8 @@ const App: React.FC = () => {
     try {
       setError(null);
       
-      // Load TurnApp Config
-      console.log('Loading TurnApp config...');
+      // Load turn2app Config
+      console.log('Loading turn2app config...');
       const configData = await api.loadConfig();
       setConfig(configData);
       
@@ -104,12 +104,12 @@ const App: React.FC = () => {
   };
 
   // Demo Fallback Config
-  const createDemoConfig = (): TurnAppConfig => ({
+  const createDemoConfig = (): Turn2AppConfig => ({
     shop: shopDomain,
     branding: {
       brandName: 'Demo Shop',
       primaryColor: '#007AFF',
-      tagline: 'Demo Mode - Connect to TurnApp Backend'
+      tagline: 'Demo Mode - Connect to turn2app Backend'
     },
     storefrontEndpoint: `https://${shopDomain}/api/2024-01/graphql.json`,
     appVersion: '1.0.0'
@@ -141,7 +141,7 @@ const App: React.FC = () => {
         { backgroundColor: config?.branding.primaryColor || '#007AFF' }
       ]}>
         <Text style={styles.headerTitle}>
-          {config?.branding.brandName || 'TurnApp Demo'}
+          {config?.branding.brandName || 'turn2app Demo'}
         </Text>
         {config?.branding.tagline && (
           <Text style={styles.headerTagline}>

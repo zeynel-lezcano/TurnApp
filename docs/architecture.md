@@ -1,6 +1,6 @@
 Zielarchitektur (MVP → V1-ready):
 
-Mobile App (RN/; später)
+Mobile Demo (React Native - ✅ IMPLEMENTIERT)
          │
          │(Storefront API for product/catalog, web checkout)
          ▼
@@ -8,60 +8,83 @@ Shopify ←→ Shopify Admin API (OAuth, Webhooks)
          │
          │ embedded Admin (React + Polaris + App Bridge)
          ▼
-   Backend (Node/TS, Express – Shopify CLI)
-     ├─ Auth & Tenant Registry (shops, tokens, settings)
-     ├─ Config API (branding, theme options)
-     ├─ Proxy/Facade (optional) to Storefront/Admin
-     ├─ Webhook Handlers (products/update, app/uninstalled, …)
-     ├─ Build/CI Hooks (later: trigger mobile builds)
+   Backend (Node/TS, Remix – Shopify CLI)
+     ├─ Auth & Tenant Registry (shops, tokens, settings) ✅
+     ├─ Config API (branding, theme options) ✅
+     ├─ Product Proxy with 60s Cache ✅
+     ├─ Webhook Handlers (products/update, app/uninstalled) ✅
+     ├─ Health & Monitoring (/healthz, /readiness) ✅
+     ├─ Cache Service (Redis/Memory) ✅
      └─ (later) Push Service, Automation Engine
-     ├─ DB: Postgres (prod), SQLite (dev)
-     └─ Cache: Redis (optional)
+     ├─ DB: SQLite (dev/staging), Postgres (prod ready)
+     └─ Storage: S3 Asset Management ✅
 
 
 
-Verzeichnisse (Vorschlag):
+Aktuelle Verzeichnisstruktur:
 
-/apps
-  /admin            # embedded admin UI (React + Polaris)
-  /web              # Node/Express app (Shopify CLI server)
-  /mobile           # placeholder for RN/Flutter template (post-MVP)
-/docs               # this folder
-/packages
-  /types            # shared TypeScript types
-  /config           # shared config (eslint, tsconfig)
-/infra              # (post-MVP) IaC, k8s manifests
+/turn2app            # Hauptapp (Shopify CLI + Remix)
+  ├─ app/
+  │  ├─ routes/      # API endpoints + Admin UI
+  │  ├─ lib/         # Services (cache, monitoring, crypto)
+  │  └─ components/  # React components (Polaris)
+  ├─ prisma/         # DB schema + migrations
+  └─ tests/          # Unit + Integration tests
+/mobile-demo         # React Native Demo App ✅
+  ├─ src/           # RN components, screens
+  ├─ config/        # Branding integration
+  └─ services/      # API clients
+/docs               # Projektdokumentation
+└─ scripts/         # Build, seed, deployment scripts
 
 
-Kernkomponenten:
+Kernkomponenten (✅ = IMPLEMENTIERT):
 
-1) OAuth & Tenanting
-Offline access token pro Shop speichern (verschlüsselt).
-HMAC-Validierung am Install-Callback.
-Shop table: id, shop_domain, access_token_enc, installed_at, uninstalled_at, settings_json.
-2) Embedded Admin
-App Bridge + Polaris.
-Session Tokens (JWT) für eingebettete Requests (kein Cookie-Login).
-Grundseiten: Overview, Branding/Theme, API-Keys/Endpoints, Uninstall-Info.
-3) Webhooks
-Registrieren bei Install: APP_UNINSTALLED, PRODUCTS_UPDATE (oder products/update), optional INVENTORY_LEVELS_UPDATE.
-Idempotente Handler; Löschen von Shop-Daten bei Uninstall.
-Retries (Shopify) korrekt beantworten (200 schnell, async work offloaded).
-4) Datenfluss (MVP)
-Produkt-/Katalogdaten: direkt via Storefront API (Mobile) oder via Backend-Proxy (optional Caching).
-Checkout: In-App WebView/Browser zu Shopify Checkout URL.
-Branding/Theme: Mobile lädt JSON-Konfig vom Backend.
-5) Sicherheit
-HTTPS only.
-HMAC Check aller Shopify Signatures (OAuth return, Webhooks).
-Secrets im Server, nie im Mobile Bundle. Storefront Access Token nicht fest einbacken → short-lived / fetch via backend.
-6) Observability
-Request-ID pro call; strukturierte Logs (JSON).
-Sentry/Crashlytics hooks (admin & mobile).
-Health endpoints /healthz, /readiness.
+1) OAuth & Tenanting ✅
+✅ Offline access token pro Shop speichern (AES-256-GCM verschlüsselt).
+✅ HMAC-Validierung am Install-Callback.
+✅ Shop table: id, shop_domain, access_token_enc, installed_at, uninstalled_at, settings_json.
 
-Skalierung (nach MVP):
-Caching Layer (Redis) für Produktlisten & Shop config.
-Queue/Worker (BullMQ/RabbitMQ) für Webhook-Fanout & Push.
-Extract BFF/API-Gateway (GraphQL) falls Mobile verlangt.
-Postgres→Managed; Read-replicas & backups; secrets→manager.
+2) Embedded Admin ✅
+✅ App Bridge + Polaris integration.
+✅ Session Tokens (JWT) für eingebettete Requests (kein Cookie-Login).
+✅ Seiten: Overview, Branding/Theme, Asset Upload.
+
+3) Webhooks ✅
+✅ Registriert bei Install: APP_UNINSTALLED, PRODUCTS_UPDATE.
+✅ Idempotente Handler; Cache-Invalidierung bei Product Updates.
+✅ Shop-Daten löschen bei Uninstall.
+
+4) Cache System ✅
+✅ Redis/Memory cache mit TTL (60s Products, 5min Config).
+✅ Shop-spezifische Cache-Keys für Mandantentrennung.
+✅ Webhook-getriggerte Cache-Invalidierung.
+✅ Health monitoring integration.
+
+5) API Layer ✅
+✅ Config API: GET /api/config → branding/theme JSON (mandantenbezogen).
+✅ Product Proxy: GET /api/products → Storefront GraphQL + Cache.
+✅ Settings API: POST /api/settings → Zod-validierte Updates.
+✅ Upload API: POST /api/upload → S3 Asset Management.
+
+6) Mobile Integration ✅
+✅ React Native Demo consuming /api/config.
+✅ Dynamic Branding (Farben, Logo, Name).
+✅ Product List via Storefront API.
+✅ Shopify Checkout WebView Integration.
+
+7) Security & Observability ✅
+✅ HTTPS only, HMAC-Validierung aller Shopify Signatures.
+✅ Secrets server-side, Token-Verschlüsselung at rest.
+✅ Structured Logging mit Request-IDs.
+✅ Health endpoints /healthz, /readiness mit Cache-Status.
+
+Nächste Schritte (Production-Ready):
+- Sentry Error Tracking Integration
+- Rate Limiting für API endpoints
+- CI/CD Pipeline (GitHub Actions)
+- Short-lived Storefront Token Management
+- Managed Postgres mit Backups
+- Queue/Worker für Background Jobs
+- Extract BFF/API-Gateway falls Mobile skaliert
+- IaC für Cloud Infrastructure

@@ -1,13 +1,13 @@
 /**
- * TypeScript Interfaces für TurnApp Mobile Demo
+ * TypeScript Interfaces für turn2app Mobile Demo
  * 
- * Typen basierend auf TurnApp Backend APIs und Shopify Storefront
+ * Typen basierend auf turn2app Backend APIs und Shopify Storefront
  */
 
 /**
- * TurnApp Config Response - /api/config Endpoint
+ * turn2app Config Response - /api/config Endpoint
  */
-export interface TurnAppConfig {
+export interface Turn2AppConfig {
   shop: string;
   branding: BrandingConfig;
   storefrontEndpoint: string;

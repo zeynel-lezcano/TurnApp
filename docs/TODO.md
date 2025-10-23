@@ -3,22 +3,36 @@
 > Quelle: docs/backlog.yaml (auto-generiert)
 
 ## NOW
-- [ ] Simple Cache Integration (id: cache-integration) — Redis/memory cache für Product Proxy, 60s TTL, cache invalidation
-- [ ] Error Tracking Setup (id: error-tracking-setup) — Sentry integration, structured logging, error reporting setup
-- [ ] Rate Limit Implementation (id: rate-limit-implementation) — Rate limiting für API endpoints, Shopify GraphQL budget management
-- [ ] CI/CD Pipeline Setup (id: ci-cd-setup) — GitHub Actions, lint/test gates, automated deployment setup
-- [ ] Storefront Token Management (id: storefront-token-management) — Short-lived storefront access tokens für mobile apps, token refresh, API endpoint
+- [ ] Mobile Home Screen Component (id: mobile-home-screen) — Hero Banner, Featured Collections, Quick Actions, Search Bar - responsive design
+- [ ] Product Catalog & Grid View (id: product-catalog-screen) — Grid/List toggle, Filters, Sort, Search, Infinite scroll, Categories navigation
+- [ ] Product Detail Screen (id: product-detail-screen) — Image gallery, Variants selection, Add to Cart, Product description, Reviews placeholder
+- [ ] Shopping Cart & Checkout Flow (id: cart-checkout-flow) — Cart sidebar/screen, Quantity updates, Remove items, Checkout button → Shopify Checkout
 
 
 ## NEXT
-- [ ] API Rate Limiting Infrastructure (id: api-rate-limiting-infra) — Rate limiting middleware, request counting, budget tracking, exponential backoff
-- [ ] Mobile Config API Extensions (id: mobile-config-extension) — Storefront endpoint config, mobile-specific settings, version compatibility
-- [ ] Webhook Retry Logic Enhancement (id: webhook-retry-logic) — Retry queue, exponential backoff, dead letter handling, webhook validation
-- [ ] Asset Management Optimization (id: asset-optimization) — Image resizing, CDN integration, asset versioning, cache headers
+- [ ] Search & Autocomplete System (id: search-autocomplete) — Real-time search, suggestions, recent searches, voice search, search analytics
+- [ ] User Account & Profile Screens (id: user-account-screens) — Login/Register, Profile editing, Order history, Wishlist, Address book
+- [ ] Navigation & Menu Components (id: navigation-components) — Bottom tab bar, Drawer menu, Category navigation, Breadcrumbs, Back navigation
+- [ ] App Onboarding & First-Time UX (id: onboarding-flow) — Welcome screens, Feature introduction, Permissions requests, Shop selection
+- [ ] Mobile Preview in Admin (id: mobile-preview-admin) — Live preview iframe, Device frames, Orientation toggle, QR code generation
+- [ ] Enhanced Brand Customization UI (id: brand-customization-ui) — Color picker, Font selection, Layout templates, Logo positioning, Theme presets
+- [ ] Collections & Categories API (id: collections-api) — GET /api/collections, Nested categories, Collection filtering, Featured collections
+- [ ] Search API Enhancement (id: search-api) — Search endpoint, Filters, Faceted search, Autocomplete, Analytics tracking
+- [ ] Wishlist & Favorites API (id: wishlist-api) — User wishlist storage, Add/remove items, Wishlist sharing, Analytics
+- [ ] User Preferences & Settings API (id: user-preferences-api) — User settings storage, App preferences, Notification settings, Theme preferences
 
 
 ## LATER
-- [ ] Product Proxy + Cache (id: product-proxy) — GET /api/products, 60s Cache
+- [ ] Social Features & Sharing (id: social-features) — Social login, Share products, Social proof, Reviews integration, User-generated content
+- [ ] Promotional & Marketing Features (id: promotional-features) — Discount codes, Banners, Flash sales, Loyalty program, Referral system
+- [ ] Advanced Product Features (id: advanced-product-features) — Product comparison, Recently viewed, Recommendations, Bundling, Subscriptions
+- [ ] Offline Support & PWA (id: offline-support) — Service worker, Offline browsing, Cache strategies, Background sync
+- [ ] Animations & Micro-Interactions (id: animations-micro-interactions) — Loading animations, Transition effects, Gesture feedback, Smooth scrolling
+- [ ] Accessibility & WCAG Compliance (id: accessibility-enhancements) — Screen reader support, Keyboard navigation, High contrast mode, Voice navigation
+- [ ] Multi-language Support (id: multi-language-support) — i18n für mobile apps, localized content, currency handling, RTL support
+- [ ] Push Notification Service (id: push-notifications) — Push infrastructure, segmentation, automation triggers, delivery tracking
+- [ ] Advanced Caching Strategy (id: advanced-caching) — Multi-layer caching, cache warming, predictive preloading
+- [ ] Advanced Analytics & Reporting (id: advanced-analytics) — Shop performance metrics, conversion tracking, dashboard visualization, A/B testing
 
 
 ## DONE
@@ -39,3 +53,8 @@
 - [x] Admin API Integration (id: admin-api-integration) — GraphQL client setup für Admin API, shop validation, product queries
 - [x] Health & Monitoring Endpoints (id: health-endpoints) — /healthz, /readiness endpoints, request logging, error tracking setup
 - [x] Mobile Demo Scaffold (id: mobile-demo-scaffold) — RN/Flutter template consuming /api/config, basic product list, checkout links
+- [x] Simple Cache Integration (id: cache-integration) — Redis/memory cache für Product Proxy, 60s TTL, cache invalidation
+- [x] Error Tracking Setup (MVP → Production) (id: error-tracking-setup) — Sentry integration, structured logging, error reporting, performance monitoring
+- [x] Rate Limit Implementation (MVP → Production) (id: rate-limit-implementation) — Rate limiting middleware, Shopify GraphQL budget management, exponential backoff
+- [x] CI/CD Pipeline Setup (MVP → Production) (id: ci-cd-setup) — GitHub Actions, lint/test/build gates, automated deployment, rollback strategy
+- [x] Storefront Token Management (Production) (id: storefront-token-management) — Short-lived storefront access tokens, token refresh API, security hardening

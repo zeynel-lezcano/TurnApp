@@ -1,0 +1,100 @@
+// TurnApp Database Schema - Shopify App Datenmodell
+// Prisma Schema für Shop-Management, Asset-Verwaltung und Sicherheit
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Shop Model - Zentrale Shop-Verwaltung für Shopify App
+// Speichert verschlüsselte Access Tokens und Shop-Konfiguration
+model Shop {
+  // Primärschlüssel: UUID für bessere Security
+  id             String   @id @default(uuid())
+  
+  // Shop-Domain: Eindeutige Shopify-Identifikation (Index für Performance)
+  shopDomain     String   @unique @map("shop_domain")
+  
+  // Shopify-spezifische Daten (automatisch von Shopify API)
+  shopifyShopId  String?  @unique @map("shopify_shop_id")  // Shopify's interne ID
+  shopName       String?  @map("shop_name")                // Von Shopify API
+  shopEmail      String?  @map("shop_email")               // Von Shopify API
+  planName       String?  @map("plan_name")                // Basic/Pro/etc.
+  currencyCode   String?  @map("currency_code")            // EUR, USD, etc.
+  timezone       String?  @map("timezone")                 // Europe/Berlin
+  
+  // SICHERHEITSKRITISCH: Verschlüsselter Shopify Access Token
+  // Wird mit AES-256-CBC in crypto.server.ts verschlüsselt/entschlüsselt
+  accessTokenEnc String   @map("access_token_enc")
+  
+  // Onboarding-Daten (vom Händler eingegeben)
+  ownerFirstName String?  @map("owner_first_name")
+  ownerLastName  String?  @map("owner_last_name")
+  ownerEmail     String?  @map("owner_email")              // Kann anders sein als Shop-Email
+  ownerPhone     String?  @map("owner_phone")
+  appName        String?  @map("app_name")                 // Wie die App heißen soll
+  
+  // App-Status und Onboarding-Tracking
+  onboardingCompleted Boolean @default(false) @map("onboarding_completed")
+  onboardingStep      String? @map("onboarding_step")      // 'profile', 'setup', 'completed'
+  
+  // Installation Lifecycle Tracking
+  installedAt    DateTime @default(now()) @map("installed_at")    // Erste Installation
+  lastActiveAt   DateTime @default(now()) @map("last_active_at")  // Letzter API-Call
+  uninstalledAt  DateTime? @map("uninstalled_at")                // Soft Delete Timestamp
+  
+  // App-Konfiguration: JSON String für erweiterte Settings
+  // Format: { features: {...}, design: {...}, notifications: {...} }
+  appSettings    String   @default("{}") @map("app_settings")
+  
+  // Legacy: Shop-Konfiguration (für Rückwärtskompatibilität)
+  settings       String   @default("{}")
+  
+  // Audit Trail: Automatische Timestamps für Datenbank-Änderungen
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  
+  // Relationen: Shop kann mehrere Assets haben (1:n)
+  assets Asset[]
+
+  // Datenbank-Tabellenname (snake_case für DB-Konventionen)
+  @@map("shops")
+}
+
+// Asset Model - File/Upload Management für Shop Branding
+// Speichert Metadaten für hochgeladene Dateien (Logos, Banner)
+model Asset {
+  // Primärschlüssel: UUID für bessere Security
+  id        String   @id @default(uuid())
+  
+  // Foreign Key: Welchem Shop gehört dieses Asset?
+  shopId    String   @map("shop_id")
+  
+  // Asset-Typ: Kategorisierung für verschiedene Verwendungszwecke
+  kind      String   // Enum: 'logo' | 'banner' (validiert in validation.server.ts)
+  
+  // Cloud Storage URL: Direkter Link zur hochgeladenen Datei
+  url       String
+  
+  // Original Filename: Für User-Display und Download
+  filename  String?
+  
+  // File Metadata: Größe in Bytes, MIME Type für Validierung
+  fileSize  Int?     @map("file_size")
+  mimeType  String?  @map("mime_type")
+  
+  // Audit Trail: Upload-Tracking
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  // FOREIGN KEY RELATION: Asset gehört zu einem Shop
+  // onDelete: Cascade = Wenn Shop gelöscht wird, werden Assets automatisch gelöscht
+  shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  // Datenbank-Tabellenname
+  @@map("assets")
+}

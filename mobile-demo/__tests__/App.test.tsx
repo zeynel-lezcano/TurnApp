@@ -5,23 +5,23 @@
 import React from 'react';
 import { render, waitFor, fireEvent } from '@testing-library/react-native';
 import App from '../src/App';
-import { TurnAppAPI } from '../src/services/TurnAppAPI';
+import { Turn2AppAPI } from '../src/services/Turn2AppAPI';
 
 // Mock react-native-config
 jest.mock('react-native-config', () => ({
-  TURNAPP_API_URL: 'http://localhost:3000',
+  TURN2APP_API_URL: 'http://localhost:3000',
   SHOP_DOMAIN: 'test-shop.myshopify.com',
   DEMO_MODE: 'true',
 }));
 
-// Mock TurnAppAPI
-jest.mock('../src/services/TurnAppAPI');
+// Mock Turn2AppAPI
+jest.mock('../src/services/Turn2AppAPI');
 
 describe('App', () => {
-  const mockTurnAppAPI = TurnAppAPI as jest.MockedClass<typeof TurnAppAPI>;
+  const mockTurn2AppAPI = Turn2AppAPI as jest.MockedClass<typeof Turn2AppAPI>;
 
   beforeEach(() => {
-    mockTurnAppAPI.mockClear();
+    mockTurn2AppAPI.mockClear();
   });
 
   it('should render loading state initially', () => {
@@ -89,7 +89,7 @@ describe('App', () => {
       getCheckoutUrl: jest.fn().mockResolvedValue('https://checkout.url'),
     };
 
-    mockTurnAppAPI.mockImplementation(() => mockApiInstance as any);
+    mockTurn2AppAPI.mockImplementation(() => mockApiInstance as any);
 
     const { getByText, queryByText } = render(<App />);
 
@@ -114,7 +114,7 @@ describe('App', () => {
       getCheckoutUrl: jest.fn(),
     };
 
-    mockTurnAppAPI.mockImplementation(() => mockApiInstance as any);
+    mockTurn2AppAPI.mockImplementation(() => mockApiInstance as any);
 
     const { getByText, queryByText } = render(<App />);
 
@@ -133,7 +133,7 @@ describe('App', () => {
       getCheckoutUrl: jest.fn(),
     };
 
-    mockTurnAppAPI.mockImplementation(() => mockApiInstance as any);
+    mockTurn2AppAPI.mockImplementation(() => mockApiInstance as any);
 
     const { getByText, queryByText } = render(<App />);
 
@@ -143,6 +143,6 @@ describe('App', () => {
 
     // Should show demo branding
     expect(getByText('Demo Shop')).toBeTruthy();
-    expect(getByText('Demo Mode - Connect to TurnApp Backend')).toBeTruthy();
+    expect(getByText('Demo Mode - Connect to turn2app Backend')).toBeTruthy();
   });
 });

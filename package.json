@@ -1,5 +1,5 @@
 {
-	"name": "turnapp",
+	"name": "turn2app",
 	"version": "0.7.0",
 	"devDependencies": {
 		"@commitlint/cli": "^19.8.1",

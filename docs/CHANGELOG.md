@@ -42,7 +42,7 @@
 ## 0.1.0 (2025-08-21)
 
 * chore(release): 0.1.0 fc1ccf6
-* feat: initial turnapp project setup with automated tooling f021672
+* feat: initial turn2app project setup with automated tooling f021672
 * docs: für den automatisierten TODO.md wurden Skripte und zusätzlich Abhängigkeiten erstellt c3931bb
 * docs: steering MDs fb79b65
 
