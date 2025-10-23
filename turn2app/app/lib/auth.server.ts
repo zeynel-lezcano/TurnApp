@@ -5,7 +5,7 @@
  * Implementiert Shopify's OAuth-Flow und Session-Management
  */
 
-import { redirect } from "@remix-run/node";
+import { redirect } from "@remix-run/cloudflare";
 import { prisma } from "./prisma.server";
 import { decryptToken } from "./crypto.server";
 

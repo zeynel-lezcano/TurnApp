@@ -1,4 +1,4 @@
-import { json, redirect, type LoaderFunctionArgs, type ActionFunctionArgs } from "@remix-run/node";
+import { json, redirect, type LoaderFunctionArgs, type ActionFunctionArgs } from "@remix-run/cloudflare";
 import { useLoaderData, Form } from "@remix-run/react";
 import { useState } from "react";
 import { prisma } from "../lib/prisma.server";

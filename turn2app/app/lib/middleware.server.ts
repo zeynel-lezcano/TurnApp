@@ -22,7 +22,7 @@
  * - Request Logging für Monitoring und Debugging
  */
 
-import { json } from '@remix-run/node';
+import { json } from '@remix-run/cloudflare';
 import { requireValidSession, getOptionalSession } from './session.server.js';
 import { prisma } from './prisma.server.js';
 import { logRequestWithContext, generateRequestId } from './monitoring.server.js';

@@ -27,7 +27,7 @@
  * - Error Handling: 200 bei Success, 500 bei Retry-würdigen Fehlern
  */
 
-import { json, type ActionFunctionArgs } from "@remix-run/node";
+import { json, type ActionFunctionArgs } from "@remix-run/cloudflare";
 import { verifyWebhookHmac } from "../lib/webhooks.server";
 import { prisma } from "../lib/prisma.server";
 

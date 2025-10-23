@@ -1,5 +1,5 @@
-import type { LoaderFunctionArgs } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import type { LoaderFunctionArgs } from '@remix-run/cloudflare';
+import { json } from '@remix-run/cloudflare';
 import { performHealthCheck, logRequest } from '../lib/monitoring.server.js';
 import { HealthResponseSchema } from '../lib/validation.server';
 import { rateLimitMiddleware } from '../lib/rate-limit.server';

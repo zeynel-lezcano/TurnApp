@@ -1,5 +1,5 @@
-import type { LoaderFunctionArgs } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import type { LoaderFunctionArgs } from '@remix-run/cloudflare';
+import { json } from '@remix-run/cloudflare';
 import { flexibleAuth } from '../lib/middleware.server';
 import { fetchProducts, transformProductForMobile, checkStorefrontRateLimit } from '../lib/storefront.server';
 import { createErrorResponse, ProductsResponseSchema } from '../lib/validation.server';

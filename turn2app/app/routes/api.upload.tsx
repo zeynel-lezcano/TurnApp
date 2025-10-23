@@ -1,5 +1,5 @@
-import type { ActionFunctionArgs } from '@remix-run/node';
-import { json, unstable_parseMultipartFormData, unstable_createFileUploadHandler } from '@remix-run/node';
+import type { ActionFunctionArgs } from '@remix-run/cloudflare';
+import { json, unstable_parseMultipartFormData, unstable_createFileUploadHandler } from '@remix-run/cloudflare';
 import { flexibleAuth, logRequest } from '../lib/middleware.server';
 import { rateLimitMiddleware } from '../lib/rate-limit.server';
 import { prisma } from '../lib/prisma.server';

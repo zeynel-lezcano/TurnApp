@@ -5,7 +5,7 @@
  * Add to Cart, Product Description und Reviews Placeholder.
  */
 
-import { json, type LoaderFunction } from '@remix-run/node';
+import { json, type LoaderFunction } from '@remix-run/cloudflare';
 import { useLoaderData, useNavigate } from '@remix-run/react';
 import { useState } from 'react';
 import { ProductImageGallery } from '../components/mobile/ProductImageGallery';

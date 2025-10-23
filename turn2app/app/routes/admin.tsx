@@ -25,7 +25,7 @@
  * - Session Token vom Shopify Admin (X-Shopify-Session-Token)
  */
 
-import { json, type LoaderFunctionArgs } from "@remix-run/node";
+import { json, type LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { useLoaderData, Outlet, useLocation, Link } from "@remix-run/react";
 import { flexibleAuth, logRequest } from "../lib/middleware.server";
 import { 

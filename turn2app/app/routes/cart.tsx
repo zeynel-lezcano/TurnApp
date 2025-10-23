@@ -5,7 +5,7 @@
  * Subtotal Calculation und Checkout Integration zu Shopify.
  */
 
-import { json, type LoaderFunction } from '@remix-run/node';
+import { json, type LoaderFunction } from '@remix-run/cloudflare';
 import { useLoaderData, useNavigate } from '@remix-run/react';
 import { useState } from 'react';
 import { CartItemList } from '../components/mobile/CartItemList';

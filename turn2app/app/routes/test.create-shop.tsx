@@ -1,4 +1,4 @@
-import { json, redirect, type LoaderFunctionArgs, type ActionFunctionArgs } from "@remix-run/node";
+import { json, redirect, type LoaderFunctionArgs, type ActionFunctionArgs } from "@remix-run/cloudflare";
 import { useLoaderData, Form } from "@remix-run/react";
 import { Page, Layout, Card, Text, Button, TextField, Banner } from "@shopify/polaris";
 import { useState } from "react";

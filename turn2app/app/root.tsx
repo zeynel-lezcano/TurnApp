@@ -6,7 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import type { MetaFunction, HeadersFunction } from "@remix-run/node";
+import type { MetaFunction, HeadersFunction } from "@remix-run/cloudflare";
 import { AppProvider } from "@shopify/polaris";
 import "@shopify/polaris/build/esm/styles.css";
 

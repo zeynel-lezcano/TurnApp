@@ -1,4 +1,4 @@
-import { json, redirect } from "@remix-run/node";
+import { json, redirect } from "@remix-run/cloudflare";
 import { useLoaderData, Link } from "@remix-run/react";
 import { prisma } from "../lib/prisma.server";
 

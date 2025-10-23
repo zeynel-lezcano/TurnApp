@@ -30,7 +30,7 @@
  * - Reduziert DB-Load bei häufigen Mobile App Starts
  */
 
-import { json, type LoaderFunctionArgs } from "@remix-run/node";
+import { json, type LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { ConfigResponseSchema } from "../lib/validation.server";
 import { getShopSettings } from "../lib/shop.server";
 import { flexibleAuth, logRequest } from "../lib/middleware.server";

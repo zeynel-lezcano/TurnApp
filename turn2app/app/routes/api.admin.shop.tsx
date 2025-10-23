@@ -1,5 +1,5 @@
-import type { LoaderFunctionArgs } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import type { LoaderFunctionArgs } from '@remix-run/cloudflare';
+import { json } from '@remix-run/cloudflare';
 import { requireSession } from '../lib/middleware.server';
 import { getShopInfo, validateShopAccess, testAdminConnection } from '../lib/admin-api.server';
 import { createErrorResponse, ShopValidationResponseSchema } from '../lib/validation.server';

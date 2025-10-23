@@ -1,4 +1,4 @@
-import { json, type LoaderFunctionArgs, type ActionFunctionArgs } from "@remix-run/node";
+import { json, type LoaderFunctionArgs, type ActionFunctionArgs } from "@remix-run/cloudflare";
 import { useLoaderData, Form, useActionData, useFetcher } from "@remix-run/react";
 import { flexibleAuth, logRequest } from "../lib/middleware.server";
 import {

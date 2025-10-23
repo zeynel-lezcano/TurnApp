@@ -5,7 +5,7 @@
  * und responsivem Design für mobile E-Commerce Experience.
  */
 
-import { json, type LoaderFunction } from '@remix-run/node';
+import { json, type LoaderFunction } from '@remix-run/cloudflare';
 import { useLoaderData, useSearchParams } from '@remix-run/react';
 import { useState } from 'react';
 import { ProductCatalogGrid } from '../components/mobile/ProductCatalogGrid';

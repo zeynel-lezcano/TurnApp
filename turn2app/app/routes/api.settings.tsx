@@ -1,4 +1,4 @@
-import { json, type ActionFunctionArgs } from "@remix-run/node";
+import { json, type ActionFunctionArgs } from "@remix-run/cloudflare";
 import { prisma } from "../lib/prisma.server";
 import { 
   validateBrandingData, 
