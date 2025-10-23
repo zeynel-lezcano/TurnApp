@@ -7,6 +7,10 @@ import type { AppLoadContext, EntryContext } from "@remix-run/cloudflare";
 import { RemixServer } from "@remix-run/react";
 import { isbot } from "isbot";
 import { renderToReadableStream } from "react-dom/server";
+import { initSentry } from "./lib/sentry.server";
+
+// Initialize Sentry on server startup
+initSentry();
 
 export default async function handleRequest(
   request: Request,

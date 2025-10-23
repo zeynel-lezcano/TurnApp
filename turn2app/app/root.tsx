@@ -10,11 +10,6 @@ import type { MetaFunction, HeadersFunction } from "@remix-run/cloudflare";
 import { AppProvider } from "@shopify/polaris";
 import "@shopify/polaris/build/esm/styles.css";
 
-// Initialize Sentry on app startup
-import { initSentry } from "./lib/sentry.server";
-if (typeof window === "undefined") {
-  initSentry();
-}
 
 export const meta: MetaFunction = () => [
   { charset: "utf-8" },
