@@ -1,9 +1,9 @@
 import { redirect } from "@remix-run/cloudflare";
 import { useState, useEffect } from 'react';
 import { 
-  Smartphone, ArrowRight, Check, Star, Zap, TrendingUp, 
-  Users, Package, Eye, Download, Menu, X, Play, ShoppingBag,
-  Sparkles, BarChart3, Bell, Lock, Globe, Award, ChevronRight
+  Smartphone, ArrowRight, Check, Star, Zap, 
+  Menu, X, ShoppingBag,
+  Sparkles, BarChart3, Bell, Lock
 } from 'lucide-react';
 
 export async function loader({ request }: { request: Request }) {
@@ -88,7 +88,7 @@ export default function Homepage() {
       name: 'Sarah Weber',
       role: 'CEO, Fashion Store',
       image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100',
-      text: 'Mit AppBuilder haben wir unsere App in 2 Wochen live gebracht. Die Conversion ist um 40% gestiegen!',
+      text: 'Mit turn2app haben wir unsere App in 2 Wochen live gebracht. Die Conversion ist um 40% gestiegen!',
       rating: 5
     },
     {
@@ -164,7 +164,7 @@ export default function Homepage() {
               <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center">
                 <Smartphone className="w-6 h-6 text-white" />
               </div>
-              <span className="text-xl font-bold text-gray-800">AppBuilder</span>
+              <span className="text-xl font-bold text-gray-800">turn2app</span>
             </div>
 
             {/* Desktop Menu */}
@@ -303,7 +303,7 @@ export default function Homepage() {
             Vertraut von führenden Marken weltweit
           </h2>
           <p className="text-xl text-white/90 mb-12">
-            Über 10.000 Unternehmen nutzen AppBuilder für ihre Mobile Apps
+            Über 10.000 Unternehmen nutzen turn2app für ihre Mobile Apps
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center opacity-80">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
@@ -444,7 +444,7 @@ export default function Homepage() {
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center">
                   <Smartphone className="w-6 h-6 text-white" />
                 </div>
-                <span className="text-xl font-bold">AppBuilder</span>
+                <span className="text-xl font-bold">turn2app</span>
               </div>
               <p className="text-gray-400 mb-4">
                 Die führende Plattform für Mobile Commerce Apps
@@ -484,7 +484,7 @@ export default function Homepage() {
 
           <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © 2025 AppBuilder. Alle Rechte vorbehalten.
+              © 2025 turn2app. Alle Rechte vorbehalten.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <a href="#" className="text-gray-400 hover:text-white transition-colors">Twitter</a>
