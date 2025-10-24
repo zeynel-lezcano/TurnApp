@@ -11,7 +11,6 @@ import { AppProvider } from "@shopify/polaris";
 import "@shopify/polaris/build/esm/styles.css";
 import tailwindStyles from "./styles/tailwind.css?url";
 
-
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStyles },
 ];
