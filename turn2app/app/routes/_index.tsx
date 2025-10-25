@@ -1,5 +1,6 @@
 import { redirect } from "@remix-run/cloudflare";
 import { useState, useEffect } from 'react';
+import { Link } from "@remix-run/react";
 import { 
   Smartphone, ArrowRight, Check, Star, Zap, 
   Menu, X, ShoppingBag,
@@ -179,9 +180,12 @@ export default function Homepage() {
               <button className="px-4 py-2 text-gray-700 hover:text-blue-600 font-medium transition-colors">
                 Anmelden
               </button>
-              <button className="px-6 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-all transform hover:scale-105">
+              <Link 
+                to="/install"
+                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-all transform hover:scale-105 inline-block text-center"
+              >
                 Kostenlos starten
-              </button>
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
@@ -206,9 +210,12 @@ export default function Homepage() {
                 <button className="w-full px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg font-medium">
                   Anmelden
                 </button>
-                <button className="w-full px-6 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700">
+                <Link 
+                  to="/install"
+                  className="w-full px-6 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 inline-block text-center"
+                >
                   Kostenlos starten
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -236,10 +243,13 @@ export default function Homepage() {
               </p>
 
               <div className="flex justify-center">
-                <button className="px-8 py-4 bg-blue-600 text-white rounded-xl font-semibold text-lg hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg shadow-blue-600/30 flex items-center space-x-2">
+                <Link 
+                  to="/install"
+                  className="px-8 py-4 bg-blue-600 text-white rounded-xl font-semibold text-lg hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg shadow-blue-600/30 flex items-center space-x-2"
+                >
                   <span>Kostenlos starten</span>
                   <ArrowRight className="w-5 h-5" />
-                </button>
+                </Link>
               </div>
 
               <div className="flex items-center space-x-8 pt-4">
@@ -395,13 +405,16 @@ export default function Homepage() {
                   )}
                 </div>
 
-                <button className={`w-full py-3 rounded-xl font-semibold mb-8 transition-all ${
-                  plan.popular
-                    ? 'bg-blue-600 text-white hover:bg-blue-700'
-                    : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
-                }`}>
+                <Link 
+                  to="/install"
+                  className={`w-full py-3 rounded-xl font-semibold mb-8 transition-all inline-block text-center ${
+                    plan.popular
+                      ? 'bg-blue-600 text-white hover:bg-blue-700'
+                      : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                  }`}
+                >
                   {plan.cta}
-                </button>
+                </Link>
 
                 <ul className="space-y-4">
                   {plan.features.map((feature, i) => (
@@ -427,10 +440,13 @@ export default function Homepage() {
             Starte kostenlos und erstelle deine App in weniger als 10 Minuten
           </p>
           <div className="flex justify-center">
-            <button className="px-8 py-4 bg-white text-blue-600 rounded-xl font-semibold text-lg hover:bg-gray-50 transition-all transform hover:scale-105 shadow-xl flex items-center justify-center space-x-2">
+            <Link 
+              to="/install"
+              className="px-8 py-4 bg-white text-blue-600 rounded-xl font-semibold text-lg hover:bg-gray-50 transition-all transform hover:scale-105 shadow-xl flex items-center justify-center space-x-2"
+            >
               <span>Jetzt kostenlos starten</span>
               <ArrowRight className="w-5 h-5" />
-            </button>
+            </Link>
           </div>
         </div>
       </section>
